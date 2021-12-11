@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "855088235268",
+    "project_id": "plugtimproject",
+    "storage_bucket": "plugtimproject.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:855088235268:android:aaaa8205dd4a32b4444651",
+        "android_client_info": {
+          "package_name": "com.dbd.plugtimproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "855088235268-272fflcolfne9p96apll3edm7jaandn5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmuIPwE2Akn8PaFUGe5qIgQCKKiYL-d3Y"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "855088235268-272fflcolfne9p96apll3edm7jaandn5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
