@@ -24,7 +24,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String uuid;
+    private String email;
 
 
     @Override
@@ -48,7 +48,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
         if (v.getId() == R.id.nxtBntReg) {
             if (registerUser()) {
                 Intent intent = new Intent(getApplicationContext(), RegisterCar.class);
-                intent.putExtra("uuid", uuid);
+                intent.putExtra("email", email);
                 startActivity(intent);
             } else {
                 Toast.makeText(Register.this, "ERROR", Toast.LENGTH_SHORT).show();
@@ -88,6 +88,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             return false;
         }
 
+        // using email as link for the owner to the car
+        email = username;
+
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
@@ -98,10 +101,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                         mDatabase.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                                 .setValue(user).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
-                                uuid = mAuth.getCurrentUser().getUid();
                                 Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
                             } else {
-                                Toast.makeText(Register.this, "Failed to register. Try again", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Register.this, "Failed to register. Please try again", Toast.LENGTH_LONG).show();
                             }
                         });
                     }
