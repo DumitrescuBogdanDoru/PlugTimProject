@@ -1,14 +1,15 @@
 package com.dbd.plugtimproject.models;
 
 public class Car {
-    private String company, model, color;
+    private String company, model, color, owner;
     private Integer year;
 
-    public Car(String company, String model, String color, Integer year) {
+    public Car(String company, String model, String color, Integer year, String owner) {
         this.company = company;
         this.model = model;
         this.color = color;
         this.year = year;
+        this.owner = owner;
     }
 
     public String getCompany() {
@@ -41,5 +42,13 @@ public class Car {
 
     public void setYear(Integer year) {
         this.year = year;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 }
