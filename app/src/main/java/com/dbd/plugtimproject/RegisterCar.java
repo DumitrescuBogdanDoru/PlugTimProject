@@ -21,7 +21,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Calendar;
-import java.util.UUID;
 
 public class RegisterCar extends AppCompatActivity implements View.OnClickListener {
 
@@ -120,8 +119,6 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
                         }
                     }
                 });
-
-
         return true;
     }
 }

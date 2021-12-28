@@ -103,9 +103,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                         mDatabase.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                                 .setValue(user).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
-                                Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_SHORT).show();
                             } else {
-                                Toast.makeText(Register.this, "Failed to register. Please try again", Toast.LENGTH_LONG).show();
+                                Toast.makeText(Register.this, "Failed to register. Please try again", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }
