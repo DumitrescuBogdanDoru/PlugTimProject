@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 loginUser();
                 break;
             case R.id.forgotBtnLog:
+                startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
                 break;
         }
     }
