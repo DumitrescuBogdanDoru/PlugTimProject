@@ -98,27 +98,16 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
 
         mAuth = FirebaseAuth.getInstance();
 
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            Car car = new Car(company, model, color, Integer.parseInt(year), email);
-                            mDatabase.child("cars").child(user.getUid())
-                                    .setValue(car).addOnCompleteListener(task1 -> {
-                                if (task1.isSuccessful()) {
-                                    Toast.makeText(RegisterCar.this, "Car has been added successfully", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Toast.makeText(RegisterCar.this, "Failed to add your car. Please try again", Toast.LENGTH_SHORT).show();
-                                }
-                            });
-                        } else {
-                            Toast.makeText(RegisterCar.this, "Something went wrong", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
+        Car car = new Car(company, model, color, Integer.parseInt(year), email);
+        mDatabase.child("cars").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                .setValue(car).addOnCompleteListener(task1 -> {
+            if (task1.isSuccessful()) {
+                Toast.makeText(RegisterCar.this, "Car has been added successfully", Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(RegisterCar.this, "Failed to add your car. Please try again", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return true;
     }
 }
