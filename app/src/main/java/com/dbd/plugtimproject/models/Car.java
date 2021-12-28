@@ -4,6 +4,10 @@ public class Car {
     private String company, model, color, owner;
     private Integer year;
 
+    public Car() {
+
+    }
+
     public Car(String company, String model, String color, Integer year, String owner) {
         this.company = company;
         this.model = model;

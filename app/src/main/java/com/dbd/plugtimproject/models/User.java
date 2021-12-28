@@ -8,10 +8,12 @@ public class User {
     private String username, firstName, lastName;
     private List<Car> cars;
 
+    public User() {
+
+    }
 
     public User(String username, String firstName, String lastName) {
         this.username = username;
-
         this.firstName = firstName;
         this.lastName = lastName;
         cars = new ArrayList<>();
