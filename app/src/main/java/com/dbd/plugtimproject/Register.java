@@ -24,7 +24,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String email;
+    private String email, pass;
 
 
     @Override
@@ -49,6 +49,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             if (registerUser()) {
                 Intent intent = new Intent(getApplicationContext(), RegisterCar.class);
                 intent.putExtra("email", email);
+                intent.putExtra("password", pass);
                 startActivity(intent);
             } else {
                 Toast.makeText(Register.this, "ERROR", Toast.LENGTH_SHORT).show();
@@ -90,6 +91,7 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
 
         // using email as link for the owner to the car
         email = username;
+        pass = password;
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();

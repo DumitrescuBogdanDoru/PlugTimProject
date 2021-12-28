@@ -8,9 +8,15 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.models.Car;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -25,6 +31,8 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
     private EditText regCarCompany, regCarModel, regCarColor, regCarYear;
 
     private DatabaseReference mDatabase;
+    private FirebaseAuth mAuth;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,14 +59,15 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
             case R.id.regCarFinishBtn:
                 Intent intent = getIntent();
                 String email = intent.getStringExtra("email");
-                if (registerCar(email)) {
+                String password = intent.getStringExtra("password");
+                if (registerCar(email, password)) {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
                 break;
         }
     }
 
-    private boolean registerCar(String email) {
+    private boolean registerCar(String email, String password) {
         String company = regCarCompany.getText().toString();
         String model = regCarModel.getText().toString();
         String color = regCarColor.getText().toString();
@@ -88,15 +97,31 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
-        Car car = new Car(company, model, color, Integer.parseInt(year), email);
-        mDatabase.child("cars").child(String.valueOf(UUID.randomUUID()))
-                .setValue(car).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(RegisterCar.this, "Car has been added successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(RegisterCar.this, "Failed to add your car. Please try again", Toast.LENGTH_SHORT).show();
-            }
-        });
+        mAuth = FirebaseAuth.getInstance();
+
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            Car car = new Car(company, model, color, Integer.parseInt(year), email);
+                            mDatabase.child("cars").child(user.getUid())
+                                    .setValue(car).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Toast.makeText(RegisterCar.this, "Car has been added successfully", Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(RegisterCar.this, "Failed to add your car. Please try again", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            Toast.makeText(RegisterCar.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+
         return true;
     }
 }
