@@ -16,7 +16,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class CarInfo extends AppCompatActivity {
 
-    private TextView companyInfo, modelInfo, colorInfo, ownerInfo, yearInfo;
+    private TextView companyInfo, modelInfo, colorInfo, yearInfo;
     private DatabaseReference mDatabase;
 
     @Override
