@@ -1,5 +1,6 @@
 package com.dbd.plugtimproject;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -19,12 +20,11 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainMenu extends AppCompatActivity {
+public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
     private TextView message;
-    private Button logout;
+    private Button logout, carInfoBtn, userInfoBtn;
 
-    private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     private String userId;
@@ -36,19 +36,17 @@ public class MainMenu extends AppCompatActivity {
 
         message = findViewById(R.id.message);
         logout = findViewById(R.id.logoutBtnMM);
+        carInfoBtn = findViewById(R.id.carInfoBtn);
+        userInfoBtn = findViewById(R.id.userInfoBtn);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
 
         userId = firebaseUser.getUid();
 
-        logout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FirebaseAuth.getInstance().signOut();
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-            }
-        });
+        logout.setOnClickListener(this);
+        carInfoBtn.setOnClickListener(this);
+        userInfoBtn.setOnClickListener(this);
 
         mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -63,8 +61,29 @@ public class MainMenu extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(MainMenu.this, "Something wrong happened", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainMenu.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    @SuppressLint("NonConstantResourceId")
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.logoutBtnMM:
+                FirebaseAuth.getInstance().signOut();
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                break;
+            case R.id.carInfoBtn:
+                Intent carIntent = new Intent(getApplicationContext(), CarInfo.class);
+                carIntent.putExtra("uuid", userId);
+                startActivity(carIntent);
+                break;
+            case R.id.userInfoBtn:
+                Intent userIntent = new Intent(getApplicationContext(), ProfileInfo.class);
+                userIntent.putExtra("uuid", userId);
+                startActivity(userIntent);
+                break;
+        }
     }
 }

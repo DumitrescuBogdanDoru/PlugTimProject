@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.PlugTimProject">
         <activity
+            android:name=".CarInfo"
+            android:exported="false" />
+        <activity
+            android:name=".ProfileInfo"
+            android:exported="false" />
+        <activity
             android:name=".ForgotPassword"
             android:exported="false" />
         <activity
