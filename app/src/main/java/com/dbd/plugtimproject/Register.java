@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.models.User;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -103,7 +104,9 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
                         mDatabase.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                                 .setValue(user).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
-                                Toast.makeText(Register.this, "User has been registered successfully", Toast.LENGTH_SHORT).show();
+                                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                                firebaseUser.sendEmailVerification();
+                                Toast.makeText(Register.this, "A verification email has been sent. Please check your email", Toast.LENGTH_SHORT).show();
                             } else {
                                 Toast.makeText(Register.this, "Failed to register. Please try again", Toast.LENGTH_SHORT).show();
                             }
