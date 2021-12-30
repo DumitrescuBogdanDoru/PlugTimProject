@@ -50,7 +50,6 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
             if (registerUser()) {
                 Intent intent = new Intent(getApplicationContext(), RegisterCar.class);
                 intent.putExtra("email", email);
-                intent.putExtra("password", pass);
                 startActivity(intent);
             } else {
                 Toast.makeText(Register.this, "ERROR", Toast.LENGTH_SHORT).show();

@@ -25,7 +25,6 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
     private EditText regCarCompany, regCarModel, regCarColor, regCarYear;
 
     private DatabaseReference mDatabase;
-    private FirebaseAuth mAuth;
 
 
     @Override
@@ -53,15 +52,14 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
             case R.id.regCarFinishBtn:
                 Intent intent = getIntent();
                 String email = intent.getStringExtra("email");
-                String password = intent.getStringExtra("password");
-                if (registerCar(email, password)) {
+                if (registerCar(email)) {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 }
                 break;
         }
     }
 
-    private boolean registerCar(String email, String password) {
+    private boolean registerCar(String email) {
         String company = regCarCompany.getText().toString();
         String model = regCarModel.getText().toString();
         String color = regCarColor.getText().toString();
@@ -91,15 +89,13 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
-        mAuth = FirebaseAuth.getInstance();
-
         Car car = new Car(company, model, color, Integer.parseInt(year), email);
         mDatabase.child("cars").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
                 .setValue(car).addOnCompleteListener(task1 -> {
             if (task1.isSuccessful()) {
                 Toast.makeText(RegisterCar.this, "Car has been added successfully", Toast.LENGTH_SHORT).show();
             } else {
-                Toast.makeText(RegisterCar.this, "Failed to add your car. Please try again", Toast.LENGTH_SHORT).show();
+                Toast.makeText(RegisterCar.this, "Failed to add your car. Please try again.", Toast.LENGTH_SHORT).show();
             }
         });
 

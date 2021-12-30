@@ -37,7 +37,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         message = findViewById(R.id.message);
         logout = findViewById(R.id.logoutBtnMM);
         carInfoBtn = findViewById(R.id.carInfoBtn);
-        userInfoBtn = findViewById(R.id.userInfoBtn);
+        userInfoBtn = findViewById(R.id.addStationBtn);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
@@ -83,6 +83,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
                 Intent userIntent = new Intent(getApplicationContext(), ProfileInfo.class);
                 userIntent.putExtra("uuid", userId);
                 startActivity(userIntent);
+                break;
+            case R.id.addStationBtn:
+                startActivity(new Intent(getApplicationContext(), AddStation.class));
                 break;
         }
     }
