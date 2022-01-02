@@ -23,7 +23,7 @@ import com.google.firebase.database.ValueEventListener;
 public class MainMenu extends AppCompatActivity implements View.OnClickListener {
 
     private TextView message;
-    private Button logout, carInfoBtn, userInfoBtn;
+    private Button logout, carInfoBtn, userInfoBtn, addStationBtn, mapsBtn;
 
     private DatabaseReference mDatabase;
 
@@ -37,7 +37,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         message = findViewById(R.id.message);
         logout = findViewById(R.id.logoutBtnMM);
         carInfoBtn = findViewById(R.id.carInfoBtn);
-        userInfoBtn = findViewById(R.id.addStationBtn);
+        userInfoBtn = findViewById(R.id.userInfoBtn);
+        addStationBtn = findViewById(R.id.addStationBtn);
+        mapsBtn = findViewById(R.id.mapsBtn);
 
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
@@ -47,6 +49,8 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
         logout.setOnClickListener(this);
         carInfoBtn.setOnClickListener(this);
         userInfoBtn.setOnClickListener(this);
+        addStationBtn.setOnClickListener(this);
+        mapsBtn.setOnClickListener(this);
 
         mDatabase.child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -86,6 +90,9 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener 
                 break;
             case R.id.addStationBtn:
                 startActivity(new Intent(getApplicationContext(), AddStation.class));
+                break;
+            case R.id.mapsBtn:
+                startActivity(new Intent(getApplicationContext(), MapsActivity.class));
                 break;
         }
     }

@@ -50,8 +50,6 @@ public class AddStation extends AppCompatActivity {
 
         addStationBtn.setOnClickListener(v -> {
             if (ActivityCompat.checkSelfPermission(AddStation.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                /*
-                 */
                 locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
                 if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) || locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {

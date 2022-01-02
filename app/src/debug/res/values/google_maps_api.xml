@@ -1,0 +1,24 @@
+<resources>
+    <!--
+    TODO: Before you run your application, you need a Google Maps API key.
+
+    To get one, follow this link, follow the directions and press "Create" at the end:
+
+    https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=E6:4E:03:C3:0D:B4:33:4E:1B:83:08:66:9F:C3:2F:63:FD:DD:ED:C8%3Bcom.dbd.plugtimproject
+
+    You can also add your credentials to an existing key, using these values:
+
+    Package name:
+    com.dbd.plugtimproject
+
+    SHA-1 certificate fingerprint:
+    E6:4E:03:C3:0D:B4:33:4E:1B:83:08:66:9F:C3:2F:63:FD:DD:ED:C8
+
+    Alternatively, follow the directions here:
+    https://developers.google.com/maps/documentation/android/start#get-key
+
+    Once you have your key (it starts with "AIza"), replace the "google_maps_key"
+    string in this file.
+    -->
+    <string name="google_maps_key" templateMergeStrategy="preserve" translatable="false">AIzaSyA5lE_mpds-TdfP5GIGd35j1cDgFSW6MD4</string>
+</resources>
