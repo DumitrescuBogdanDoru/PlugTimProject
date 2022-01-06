@@ -63,7 +63,7 @@ public class AddStation extends AppCompatActivity {
                                 List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
                                 Station station = new Station(descriptionStation, Integer.parseInt(portsStation), new LocationHelper(addressList.get(0).getLatitude(), addressList.get(0).getLongitude()), FirebaseAuth.getInstance().getUid());
 
-                                mDatabase.child("stations").child(addressList.get(0).getLocality())
+                                mDatabase.child("stations").child(addressList.get(0).getPostalCode())
                                         .setValue(station).addOnCompleteListener(task1 -> {
                                     if (task1.isSuccessful()) {
                                         Toast.makeText(AddStation.this, "Station has been added successfully", Toast.LENGTH_SHORT).show();
