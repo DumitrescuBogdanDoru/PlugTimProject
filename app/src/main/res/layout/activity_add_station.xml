@@ -37,7 +37,7 @@
         android:id="@+id/description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="30dp"
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
@@ -50,7 +50,7 @@
         android:id="@+id/ports"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="35dp"
+        android:layout_marginTop="20dp"
         android:ems="10"
         android:inputType="number"
         android:minHeight="48dp"
@@ -64,26 +64,52 @@
         android:id="@+id/addStationBtnForm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="64dp"
         android:backgroundTint="@android:color/holo_blue_bright"
         android:text="Add Station"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ports"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/addImageBtnForm"
+        app:layout_constraintVertical_bias="0.025" />
+
+    <Button
+        android:id="@+id/addImageBtnForm"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="64dp"
+        android:backgroundTint="@android:color/holo_blue_bright"
+        android:text="Upload photo"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageAddStation"
+        app:layout_constraintVertical_bias="0.027" />
 
     <TextView
         android:id="@+id/textView8"
         android:layout_width="298dp"
         android:layout_height="87dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="20dp"
         android:text="To complete this operation you will need to give access to your location"
         android:textAlignment="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/addStationBtnForm" />
+
+    <ImageView
+        android:id="@+id/imageAddStation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/ports"
+        app:layout_constraintVertical_bias="0.165" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
