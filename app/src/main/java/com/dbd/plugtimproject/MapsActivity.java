@@ -1,7 +1,7 @@
 package com.dbd.plugtimproject;
 
 import android.Manifest;
-import android.annotation.SuppressLint;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -9,6 +9,9 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -24,6 +27,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -36,7 +40,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
@@ -44,6 +48,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private DatabaseReference mDatabase;
     private FusedLocationProviderClient fusedLocationClient;
     protected LocationManager locationManager;
+
+    private AlertDialog.Builder dialogBuilder;
+    private AlertDialog dialog;
+    private TextView descriptionMaps, portsMaps;
+    private Button backBtnMaps;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,17 +65,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+
     }
 
-    /**
-     * Manipulates the map once available.
-     * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
-     * installed Google Play services and returned to the app.
-     */
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
@@ -87,8 +89,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for (Station station : stationList) {
                     if (station.getLocationHelper() != null) {
                         LatLng stationLocation = new LatLng(station.getLocationHelper().getLatitude(), station.getLocationHelper().getLongitude());
-                        MarkerOptions marker = new MarkerOptions().position(stationLocation).title(station.getDescription()).snippet("Number of ports: " + station.getNumberOfPorts().toString());
-
+                        //MarkerOptions marker = new MarkerOptions().position(stationLocation).title(station.getDescription()).snippet("Number of ports: " + station.getNumberOfPorts().toString());
+                        MarkerOptions marker = new MarkerOptions().position(stationLocation);
                         mMap.addMarker(marker);
                     } else {
                         Toast.makeText(MapsActivity.this, "LocationHelper", Toast.LENGTH_SHORT).show();
@@ -127,5 +129,75 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             ActivityCompat.requestPermissions(MapsActivity.this,
                     new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 44);
         }
+
+        mMap.setOnMarkerClickListener(this);
+    }
+
+    public void createNewMapsDialog(String description, String ports) {
+        dialogBuilder = new AlertDialog.Builder(this);
+        final View mapsPopupView = getLayoutInflater().inflate(R.layout.popup, null);
+
+        descriptionMaps = mapsPopupView.findViewById(R.id.descriptionMaps);
+        portsMaps = mapsPopupView.findViewById(R.id.portsMaps);
+        backBtnMaps = mapsPopupView.findViewById(R.id.backBtnMaps);
+
+        descriptionMaps.setText(description);
+        portsMaps.setText(ports);
+
+        dialogBuilder.setView(mapsPopupView);
+        dialog = dialogBuilder.create();
+        dialog.show();
+
+        backBtnMaps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        //String description = marker.getTitle();
+        //String ports = marker.getSnippet();
+
+        LatLng position = marker.getPosition();
+        double latitude = position.latitude;
+        double longitudine = position.longitude;
+
+        List<Station> stationList = new ArrayList<>();
+
+        mDatabase.child("stations").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                stationList.clear();
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    Station station = postSnapshot.getValue(Station.class);
+                    stationList.add(station);
+                }
+
+                for (Station station : stationList) {
+                    if (station.getLocationHelper() != null) {
+                        String description = "";
+                        String ports = "";
+
+
+                        if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitudine) {
+                            description = station.getDescription();
+                            ports = station.getNumberOfPorts().toString();
+                            createNewMapsDialog(description, ports);
+                        }
+
+                    } else {
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        return false;
     }
 }
