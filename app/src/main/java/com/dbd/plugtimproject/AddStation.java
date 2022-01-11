@@ -28,7 +28,6 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -64,7 +63,6 @@ public class AddStation extends AppCompatActivity {
         ports = findViewById(R.id.ports);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        //storage = FirebaseStorage.getInstance("gs://plugtimproject.appspot.com");
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
@@ -132,7 +130,6 @@ public class AddStation extends AppCompatActivity {
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         startActivityForResult(intent, 1);
-
     }
 
     @Override
@@ -142,7 +139,6 @@ public class AddStation extends AppCompatActivity {
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
             imageAddStation.setImageURI(imageUri);
-
         }
     }
 

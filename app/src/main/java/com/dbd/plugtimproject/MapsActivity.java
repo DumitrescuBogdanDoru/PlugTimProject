@@ -4,6 +4,8 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
@@ -11,6 +13,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +32,14 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -53,6 +59,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private AlertDialog dialog;
     private TextView descriptionMaps, portsMaps;
     private Button backBtnMaps;
+    private ImageView evPhoto;
+
+    private FirebaseStorage storage;
+    private StorageReference storageReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +76,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-
+        storage = FirebaseStorage.getInstance();
+        storageReference = storage.getReference();
     }
 
     @Override
@@ -89,7 +100,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 for (Station station : stationList) {
                     if (station.getLocationHelper() != null) {
                         LatLng stationLocation = new LatLng(station.getLocationHelper().getLatitude(), station.getLocationHelper().getLongitude());
-                        //MarkerOptions marker = new MarkerOptions().position(stationLocation).title(station.getDescription()).snippet("Number of ports: " + station.getNumberOfPorts().toString());
                         MarkerOptions marker = new MarkerOptions().position(stationLocation);
                         mMap.addMarker(marker);
                     } else {
@@ -134,15 +144,27 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     }
 
     public void createNewMapsDialog(String description, String ports) {
+
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        LatLng position = marker.getPosition();
+        double latitude = position.latitude;
+        double longitudine = position.longitude;
+
+        List<Station> stationList = new ArrayList<>();
+        List<String> uuids = new ArrayList<>();
+
+
+        // dialog
         dialogBuilder = new AlertDialog.Builder(this);
         final View mapsPopupView = getLayoutInflater().inflate(R.layout.popup, null);
 
         descriptionMaps = mapsPopupView.findViewById(R.id.descriptionMaps);
         portsMaps = mapsPopupView.findViewById(R.id.portsMaps);
         backBtnMaps = mapsPopupView.findViewById(R.id.backBtnMaps);
-
-        descriptionMaps.setText(description);
-        portsMaps.setText(ports);
+        evPhoto = mapsPopupView.findViewById(R.id.evPhoto);
 
         dialogBuilder.setView(mapsPopupView);
         dialog = dialogBuilder.create();
@@ -154,38 +176,43 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 dialog.dismiss();
             }
         });
-    }
 
-    @Override
-    public boolean onMarkerClick(@NonNull Marker marker) {
-        //String description = marker.getTitle();
-        //String ports = marker.getSnippet();
-
-        LatLng position = marker.getPosition();
-        double latitude = position.latitude;
-        double longitudine = position.longitude;
-
-        List<Station> stationList = new ArrayList<>();
+        // add
 
         mDatabase.child("stations").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 stationList.clear();
+                uuids.clear();
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
                     Station station = postSnapshot.getValue(Station.class);
                     stationList.add(station);
+                    uuids.add(postSnapshot.getKey());
+
                 }
 
-                for (Station station : stationList) {
-                    if (station.getLocationHelper() != null) {
+                for (int i = 0; i < stationList.size(); i++) {
+                    if (stationList.get(i).getLocationHelper() != null) {
                         String description = "";
                         String ports = "";
+                        StorageReference pathReference = storageReference.child("images/" + uuids.get(0));
 
+                        if (stationList.get(i).getLocationHelper().getLatitude() == latitude && stationList.get(i).getLocationHelper().getLongitude() == longitudine) {
+                            description = stationList.get(i).getDescription();
+                            ports = stationList.get(i).getNumberOfPorts().toString();
 
-                        if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitudine) {
-                            description = station.getDescription();
-                            ports = station.getNumberOfPorts().toString();
-                            createNewMapsDialog(description, ports);
+                            long MAXBYTES = 1024 * 1024;
+
+                            pathReference.getBytes(MAXBYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                @Override
+                                public void onSuccess(@NonNull byte[] bytes) {
+                                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                    evPhoto.setImageBitmap(bitmap);
+                                }
+                            });
+
+                            descriptionMaps.setText(description);
+                            portsMaps.setText(ports);
                         }
 
                     } else {
