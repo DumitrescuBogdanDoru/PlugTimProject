@@ -143,10 +143,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(this);
     }
 
-    public void createNewMapsDialog(String description, String ports) {
-
-    }
-
     @Override
     public boolean onMarkerClick(@NonNull Marker marker) {
         LatLng position = marker.getPosition();
@@ -176,7 +172,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             }
         });
 
-        // add
+        // add photo in dialog
 
         mDatabase.child("stations").addValueEventListener(new ValueEventListener() {
             @Override
