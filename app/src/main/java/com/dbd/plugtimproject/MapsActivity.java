@@ -156,7 +156,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         List<Station> stationList = new ArrayList<>();
         List<String> uuids = new ArrayList<>();
 
-
         // dialog
         dialogBuilder = new AlertDialog.Builder(this);
         final View mapsPopupView = getLayoutInflater().inflate(R.layout.popup, null);
@@ -195,13 +194,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (stationList.get(i).getLocationHelper() != null) {
                         String description = "";
                         String ports = "";
-                        StorageReference pathReference = storageReference.child("images/" + uuids.get(0));
+                        StorageReference pathReference = storageReference.child("images/" + uuids.get(i));
 
                         if (stationList.get(i).getLocationHelper().getLatitude() == latitude && stationList.get(i).getLocationHelper().getLongitude() == longitudine) {
                             description = stationList.get(i).getDescription();
                             ports = stationList.get(i).getNumberOfPorts().toString();
 
-                            long MAXBYTES = 1024 * 1024;
+                            long MAXBYTES = 1024 * 1024 * 20;
 
                             pathReference.getBytes(MAXBYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
                                 @Override
