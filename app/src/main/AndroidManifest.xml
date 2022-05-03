@@ -44,19 +44,19 @@
             android:name=".ProfileInfo"
             android:exported="false" />
         <activity
-            android:name=".ForgotPassword"
+            android:name=".register.ForgotPassword"
             android:exported="false" />
         <activity
             android:name=".MainMenu"
             android:exported="false" />
         <activity
-            android:name=".RegisterCar"
+            android:name=".register.RegisterCar"
             android:exported="false" />
         <activity
-            android:name=".Register"
+            android:name=".register.Register"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".register.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

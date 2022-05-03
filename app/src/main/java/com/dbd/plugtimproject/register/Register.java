@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject;
+package com.dbd.plugtimproject.register;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
