@@ -32,11 +32,13 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
@@ -81,6 +83,8 @@ public class AddStation extends AppCompatActivity {
                             Geocoder geocoder = new Geocoder(AddStation.this, Locale.getDefault());
                             try {
                                 List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
+
+                                // TODO check using latitudine and logitudine if another station is near
                                 Station station = new Station(descriptionStation, Integer.parseInt(portsStation), new LocationHelper(addressList.get(0).getLatitude(), addressList.get(0).getLongitude()), FirebaseAuth.getInstance().getUid());
 
                                 String random = UUID.randomUUID().toString();
@@ -147,27 +151,38 @@ public class AddStation extends AppCompatActivity {
         pd.setTitle("Uploading image");
         pd.show();
 
-        StorageReference stationReference = storageReference.child("images/" + uuid);
+        StorageReference stationReference = storageReference.child("images/" + uuid + "/");
+        stationReference.listAll()
+                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
+                    Integer counter = 0;
 
-        stationReference.putFile(imageUri)
-                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
                     @Override
-                    public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                        pd.dismiss();
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        pd.dismiss();
-                        Toast.makeText(AddStation.this, "Couldn't load image", Toast.LENGTH_SHORT).show();
-                    }
-                })
-                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                        double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                        pd.setMessage("Progress: " + (int) progress + "%");
+                    public void onSuccess(ListResult listResult) {
+                        for (StorageReference prefix : listResult.getPrefixes()) {
+                            counter++;
+                        }
+
+                        stationReference.child(counter.toString()).putFile(imageUri)
+                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
+                                        pd.dismiss();
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        pd.dismiss();
+                                        Toast.makeText(AddStation.this, "Couldn't load image", Toast.LENGTH_SHORT).show();
+                                    }
+                                })
+                                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                                    @Override
+                                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
+                                        double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                                        pd.setMessage("Progress: " + (int) progress + "%");
+                                    }
+                                });
                     }
                 });
     }

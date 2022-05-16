@@ -190,7 +190,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     if (stationList.get(i).getLocationHelper() != null) {
                         String description = "";
                         String ports = "";
-                        StorageReference pathReference = storageReference.child("images/" + uuids.get(i));
+                        StorageReference pathReference = storageReference.child("images/" + uuids.get(i) + "/");
 
                         if (stationList.get(i).getLocationHelper().getLatitude() == latitude && stationList.get(i).getLocationHelper().getLongitude() == longitudine) {
                             description = stationList.get(i).getDescription();
