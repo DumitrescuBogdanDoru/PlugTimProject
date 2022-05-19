@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject.register;
+package com.dbd.plugtimproject.activities.register;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

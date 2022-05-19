@@ -31,32 +31,32 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".activities.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".AddStation"
+            android:name=".activities.AddStation"
             android:exported="false" />
         <activity
-            android:name=".CarInfo"
+            android:name=".activities.CarInfo"
             android:exported="false" />
         <activity
-            android:name=".ProfileInfo"
+            android:name=".activities.ProfileInfo"
             android:exported="false" />
         <activity
-            android:name=".register.ForgotPassword"
+            android:name=".activities.register.ForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".MainMenu"
+            android:name=".activities.MainMenu"
             android:exported="false" />
         <activity
-            android:name=".register.RegisterCar"
+            android:name=".activities.register.RegisterCar"
             android:exported="false" />
         <activity
-            android:name=".register.Register"
+            android:name=".activities.register.Register"
             android:exported="false" />
         <activity
-            android:name=".register.Login"
+            android:name=".activities.register.Login"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

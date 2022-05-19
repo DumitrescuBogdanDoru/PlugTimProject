@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject.register;
+package com.dbd.plugtimproject.activities.register;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +12,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dbd.plugtimproject.MainMenu;
+import com.dbd.plugtimproject.activities.MainMenu;
 import com.dbd.plugtimproject.R;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;

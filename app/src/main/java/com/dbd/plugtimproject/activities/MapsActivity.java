@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject;
+package com.dbd.plugtimproject.activities;
 
 import android.Manifest;
 import android.app.AlertDialog;
@@ -21,6 +21,7 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.FragmentActivity;
 
+import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.databinding.ActivityMapsBinding;
 import com.dbd.plugtimproject.models.Station;
 import com.google.android.gms.location.FusedLocationProviderClient;

@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject;
+package com.dbd.plugtimproject.activities;
 
 import android.os.Bundle;
 import android.widget.TextView;
@@ -7,6 +7,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.Car;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

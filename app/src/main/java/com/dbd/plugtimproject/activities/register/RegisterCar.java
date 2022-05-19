@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject.register;
+package com.dbd.plugtimproject.activities.register;
 
 import android.content.Intent;
 import android.os.Bundle;

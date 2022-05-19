@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject;
+package com.dbd.plugtimproject.activities;
 
 import android.Manifest;
 import android.app.ProgressDialog;
@@ -22,6 +22,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.LocationHelper;
 import com.dbd.plugtimproject.models.Station;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -38,7 +39,6 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
