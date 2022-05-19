@@ -23,8 +23,8 @@
         android:title="Notifications"
         app:showAsAction="ifRoom" />
     <item
-        android:id="@+id/settings"
-        android:icon="@drawable/ic_settings"
+        android:id="@+id/profile"
+        android:icon="@drawable/ic_account"
         android:title="Settings"
         app:showAsAction="ifRoom" />
 
