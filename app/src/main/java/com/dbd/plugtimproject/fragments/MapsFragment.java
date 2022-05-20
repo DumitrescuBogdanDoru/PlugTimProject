@@ -1,18 +1,19 @@
 package com.dbd.plugtimproject.fragments;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
-
 import android.annotation.SuppressLint;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.fragment.app.Fragment;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.models.Station;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -21,14 +22,22 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MapsFragment extends Fragment {
 
     private FusedLocationProviderClient fusedLocationClient;
+    private DatabaseReference mDatabase;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
-        // permission already asked
         @SuppressLint("MissingPermission")
         @Override
         public void onMapReady(GoogleMap googleMap) {
@@ -38,6 +47,36 @@ public class MapsFragment extends Fragment {
                 Location location = task.getResult();
                 if (location != null) {
                     googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+
+                    // Getting all the stations and pointing them on map
+                    mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+                    List<Station> stationList = new ArrayList<>();
+
+                    mDatabase.child("stations").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            stationList.clear();
+                            for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                                Station station = postSnapshot.getValue(Station.class);
+                                stationList.add(station);
+                            }
+
+                            for (Station station : stationList) {
+                                if (station.getLocationHelper() != null) {
+                                    LatLng stationLocation = new LatLng(station.getLocationHelper().getLatitude(), station.getLocationHelper().getLongitude());
+                                    MarkerOptions marker = new MarkerOptions().position(stationLocation);
+                                    googleMap.addMarker(marker);
+                                } else {
+                                    Toast.makeText(getContext(), "LocationHelper", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             });
         }
