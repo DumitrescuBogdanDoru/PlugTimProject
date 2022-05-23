@@ -40,6 +40,8 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_add"
         app:layout_anchor="@id/bottomAppBar"
+        app:tint="@color/black"
+        app:backgroundTint="@color/white"
         tools:ignore="SpeakableTextPresentCheck" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.User;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,7 +32,7 @@ public class ProfileInfo extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
 
-        String uuid = getIntent().getStringExtra("uuid");
+        String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         getInfo(uuid);
     }
 

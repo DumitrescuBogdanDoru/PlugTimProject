@@ -12,9 +12,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dbd.plugtimproject.activities.MainActivity;
-import com.dbd.plugtimproject.activities.MainMenu;
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.activities.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;

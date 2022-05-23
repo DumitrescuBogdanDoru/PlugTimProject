@@ -12,6 +12,7 @@
         android:layout_height="150dp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
+        app:civ_border_color="@android:color/holo_blue_bright"
         app:civ_border_width="2dp" />
 
     <TextView
@@ -32,5 +33,24 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="10dp"
         android:textSize="18sp" />
+
+    <Button
+        android:id="@+id/editProfileBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_car"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Edit Profile" />
+
+
+    <Button
+        android:id="@+id/editCarBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editProfileBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Edit Car" />
 
 </RelativeLayout>

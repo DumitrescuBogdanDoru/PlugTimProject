@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.Car;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -32,7 +33,7 @@ public class CarInfo extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("cars");
 
-        String uuid = getIntent().getStringExtra("uuid");
+        String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         getInfo(uuid);
     }
 

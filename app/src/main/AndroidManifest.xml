@@ -52,9 +52,6 @@
             android:name=".activities.register.ForgotPassword"
             android:exported="false" />
         <activity
-            android:name=".activities.MainMenu"
-            android:exported="false" />
-        <activity
             android:name=".activities.register.RegisterCar"
             android:exported="false" />
         <activity
