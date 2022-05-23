@@ -157,7 +157,7 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
         pd.setTitle("Uploading image");
         pd.show();
 
-        StorageReference stationReference = storageReference.child("images/car/" + uuid);
+        StorageReference stationReference = storageReference.child("images/cars/" + uuid);
         stationReference.listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
 
