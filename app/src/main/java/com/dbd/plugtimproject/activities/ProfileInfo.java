@@ -48,7 +48,7 @@ public class ProfileInfo extends AppCompatActivity {
         changeProfileInfoBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (saveChanges()) {
+                if (saveChanges(uuid)) {
                     startActivity(new Intent(getApplicationContext(), MainActivity.class));
                     finish();
                 }
@@ -79,7 +79,7 @@ public class ProfileInfo extends AppCompatActivity {
         });
     }
 
-    private boolean saveChanges() {
+    private boolean saveChanges(String uuid) {
         String changedEmail = profileEmailInfo.getText().toString();
         String changedFirstName = profileFirstNameInfo.getText().toString();
         String changedLastName = profileLastNameInfo.getText().toString();
@@ -115,7 +115,7 @@ public class ProfileInfo extends AppCompatActivity {
             }
         }
 
-        mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).updateChildren(update);
+        mDatabase.child(uuid).updateChildren(update);
         return true;
     }
 }

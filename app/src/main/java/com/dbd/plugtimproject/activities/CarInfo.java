@@ -1,7 +1,10 @@
 package com.dbd.plugtimproject.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,9 +19,15 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Map;
+
 public class CarInfo extends AppCompatActivity {
 
-    private TextView companyInfo, modelInfo, colorInfo, yearInfo;
+    private EditText carCompanyInfo, carModelInfo, carColorInfo, carYearInfo;
+    String company, model, color, year;
+    Button changeCarInfoBtn;
     private DatabaseReference mDatabase;
 
     @Override
@@ -26,15 +35,27 @@ public class CarInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info);
 
-        companyInfo = findViewById(R.id.companyInfo);
-        modelInfo = findViewById(R.id.modelInfo);
-        colorInfo = findViewById(R.id.colorInfo);
-        yearInfo = findViewById(R.id.yearInfo);
+        carCompanyInfo = findViewById(R.id.carCompanyInfo);
+        carModelInfo = findViewById(R.id.carModelInfo);
+        carColorInfo = findViewById(R.id.carColorInfo);
+        carYearInfo = findViewById(R.id.carYearInfo);
+
+        changeCarInfoBtn = findViewById(R.id.changeCarInfoBtn);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("cars");
 
         String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         getInfo(uuid);
+
+        changeCarInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (saveChanges(uuid)) {
+                    finish();
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                }
+            }
+        });
     }
 
     private void getInfo(String userId) {
@@ -44,14 +65,14 @@ public class CarInfo extends AppCompatActivity {
                 Car car = snapshot.getValue(Car.class);
 
                 if (car != null) {
-                    String company = car.getCompany();
-                    companyInfo.setText(company);
-                    String model = car.getModel();
-                    modelInfo.setText(model);
-                    String color = car.getColor();
-                    colorInfo.setText(color);
-                    String year = car.getYear().toString();
-                    yearInfo.setText(year);
+                    company = car.getCompany();
+                    carCompanyInfo.setText(company);
+                    model = car.getModel();
+                    carModelInfo.setText(model);
+                    color = car.getColor();
+                    carColorInfo.setText(color);
+                    year = car.getYear().toString();
+                    carYearInfo.setText(year);
                 }
             }
 
@@ -60,5 +81,59 @@ public class CarInfo extends AppCompatActivity {
                 Toast.makeText(CarInfo.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean saveChanges(String uuid) {
+        String changedCarCompany = carCompanyInfo.getText().toString();
+        String changedCarModel = carModelInfo.getText().toString();
+        String changedCarColor = carColorInfo.getText().toString();
+        String changedCarYear = carYearInfo.getText().toString();
+
+        Map<String, Object> update = new HashMap<>();
+
+        if (!changedCarCompany.equals(company)) {
+            if (!changedCarCompany.isEmpty()) {
+                update.put("company", changedCarCompany);
+            } else {
+                carCompanyInfo.setError("Company name is invalid");
+                carCompanyInfo.requestFocus();
+                return false;
+            }
+        }
+
+        if (!changedCarModel.equals(model)) {
+            if (!changedCarModel.isEmpty()) {
+                update.put("model", changedCarModel);
+            } else {
+                carModelInfo.setError("Model name is invalid");
+                carModelInfo.requestFocus();
+                return false;
+            }
+        }
+
+
+        if (!changedCarColor.equals(color)) {
+            if (!changedCarColor.isEmpty()) {
+                update.put("color", changedCarColor);
+            } else {
+                carColorInfo.setError("Color is invalid");
+                carColorInfo.requestFocus();
+                return false;
+            }
+        }
+
+
+        if (!changedCarYear.equals(year)) {
+            if (!changedCarCompany.isEmpty() && (Integer.parseInt(changedCarYear) > 1885 && Integer.parseInt(changedCarYear) <= Calendar.getInstance().get(Calendar.YEAR))) {
+                update.put("year", Integer.parseInt(changedCarYear));
+            } else {
+                carYearInfo.setError("Year is invalid");
+                carYearInfo.requestFocus();
+                return false;
+            }
+        }
+
+        mDatabase.child(uuid).updateChildren(update);
+        return true;
     }
 }
