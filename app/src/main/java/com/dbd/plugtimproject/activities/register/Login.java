@@ -100,6 +100,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                                 finish();
                             } else {
                                 Toast.makeText(Login.this, "Email verification hasn't been completed. Please check your email.", Toast.LENGTH_SHORT).show();
+                                user.sendEmailVerification();
                             }
 
 

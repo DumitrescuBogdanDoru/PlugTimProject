@@ -1,7 +1,11 @@
 package com.dbd.plugtimproject.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.TextView;
+import android.util.Patterns;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,9 +20,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class ProfileInfo extends AppCompatActivity {
 
-    private TextView emailInfo, firstNameInfo, lastNameInfo;
+    private EditText profileEmailInfo, profileFirstNameInfo, profileLastNameInfo;
+    private String email, firstName, lastName;
+    private Button changeProfileInfoBtn;
     private DatabaseReference mDatabase;
 
     @Override
@@ -26,14 +35,25 @@ public class ProfileInfo extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_info);
 
-        emailInfo = findViewById(R.id.companyInfo);
-        firstNameInfo = findViewById(R.id.modelInfo);
-        lastNameInfo = findViewById(R.id.colorInfo);
+        profileEmailInfo = findViewById(R.id.profileEmailInfo);
+        profileFirstNameInfo = findViewById(R.id.profileFirstNameInfo);
+        profileLastNameInfo = findViewById(R.id.profileLastNameInfo);
+        changeProfileInfoBtn = findViewById(R.id.changeProfileInfoBtn);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
 
         String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         getInfo(uuid);
+
+        changeProfileInfoBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (saveChanges()) {
+                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                    finish();
+                }
+            }
+        });
     }
 
     private void getInfo(String userId) {
@@ -43,12 +63,12 @@ public class ProfileInfo extends AppCompatActivity {
                 User user = snapshot.getValue(User.class);
 
                 if (user != null) {
-                    String email = user.getUsername();
-                    emailInfo.setText(email);
-                    String firstName = user.getFirstName();
-                    firstNameInfo.setText(firstName);
-                    String lastName = user.getLastName();
-                    lastNameInfo.setText(lastName);
+                    email = user.getUsername();
+                    profileEmailInfo.setText(email);
+                    firstName = user.getFirstName();
+                    profileFirstNameInfo.setText(firstName);
+                    lastName = user.getLastName();
+                    profileLastNameInfo.setText(lastName);
                 }
             }
 
@@ -57,5 +77,45 @@ public class ProfileInfo extends AppCompatActivity {
                 Toast.makeText(ProfileInfo.this, "Something went wrong", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private boolean saveChanges() {
+        String changedEmail = profileEmailInfo.getText().toString();
+        String changedFirstName = profileFirstNameInfo.getText().toString();
+        String changedLastName = profileLastNameInfo.getText().toString();
+
+        Map<String, Object> update = new HashMap<>();
+
+        if (!changedEmail.equals(email)) {
+            if (Patterns.EMAIL_ADDRESS.matcher(changedEmail).matches() && !changedEmail.isEmpty()) {
+                update.put("username", changedEmail);
+                FirebaseAuth.getInstance().getCurrentUser().updateEmail(changedEmail);
+            } else {
+                profileEmailInfo.setError("Email is invalid");
+                profileEmailInfo.requestFocus();
+                return false;
+            }
+        }
+
+        if (!changedFirstName.equals(firstName)) {
+            if (!changedEmail.isEmpty() && changedEmail.length() > 1) {
+                update.put("firstName", changedFirstName);
+            } else {
+                profileFirstNameInfo.setError("First name is invalid");
+                profileFirstNameInfo.requestFocus();
+                return false;
+            }
+        }
+
+        if (!changedLastName.equals(lastName)) {
+            if (!changedLastName.isEmpty() && changedLastName.length() > 1) {
+                update.put("lastName", changedLastName);
+            } else {
+                profileLastNameInfo.setError("Last name is invalid");
+            }
+        }
+
+        mDatabase.child(FirebaseAuth.getInstance().getCurrentUser().getUid()).updateChildren(update);
+        return true;
     }
 }

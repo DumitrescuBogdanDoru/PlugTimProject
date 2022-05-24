@@ -21,6 +21,7 @@ import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.activities.CarInfo;
 import com.dbd.plugtimproject.activities.ProfileInfo;
 import com.dbd.plugtimproject.activities.register.ForgotPassword;
+import com.dbd.plugtimproject.activities.register.Login;
 import com.dbd.plugtimproject.models.Car;
 import com.dbd.plugtimproject.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -43,7 +44,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private CircleImageView profileImageView;
     private TextView profileInfo, carInfo;
-    private Button editProfileBtn, editCarBtn, resetPasswordBtn;
+    private Button editProfileBtn, editCarBtn, resetPasswordBtn, signoutBtn;
 
     private DatabaseReference mDatabase;
     private FirebaseStorage storage;
@@ -84,6 +85,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         editCarBtn.setOnClickListener(this);
         resetPasswordBtn = view.findViewById(R.id.resetPasswordBtn);
         resetPasswordBtn.setOnClickListener(this);
+        signoutBtn = view.findViewById(R.id.signoutBtn);
+        signoutBtn.setOnClickListener(this);
 
         return view;
     }
@@ -155,6 +158,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.resetPasswordBtn:
                 startActivity(new Intent(getActivity(), ForgotPassword.class));
                 break;
+            case R.id.signoutBtn:
+                FirebaseAuth.getInstance().signOut();
+                getActivity().finish();
+                startActivity(new Intent(getActivity(), Login.class));
+
         }
     }
 

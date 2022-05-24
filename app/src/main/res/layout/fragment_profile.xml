@@ -62,4 +62,13 @@
         android:layout_marginTop="20dp"
         android:text="Reset Password" />
 
+    <Button
+        android:id="@+id/signoutBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/resetPasswordBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Sign out" />
+
 </RelativeLayout>
