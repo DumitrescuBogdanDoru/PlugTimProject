@@ -25,7 +25,7 @@
     <item
         android:id="@+id/profile"
         android:icon="@drawable/ic_account"
-        android:title="Settings"
+        android:title="Profile"
         app:showAsAction="ifRoom" />
 
 </menu>

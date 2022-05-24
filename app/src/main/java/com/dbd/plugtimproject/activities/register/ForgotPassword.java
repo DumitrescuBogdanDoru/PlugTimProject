@@ -58,6 +58,7 @@ public class ForgotPassword extends AppCompatActivity {
             public void onComplete(@NonNull Task<Void> task) {
                 if (task.isSuccessful()) {
                     Toast.makeText(ForgotPassword.this, "An email has been sent to reset your password", Toast.LENGTH_SHORT).show();
+                    finish();
                 } else {
                     Toast.makeText(ForgotPassword.this, "Something went wrong. Please try again.", Toast.LENGTH_SHORT).show();
                 }

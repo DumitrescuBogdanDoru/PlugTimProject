@@ -53,4 +53,13 @@
         android:layout_marginTop="20dp"
         android:text="Edit Car" />
 
+    <Button
+        android:id="@+id/resetPasswordBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/editCarBtn"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="20dp"
+        android:text="Reset Password" />
+
 </RelativeLayout>

@@ -99,6 +99,7 @@ public class AddStation extends AppCompatActivity {
                                 });
 
                                 uploadPicture(random);
+                                finish();
                             } catch (IOException e) {
                                 e.printStackTrace();
                             }

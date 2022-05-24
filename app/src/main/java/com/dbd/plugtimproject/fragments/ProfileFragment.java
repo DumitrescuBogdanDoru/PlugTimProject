@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment;
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.activities.CarInfo;
 import com.dbd.plugtimproject.activities.ProfileInfo;
+import com.dbd.plugtimproject.activities.register.ForgotPassword;
 import com.dbd.plugtimproject.models.Car;
 import com.dbd.plugtimproject.models.User;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -40,14 +41,9 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
     private CircleImageView profileImageView;
     private TextView profileInfo, carInfo;
-    private Button editProfileBtn, editCarBtn;
+    private Button editProfileBtn, editCarBtn, resetPasswordBtn;
 
     private DatabaseReference mDatabase;
     private FirebaseStorage storage;
@@ -86,6 +82,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         editProfileBtn.setOnClickListener(this);
         editCarBtn = view.findViewById(R.id.editCarBtn);
         editCarBtn.setOnClickListener(this);
+        resetPasswordBtn = view.findViewById(R.id.resetPasswordBtn);
+        resetPasswordBtn.setOnClickListener(this);
 
         return view;
     }
@@ -153,6 +151,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.profile_image:
                 addCarImage();
+                break;
+            case R.id.resetPasswordBtn:
+                startActivity(new Intent(getActivity(), ForgotPassword.class));
                 break;
         }
     }
