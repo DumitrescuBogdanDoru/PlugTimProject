@@ -138,7 +138,7 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
         // intent to open gallery from phone
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         startActivityForResult(intent, 1);
     }
 

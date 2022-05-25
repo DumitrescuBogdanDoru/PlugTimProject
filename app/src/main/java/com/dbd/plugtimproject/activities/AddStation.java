@@ -174,7 +174,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
         // intent to open gallery from phone
         Intent intent = new Intent();
         intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);
+        intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         startActivityForResult(intent, 1);
     }
 
