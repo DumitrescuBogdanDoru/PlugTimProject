@@ -1,6 +1,7 @@
 package com.dbd.plugtimproject.activities;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -149,7 +150,6 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
             });
 
             uploadPicture(random);
-            finish();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -179,9 +179,9 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
     }
 
     private void uploadPicture(String uuid) {
-        //final ProgressDialog pd = new ProgressDialog(this);
-        //pd.setTitle("Uploading image");
-        //pd.show();
+        final ProgressDialog pd = new ProgressDialog(AddStation.this);
+        pd.setTitle("Uploading image");
+        pd.show();
 
         StorageReference stationReference = storageReference.child("images/" + uuid + "/");
         stationReference.listAll()
@@ -194,15 +194,16 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
 
                         stationReference.child(counter.toString()).putFile(imageUri)
                                 .addOnSuccessListener(taskSnapshot -> {
-                                    //pd.dismiss();
+                                    pd.dismiss();
+                                    finish();
                                 })
                                 .addOnFailureListener(e -> {
-                                    //pd.dismiss();
+                                    pd.dismiss();
                                     Toast.makeText(AddStation.this, "Couldn't load image", Toast.LENGTH_SHORT).show();
                                 })
                                 .addOnProgressListener(snapshot -> {
-                                    //double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                                    //pd.setMessage("Progress: " + (int) progress + "%");
+                                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                                    pd.setMessage("Progress: " + (int) progress + "%");
                                 });
                     }
                 });
