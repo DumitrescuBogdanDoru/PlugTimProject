@@ -183,7 +183,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
         pd.setTitle("Uploading image");
         pd.show();
 
-        StorageReference stationReference = storageReference.child("images/" + uuid + "/");
+        StorageReference stationReference = storageReference.child("images/stations/" + uuid + "/");
         stationReference.listAll()
                 .addOnSuccessListener(new OnSuccessListener<ListResult>() {
                     Integer counter = 0;
