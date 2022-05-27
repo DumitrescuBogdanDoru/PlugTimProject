@@ -1,6 +1,7 @@
 package com.dbd.plugtimproject.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +14,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.activities.StationActivity;
 import com.dbd.plugtimproject.models.Station;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -85,6 +87,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
             });
 
             mMap.setOnMarkerClickListener(MapsFragment.this);
+            mMap.setOnInfoWindowClickListener(MapsFragment.this);
         }
     };
 
@@ -120,6 +123,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
                     if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitude) {
                         marker.setTitle(station.getDescription());
                         marker.setSnippet("Click for more info");
+                        marker.showInfoWindow();
                         break;
                     }
                 }
@@ -130,12 +134,45 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
             }
         });
 
-        marker.showInfoWindow();
         return true;
     }
 
     @Override
     public void onInfoWindowClick(@NonNull Marker marker) {
+        LatLng position = marker.getPosition();
+        double latitude = position.latitude;
+        double longitude = position.longitude;
 
+        mDatabase.child("stations").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Station dbStation = dataSnapshot.getValue(Station.class);
+                    if (dbStation.getLocationHelper().getLatitude() == latitude && dbStation.getLocationHelper().getLongitude() == longitude) {
+                        Intent intent = new Intent(getActivity(), StationActivity.class);
+                        intent.putExtra("uuid", dataSnapshot.getKey());
+                        startActivity(intent);
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+    }
+
+    private Station getStation(Station s) {
+        return new Station() {{
+            setDescription(s.getDescription());
+            setNumberOfPorts(s.getNumberOfPorts());
+            setAddedBy(s.getAddedBy());
+            setLocationHelper(s.getLocationHelper());
+            setType1(isType1());
+            setType2(isType2());
+            setCcs(isCcs());
+            setChademo(isChademo());
+        }};
     }
 }
