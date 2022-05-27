@@ -21,6 +21,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -31,22 +32,25 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MapsFragment extends Fragment {
+public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
     private FusedLocationProviderClient fusedLocationClient;
     private DatabaseReference mDatabase;
+    private GoogleMap mMap;
 
     private OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         @SuppressLint("MissingPermission")
         @Override
-        public void onMapReady(GoogleMap googleMap) {
+        public void onMapReady(@NonNull GoogleMap googleMap) {
+            mMap = googleMap;
+
             fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
                 Location location = task.getResult();
                 if (location != null) {
-                    googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(location.getLatitude(), location.getLongitude()), 15));
 
                     // Getting all the stations and pointing them on map
                     mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
@@ -65,7 +69,7 @@ public class MapsFragment extends Fragment {
                                 if (station.getLocationHelper() != null) {
                                     LatLng stationLocation = new LatLng(station.getLocationHelper().getLatitude(), station.getLocationHelper().getLongitude());
                                     MarkerOptions marker = new MarkerOptions().position(stationLocation);
-                                    googleMap.addMarker(marker);
+                                    mMap.addMarker(marker);
                                 } else {
                                     Toast.makeText(getContext(), "LocationHelper", Toast.LENGTH_SHORT).show();
                                 }
@@ -79,6 +83,8 @@ public class MapsFragment extends Fragment {
                     });
                 }
             });
+
+            mMap.setOnMarkerClickListener(MapsFragment.this);
         }
     };
 
@@ -98,5 +104,38 @@ public class MapsFragment extends Fragment {
         if (mapFragment != null) {
             mapFragment.getMapAsync(callback);
         }
+    }
+
+    @Override
+    public boolean onMarkerClick(@NonNull Marker marker) {
+        LatLng position = marker.getPosition();
+        double latitude = position.latitude;
+        double longitude = position.longitude;
+
+        mDatabase.child("stations").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Station station = dataSnapshot.getValue(Station.class);
+                    if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitude) {
+                        marker.setTitle(station.getDescription());
+                        marker.setSnippet("Click for more info");
+                        break;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+
+        marker.showInfoWindow();
+        return true;
+    }
+
+    @Override
+    public void onInfoWindowClick(@NonNull Marker marker) {
+
     }
 }
