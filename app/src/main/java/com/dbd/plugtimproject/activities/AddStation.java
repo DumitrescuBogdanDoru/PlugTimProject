@@ -18,11 +18,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.models.FileUri;
 import com.dbd.plugtimproject.models.LocationHelper;
 import com.dbd.plugtimproject.models.Station;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -194,6 +196,13 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
 
                         stationReference.child(counter.toString()).putFile(imageUri)
                                 .addOnSuccessListener(taskSnapshot -> {
+
+                                    stationReference.child(counter.toString()).getDownloadUrl()
+                                            .addOnSuccessListener(uri -> {
+                                                FileUri fileUri = new FileUri(uri.toString());
+                                                mDatabase.child("/photos/" + uuid + "/" + counter).setValue(fileUri);
+                                            });
+
                                     pd.dismiss();
                                     finish();
                                 })

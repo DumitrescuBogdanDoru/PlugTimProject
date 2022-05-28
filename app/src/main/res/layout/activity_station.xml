@@ -11,18 +11,11 @@
         android:layout_height="match_parent"
         tools:context=".activities.StationActivity">
 
-        <HorizontalScrollView
-            android:id="@+id/stationScrollView"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            tools:ignore="SpeakableTextPresentCheck">
-
-            <ImageView
-                android:id="@+id/Stationphoto"
-                android:layout_width="300dp"
-                android:layout_height="300dp" />
-        </HorizontalScrollView>
+            android:layout_height="200dp"
+            android:orientation="horizontal"/>
 
     </RelativeLayout>
 
