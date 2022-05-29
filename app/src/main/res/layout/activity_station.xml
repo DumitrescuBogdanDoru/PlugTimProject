@@ -32,7 +32,8 @@
             android:layout_below="@+id/choosePhotoBtn"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Add photos +" />
+            android:text="Add photos +"
+            android:textAlignment="center" />
 
         <TextView
             android:id="@+id/nameStation"
@@ -40,7 +41,10 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/addPhotosToStationBtn"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/portsStation"
@@ -48,7 +52,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/nameStation"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/portTypesStation"
@@ -56,15 +62,29 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/portsStation"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/stationAddress"
+            android:id="@+id/addressStation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/portTypesStation"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="20dp"
+            android:textAlignment="center"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/getDirectionsStationBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addressStation"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Get Directions"
+            android:textAlignment="center" />
 
     </RelativeLayout>
 

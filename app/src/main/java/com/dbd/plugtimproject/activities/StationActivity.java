@@ -2,10 +2,13 @@ package com.dbd.plugtimproject.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -16,6 +19,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.FileUri;
+import com.dbd.plugtimproject.models.LocationHelper;
+import com.dbd.plugtimproject.models.Station;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,7 +31,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
 public class StationActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -38,6 +46,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
     private PhotoAdapter adapter;
     private Button addPhotosToStationBtn;
     private Button choosePhotoBtn;
+    private TextView name, ports, portTypes, address;
 
     private ArrayList<FileUri> photoList;
     private Uri imageUri;
@@ -66,8 +75,75 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         choosePhotoBtn = findViewById(R.id.choosePhotoBtn);
         choosePhotoBtn.setOnClickListener(this);
 
-        getPhotos(uuid);
+        name = findViewById(R.id.nameStation);
+        ports = findViewById(R.id.portsStation);
+        portTypes = findViewById(R.id.portTypesStation);
+        address = findViewById(R.id.addressStation);
 
+        getInfo(uuid);
+        getPhotos(uuid);
+    }
+
+    private void getInfo(String uuid) {
+        mDatabase.child("stations/" + uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Station station = snapshot.getValue(Station.class);
+
+                if (station != null) {
+                    try {
+                        name.setText(station.getDescription());
+                        ports.setText("Number of ports: " + station.getNumberOfPorts());
+                        portTypes.setText(getPortTypes(station));
+                        address.setText(getAddress(station.getLocationHelper()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
+
+    private String getPortTypes(Station station) {
+        List<String> types = new ArrayList<>();
+        StringBuilder portTypes = new StringBuilder();
+
+        if (station.isType1()) {
+            types.add("Type1");
+        }
+        if (station.isType2()) {
+            types.add("Type1");
+        }
+        if (station.isCcs()) {
+            types.add("Ccs");
+        }
+        if (station.isChademo()) {
+            types.add("Chademo");
+        }
+
+        for (String type : types) {
+            portTypes.append(type).append(" ");
+        }
+
+        return portTypes.toString();
+    }
+
+
+    private String getAddress(LocationHelper locationHelper) throws IOException {
+        Geocoder geocoder;
+        List<Address> addresses;
+        geocoder = new Geocoder(this, Locale.getDefault());
+
+        addresses = geocoder.getFromLocation(locationHelper.getLatitude(), locationHelper.getLongitude(), 1);
+
+        return addresses.get(0).getAddressLine(0);
     }
 
     private void getPhotos(String uuid) {
@@ -109,13 +185,12 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private boolean choosePicture() {
+    private void choosePicture() {
         // intent to open gallery from phone
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         startActivityForResult(intent, 1);
-        return true;
     }
 
     private void addPhoto() {
@@ -131,7 +206,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                     Integer counter;
 
                     @Override
-                    public void onSuccess(ListResult listResult) {
+                    public void onSuccess(@NonNull ListResult listResult) {
                         counter = listResult.getItems().size();
 
                         stationReference.child(counter.toString()).putFile(imageUri)
