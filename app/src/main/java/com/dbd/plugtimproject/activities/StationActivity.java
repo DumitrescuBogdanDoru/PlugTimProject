@@ -47,6 +47,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
     private Button addPhotosToStationBtn;
     private Button choosePhotoBtn;
     private TextView name, ports, portTypes, address;
+    private Button getDirectionsBtn;
 
     private ArrayList<FileUri> photoList;
     private Uri imageUri;
@@ -80,8 +81,34 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         portTypes = findViewById(R.id.portTypesStation);
         address = findViewById(R.id.addressStation);
 
+        getDirectionsBtn = findViewById(R.id.getDirectionsStationBtn);
+        getDirectionsBtn.setOnClickListener(this);
+
         getInfo(uuid);
         getPhotos(uuid);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.choosePhotoBtn:
+                choosePicture();
+                break;
+            case R.id.addPhotosToStationBtn:
+                addPhoto();
+                break;
+            case R.id.getDirectionsStationBtn:
+                getDirections();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            imageUri = data.getData();
+        }
     }
 
     private void getInfo(String uuid) {
@@ -108,7 +135,6 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
-
     }
 
     private String getPortTypes(Station station) {
@@ -164,27 +190,6 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.choosePhotoBtn:
-                choosePicture();
-                break;
-            case R.id.addPhotosToStationBtn:
-                addPhoto();
-                break;
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
-            imageUri = data.getData();
-        }
-    }
-
     private void choosePicture() {
         // intent to open gallery from phone
         Intent intent = new Intent();
@@ -231,5 +236,27 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                                 });
                     }
                 });
+    }
+
+    private void getDirections() {
+        String uuid = getIntent().getStringExtra("uuid");
+
+        mDatabase.child("stations/" + uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Station station = snapshot.getValue(Station.class);
+
+                if (station != null) {
+                    Intent intent = new Intent(android.content.Intent.ACTION_VIEW,
+                            Uri.parse(String.format("http://maps.google.com/maps?daddr=%s,%s", station.getLocationHelper().getLatitude(), station.getLocationHelper().getLongitude())));
+                    startActivity(intent);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 }
