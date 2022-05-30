@@ -209,11 +209,20 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     private void getUser(String uuid) {
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
         mDatabase.child("/users/" + uuid).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
-                addedByStation.setText("Added by " + user.getFirstName() + " " + user.getLastName());
+                if (snapshot.exists()) {
+                    if (snapshot.getKey().equals(firebaseUser.getUid())) {
+                        addedByStation.setText("Added by me");
+                    } else {
+                        User user = snapshot.getValue(User.class);
+                        addedByStation.setText("Added by " + user.getFirstName() + " " + user.getLastName());
+                    }
+                }
+
             }
 
             @Override
@@ -278,9 +287,6 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
             mDatabase.child("likes/" + uuid)
                     .child(firebaseUser.getUid()).setValue(false);
         }
-
-        //getLikes(uuid);
-        //nrOfLikes(uuid);
     }
 
     private void choosePicture() {
