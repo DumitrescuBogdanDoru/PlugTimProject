@@ -8,6 +8,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,10 +19,14 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.adapters.PhotoAdapter;
 import com.dbd.plugtimproject.models.FileUri;
 import com.dbd.plugtimproject.models.LocationHelper;
 import com.dbd.plugtimproject.models.Station;
+import com.dbd.plugtimproject.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -46,8 +51,12 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
     private PhotoAdapter adapter;
     private Button addPhotosToStationBtn;
     private Button choosePhotoBtn;
-    private TextView name, ports, portTypes, address;
+    private TextView name, ports, portTypes, address, addedByStation;
     private Button getDirectionsBtn;
+
+    // like
+    private TextView noOfLikes;
+    private ImageView like;
 
     private ArrayList<FileUri> photoList;
     private Uri imageUri;
@@ -80,12 +89,19 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         ports = findViewById(R.id.portsStation);
         portTypes = findViewById(R.id.portTypesStation);
         address = findViewById(R.id.addressStation);
+        addedByStation = findViewById(R.id.addedByStation);
+
+        noOfLikes = findViewById(R.id.noOfLikes);
+        like = findViewById(R.id.likeIcon);
+        like.setOnClickListener(this);
 
         getDirectionsBtn = findViewById(R.id.getDirectionsStationBtn);
         getDirectionsBtn.setOnClickListener(this);
 
         getInfo(uuid);
         getPhotos(uuid);
+        getLikes(uuid);
+        nrOfLikes(uuid);
     }
 
     @Override
@@ -99,6 +115,8 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.getDirectionsStationBtn:
                 getDirections();
+            case R.id.likeIcon:
+                likeStation();
         }
     }
 
@@ -120,9 +138,10 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                 if (station != null) {
                     try {
                         name.setText(station.getDescription());
-                        ports.setText("Number of ports: " + station.getNumberOfPorts());
-                        portTypes.setText(getPortTypes(station));
-                        address.setText(getAddress(station.getLocationHelper()));
+                        ports.setText("Number of Ports: " + station.getNumberOfPorts());
+                        portTypes.setText("Port Types: " + getPortTypes(station));
+                        address.setText("Address: " + getAddress(station.getLocationHelper()));
+                        getUser(station.getAddedBy());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
@@ -161,7 +180,6 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         return portTypes.toString();
     }
 
-
     private String getAddress(LocationHelper locationHelper) throws IOException {
         Geocoder geocoder;
         List<Address> addresses;
@@ -188,6 +206,81 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+    }
+
+    private void getUser(String uuid) {
+        mDatabase.child("/users/" + uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                addedByStation.setText("Added by " + user.getFirstName() + " " + user.getLastName());
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void getLikes(String uuid) {
+        final FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        mDatabase.child("likes/" + uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.child(firebaseUser.getUid()).exists() && snapshot.child(firebaseUser.getUid()).getValue(Boolean.class)) {
+                    like.setImageResource(R.drawable.ic_like);
+                    like.setTag("like");
+                } else {
+                    like.setImageResource(R.drawable.ic_unlike);
+                    like.setTag("unlike");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void nrOfLikes(String uuid) {
+        mDatabase.child("likes/" + uuid).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Integer counter = 0;
+
+                for (DataSnapshot data : snapshot.getChildren()) {
+                    if (data.exists() && data.getValue(Boolean.class)) {
+                        counter++;
+                    }
+                }
+
+                noOfLikes.setText(counter + " likes");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    private void likeStation() {
+        String uuid = getIntent().getStringExtra("uuid");
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (like.getTag().equals("unlike")) {
+            mDatabase.child("likes/" + uuid)
+                    .child(firebaseUser.getUid()).setValue(true);
+        } else if (like.getTag().equals("like")) {
+            mDatabase.child("likes/" + uuid)
+                    .child(firebaseUser.getUid()).setValue(false);
+        }
+
+        //getLikes(uuid);
+        //nrOfLikes(uuid);
     }
 
     private void choosePicture() {

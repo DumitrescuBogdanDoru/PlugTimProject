@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject.activities;
+package com.dbd.plugtimproject.adapters;
 
 import android.content.Context;
 import android.view.LayoutInflater;
