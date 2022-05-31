@@ -24,8 +24,6 @@ import com.dbd.plugtimproject.activities.register.ForgotPassword;
 import com.dbd.plugtimproject.activities.register.Login;
 import com.dbd.plugtimproject.models.Car;
 import com.dbd.plugtimproject.models.User;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,10 +31,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -44,10 +39,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private CircleImageView profileImageView;
     private TextView profileInfo, carInfo;
-    private Button editProfileBtn, editCarBtn, resetPasswordBtn, signoutBtn;
 
     private DatabaseReference mDatabase;
-    private FirebaseStorage storage;
     private StorageReference storageReference;
     private Uri imageUri;
 
@@ -60,7 +53,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         super.onCreate(savedInstanceState);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        storage = FirebaseStorage.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
         getInfo(FirebaseAuth.getInstance().getCurrentUser().getUid());
@@ -79,13 +72,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         profileInfo = view.findViewById(R.id.profile_name);
         carInfo = view.findViewById(R.id.profile_car);
 
-        editProfileBtn = view.findViewById(R.id.editProfileBtn);
+        Button editProfileBtn = view.findViewById(R.id.editProfileBtn);
         editProfileBtn.setOnClickListener(this);
-        editCarBtn = view.findViewById(R.id.editCarBtn);
+        Button editCarBtn = view.findViewById(R.id.editCarBtn);
         editCarBtn.setOnClickListener(this);
-        resetPasswordBtn = view.findViewById(R.id.resetPasswordBtn);
+        Button resetPasswordBtn = view.findViewById(R.id.resetPasswordBtn);
         resetPasswordBtn.setOnClickListener(this);
-        signoutBtn = view.findViewById(R.id.signoutBtn);
+        Button signoutBtn = view.findViewById(R.id.signoutBtn);
         signoutBtn.setOnClickListener(this);
 
         return view;
@@ -134,12 +127,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         long MAXBYTES = 1024 * 1024 * 20;
 
-        pathReference.getBytes(MAXBYTES).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(@NonNull byte[] bytes) {
-                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                profileImageView.setImageBitmap(bitmap);
-            }
+        pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
+            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+            profileImageView.setImageBitmap(bitmap);
         });
     }
 
@@ -192,36 +182,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         pd.show();
 
         StorageReference stationReference = storageReference.child("images/cars/" + uuid);
-        stationReference.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
 
-
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-
-
-                        stationReference.putFile(imageUri)
-                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                                        pd.dismiss();
-                                    }
-                                })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        pd.dismiss();
-                                        Toast.makeText(getContext(), "Couldn't load image", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                        double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                                        pd.setMessage("Progress: " + (int) progress + "%");
-                                    }
-                                });
-                    }
-                });
+        if (imageUri != null) {
+            stationReference.putFile(imageUri)
+                    .addOnSuccessListener(taskSnapshot -> pd.dismiss())
+                    .addOnFailureListener(e -> {
+                        pd.dismiss();
+                        Toast.makeText(getContext(), "Couldn't load image", Toast.LENGTH_SHORT).show();
+                    })
+                    .addOnProgressListener(snapshot -> {
+                        double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                        pd.setMessage("Progress: " + (int) progress + "%");
+                    });
+        }
+        pd.dismiss();
     }
 }

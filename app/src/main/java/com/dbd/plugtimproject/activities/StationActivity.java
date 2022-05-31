@@ -115,8 +115,10 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.getDirectionsStationBtn:
                 getDirections();
+                break;
             case R.id.likeIcon:
                 likeStation();
+                break;
         }
     }
 
