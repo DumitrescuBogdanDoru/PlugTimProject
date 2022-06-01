@@ -5,12 +5,16 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.media.ThumbnailUtils;
 import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -24,6 +28,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.ml.ModelUnquant;
 import com.dbd.plugtimproject.models.FileUri;
 import com.dbd.plugtimproject.models.LocationHelper;
 import com.dbd.plugtimproject.models.Station;
@@ -37,12 +42,19 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.ListResult;
 import com.google.firebase.storage.StorageReference;
 
+import org.tensorflow.lite.DataType;
+import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
+
 import java.io.IOException;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.List;
 import java.util.Locale;
 import java.util.UUID;
 
 public class AddStation extends AppCompatActivity implements View.OnClickListener {
+
+    private static final String TAG = "AddStation";
 
     private Button addStationBtn, addImageBtn;
     private EditText description, ports;
@@ -58,6 +70,8 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
     boolean isType2 = false;
     boolean isCcs = false;
     boolean isChademo = false;
+
+    int imageSize = 224;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,8 +110,70 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
 
         if (requestCode == 1 && resultCode == RESULT_OK && data != null && data.getData() != null) {
             imageUri = data.getData();
-            imageAddStation.setImageURI(imageUri);
+
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(this.getContentResolver(), imageUri);
+                int dimension = Math.min(bitmap.getWidth(), bitmap.getHeight());
+                Bitmap image = ThumbnailUtils.extractThumbnail(bitmap, dimension, dimension);
+
+                image = Bitmap.createScaledBitmap(image, imageSize, imageSize, false);
+
+                if (checkImage(image)) {
+                    imageAddStation.setImageURI(imageUri);
+                } else {
+                    Toast.makeText(AddStation.this, "Please load another picture", Toast.LENGTH_LONG).show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
         }
+    }
+
+    private boolean checkImage(Bitmap image) {
+        try {
+            ModelUnquant model = ModelUnquant.newInstance(getApplicationContext());
+
+            // Creates inputs for reference.
+            TensorBuffer inputFeature0 = TensorBuffer.createFixedSize(new int[]{1, 224, 224, 3}, DataType.FLOAT32);
+            ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
+            byteBuffer.order(ByteOrder.nativeOrder());
+
+            int[] intValues = new int[imageSize * imageSize];
+            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+            int pixel = 0;
+            for (int i = 0; i < imageSize; i++) {
+                for (int j = 0; j < imageSize; j++) {
+                    int val = intValues[pixel++];
+                    byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 255.f));
+                    byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 255.f));
+                    byteBuffer.putFloat((val & 0xFF) * (1.f / 255.f));
+                }
+            }
+
+            inputFeature0.loadBuffer(byteBuffer);
+
+            // Runs model inference and gets result.
+            ModelUnquant.Outputs outputs = model.process(inputFeature0);
+            TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
+
+            float[] confidences = outputFeature0.getFloatArray();
+            Log.i(TAG, "Electric Station " + confidences[0]);
+            Log.i(TAG, "Gas Pump " + confidences[1]);
+
+            if (confidences[0] > confidences[1]) {
+                model.close();
+                return true;
+            } else {
+                model.close();
+                return false;
+            }
+
+            // Releases model resources if no longer used.
+        } catch (IOException e) {
+            return false;
+        }
+
     }
 
     private void addStation() {
