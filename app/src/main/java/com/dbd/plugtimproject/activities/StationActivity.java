@@ -22,6 +22,7 @@ import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.adapters.PhotoAdapter;
 import com.dbd.plugtimproject.models.FileUri;
 import com.dbd.plugtimproject.models.LocationHelper;
+import com.dbd.plugtimproject.models.Notification;
 import com.dbd.plugtimproject.models.Station;
 import com.dbd.plugtimproject.models.User;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -40,19 +41,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.UUID;
 
 public class StationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private DatabaseReference mDatabase;
-    private FirebaseStorage storage;
     private StorageReference storageReference;
 
-    private RecyclerView recyclerView;
     private PhotoAdapter adapter;
-    private Button addPhotosToStationBtn;
-    private Button choosePhotoBtn;
     private TextView name, ports, portTypes, address, addedByStation;
-    private Button getDirectionsBtn;
 
     // like
     private TextView noOfLikes;
@@ -67,22 +64,22 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_station);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        storage = FirebaseStorage.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
         String uuid = getIntent().getStringExtra("uuid");
 
         photoList = new ArrayList<>();
 
-        recyclerView = findViewById(R.id.recyclerView);
+        RecyclerView recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         adapter = new PhotoAdapter(photoList, this);
         recyclerView.setAdapter(adapter);
 
-        addPhotosToStationBtn = findViewById(R.id.addPhotosToStationBtn);
+        Button addPhotosToStationBtn = findViewById(R.id.addPhotosToStationBtn);
         addPhotosToStationBtn.setOnClickListener(this);
-        choosePhotoBtn = findViewById(R.id.choosePhotoBtn);
+        Button choosePhotoBtn = findViewById(R.id.choosePhotoBtn);
         choosePhotoBtn.setOnClickListener(this);
 
         name = findViewById(R.id.nameStation);
@@ -95,7 +92,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         like = findViewById(R.id.likeIcon);
         like.setOnClickListener(this);
 
-        getDirectionsBtn = findViewById(R.id.getDirectionsStationBtn);
+        Button getDirectionsBtn = findViewById(R.id.getDirectionsStationBtn);
         getDirectionsBtn.setOnClickListener(this);
 
         getInfo(uuid);
@@ -285,6 +282,8 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         if (like.getTag().equals("unlike")) {
             mDatabase.child("likes/" + uuid)
                     .child(firebaseUser.getUid()).setValue(true);
+            sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, false);
+
         } else if (like.getTag().equals("like")) {
             mDatabase.child("likes/" + uuid)
                     .child(firebaseUser.getUid()).setValue(false);
@@ -322,6 +321,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                                             .addOnSuccessListener(uri -> {
                                                 FileUri fileUri = new FileUri(uri.toString());
                                                 mDatabase.child("/photos/" + uuid + "/" + counter).setValue(fileUri);
+                                                sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, true);
                                             });
 
                                     pd.dismiss();
@@ -337,6 +337,70 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                                 });
                     }
                 });
+    }
+
+    private void sendNotification(String userId, String stationId, boolean isPhotoAdded) {
+
+        if (isPhotoAdded) {
+            mDatabase.child("/users/" + userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User user = snapshot.getValue(User.class);
+                    String text = user.getFirstName() + " " + user.getLastName() + " added a photo to the station";
+
+                    mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Station station = snapshot.getValue(Station.class);
+                            Notification notification = new Notification(userId, stationId, text);
+                            if (!userId.equals(station.getAddedBy())) {
+                                mDatabase.child("/notifications/" + station.getAddedBy() + "/" + UUID.randomUUID()).setValue(notification);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        } else {
+            mDatabase.child("/users/" + userId).addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    User user = snapshot.getValue(User.class);
+                    String text = user.getFirstName() + " " + user.getLastName() + " appreciates this station";
+
+                    mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Station station = snapshot.getValue(Station.class);
+                            Notification notification = new Notification(userId, stationId, text);
+                            if (!userId.equals(station.getAddedBy())) {
+                                mDatabase.child("/notifications/" + station.getAddedBy() + "/" + UUID.randomUUID()).setValue(notification);
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
     }
 
     private void getDirections() {
