@@ -1,6 +1,58 @@
 <resources>
     <string name="app_name">PlugTimProject</string>
     <string name="title_activity_maps">MapsActivity</string>
+
+    <string-array name="company">
+        <item>BMW</item>
+        <item>Dacia</item>
+        <item>Hyundai</item>
+        <item>Renault</item>
+        <item>Škoda</item>
+        <item>Smart</item>
+        <item>Tesla</item>
+        <item>VW</item>
+    </string-array>
+
+    <string-array name="bmw">
+        <item>I3</item>
+    </string-array>
+    <string-array name="dacia">
+        <item>Spring</item>
+    </string-array>
+    <string-array name="hyundai">
+        <item>Ioniq</item>
+        <item>Kona</item>
+    </string-array>
+    <string-array name="renault">
+        <item>Zoe</item>
+    </string-array>
+    <string-array name="skoda">
+        <item>Enyaq</item>
+    </string-array>
+    <string-array name="smart">
+        <item>forfour</item>
+    </string-array>
+    <string-array name="tesla">
+        <item>Model S</item>
+        <item>Model 3</item>
+    </string-array>
+    <string-array name="vw">
+        <item>ID.4</item>
+    </string-array>
+
+    <string-array name="colors_en">
+        <item>White</item>
+        <item>Blue</item>
+        <item>Gray</item>
+        <item>Black</item>
+        <item>Red</item>
+        <item>Silver</item>
+        <item>Brown</item>
+        <item>Orange</item>
+        <item>Green</item>
+        <item>Yellow</item>
+    </string-array>
+
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -28,14 +31,17 @@ import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.List;
 
 public class RegisterCar extends AppCompatActivity implements View.OnClickListener {
 
     private TextView regCarSkipBtn;
     private Button regCarFinishBtn;
 
-    private EditText regCarCompany, regCarModel, regCarColor, regCarYear;
+    private EditText regCarYear;
+    private Spinner regCarCompany, regCarModel, regCarColor;
 
     private DatabaseReference mDatabase;
 
@@ -45,6 +51,11 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
     private Uri imageUri;
     private FirebaseStorage storage;
     private StorageReference storageReference;
+
+    List<String> companyList;
+    List<String> bmw, dacia, hyundai, renault, skoda, smart, tesla, vw;
+    List<String> colors;
+    ArrayAdapter<String> companyAdapter, modelAdapter, colorAdapter;
 
 
     @Override
@@ -69,6 +80,8 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
 
         storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
+
+        initializeSpinners();
     }
 
     @Override
@@ -82,7 +95,9 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
                 String email = intent.getStringExtra("email");
                 if (registerCar(email)) {
                     startActivity(new Intent(getApplicationContext(), Login.class));
-                    uploadPicture(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    if (imageUri != null) {
+                        uploadPicture(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                    }
                 }
                 break;
             case R.id.addCarImageBtn:
@@ -92,24 +107,12 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
     }
 
     private boolean registerCar(String email) {
-        String company = regCarCompany.getText().toString();
-        String model = regCarModel.getText().toString();
-        String color = regCarColor.getText().toString();
+        String company = regCarCompany.getSelectedItem().toString();
+        String model = regCarModel.getSelectedItem().toString();
+        String color = regCarColor.getSelectedItem().toString();
         String year = regCarYear.getText().toString();
 
-        if (company.isEmpty()) {
-            regCarCompany.setError("Company name is required");
-            regCarCompany.requestFocus();
-            return false;
-        } else if (model.isEmpty()) {
-            regCarModel.setError("Model name is required");
-            regCarModel.requestFocus();
-            return false;
-        } else if (color.isEmpty()) {
-            regCarColor.setError("Color is required");
-            regCarColor.requestFocus();
-            return false;
-        } else if (year.isEmpty()) {
+        if (year.isEmpty()) {
             regCarYear.setError("Year is required");
             regCarYear.requestFocus();
             return false;
@@ -189,5 +192,65 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
                                 });
                     }
                 });
+    }
+
+    private void initializeSpinners() {
+        // company spinner
+        companyList = Arrays.asList(getResources().getStringArray(R.array.company));
+        companyAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, companyList);
+        regCarCompany.setAdapter(companyAdapter);
+
+        // model spinner
+        bmw = Arrays.asList(getResources().getStringArray(R.array.bmw));
+        dacia = Arrays.asList(getResources().getStringArray(R.array.dacia));
+        hyundai = Arrays.asList(getResources().getStringArray(R.array.hyundai));
+        renault = Arrays.asList(getResources().getStringArray(R.array.renault));
+        skoda = Arrays.asList(getResources().getStringArray(R.array.skoda));
+        smart = Arrays.asList(getResources().getStringArray(R.array.smart));
+        tesla = Arrays.asList(getResources().getStringArray(R.array.tesla));
+        vw = Arrays.asList(getResources().getStringArray(R.array.vw));
+
+        regCarCompany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bmw);
+                        break;
+                    case 1:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, dacia);
+                        break;
+                    case 2:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, hyundai);
+                        break;
+                    case 3:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, renault);
+                        break;
+                    case 4:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, skoda);
+                        break;
+                    case 5:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, smart);
+                        break;
+                    case 6:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, tesla);
+                        break;
+                    case 7:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, vw);
+                        break;
+                }
+                regCarModel.setAdapter(modelAdapter);
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        // color spinner
+        colors = Arrays.asList(getResources().getStringArray(R.array.colors_en));
+        colorAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, colors);
+        regCarColor.setAdapter(colorAdapter);
     }
 }
