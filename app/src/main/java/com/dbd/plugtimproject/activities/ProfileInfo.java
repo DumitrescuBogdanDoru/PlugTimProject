@@ -13,7 +13,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.User;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -45,13 +47,10 @@ public class ProfileInfo extends AppCompatActivity {
         String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
         getInfo(uuid);
 
-        changeProfileInfoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (saveChanges(uuid)) {
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                    finish();
-                }
+        changeProfileInfoBtn.setOnClickListener(v -> {
+            if (saveChanges(uuid)) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
             }
         });
     }
@@ -89,7 +88,8 @@ public class ProfileInfo extends AppCompatActivity {
         if (!changedEmail.equals(email)) {
             if (Patterns.EMAIL_ADDRESS.matcher(changedEmail).matches() && !changedEmail.isEmpty()) {
                 update.put("username", changedEmail);
-                FirebaseAuth.getInstance().getCurrentUser().updateEmail(changedEmail);
+                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                firebaseUser.updateEmail(changedEmail).addOnSuccessListener(unused -> firebaseUser.sendEmailVerification());
             } else {
                 profileEmailInfo.setError("Email is invalid");
                 profileEmailInfo.requestFocus();
