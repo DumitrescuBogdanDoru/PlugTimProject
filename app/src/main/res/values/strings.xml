@@ -2,42 +2,134 @@
     <string name="app_name">PlugTimProject</string>
     <string name="title_activity_maps">MapsActivity</string>
 
+
+    <!-- Car Companies for spinner -->
     <string-array name="company">
+        <item>Audi</item>
         <item>BMW</item>
+        <item>Citroën</item>
         <item>Dacia</item>
+        <item>DS</item>
+        <item>Fiat</item>
+        <item>Ford</item>
+        <item>Honda</item>
         <item>Hyundai</item>
+        <item>Jaguar</item>
+        <item>Kia</item>
+        <item>Lexus</item>
+        <item>Mazda</item>
+        <item>Mercedes-Benz</item>
+        <item>Mini</item>
+        <item>Nissan</item>
+        <item>Opel</item>
+        <item>Peugeot</item>
+        <item>Porsche</item>
         <item>Renault</item>
         <item>Škoda</item>
         <item>Smart</item>
+        <item>SsangYong</item>
         <item>Tesla</item>
-        <item>VW</item>
+        <item>Volkswagen</item>
+        <item>Volvo</item>
     </string-array>
 
+    <!-- Car Model for each company for spinner -->
+    <string-array name="audi">
+        <item>Q4 e-tron</item>
+        <item>e-tron</item>
+    </string-array>
     <string-array name="bmw">
         <item>I3</item>
+        <item>IX3</item>
+        <item>I4</item>
+        <item>IX4</item>
+    </string-array>
+    <string-array name="citroen">
+        <item>ë-C4</item>
     </string-array>
     <string-array name="dacia">
         <item>Spring</item>
+    </string-array>
+    <string-array name="ds">
+        <item>3 Crossback E-Tense</item>
+    </string-array>
+    <string-array name="fiat">
+        <item>500e</item>
+    </string-array>
+    <string-array name="ford">
+        <item>Mustang Mach-E</item>
+    </string-array>
+    <string-array name="honda">
+        <item>e</item>
     </string-array>
     <string-array name="hyundai">
         <item>Ioniq</item>
         <item>Kona</item>
     </string-array>
+    <string-array name="jaguar">
+        <item>I-Pace</item>
+    </string-array>
+    <string-array name="kia">
+        <item>Soul EV</item>
+        <item>e-Niro</item>
+        <item>EV6</item>
+    </string-array>
+    <string-array name="lexus">
+        <item>UX 300e</item>
+    </string-array>
+    <string-array name="mazda">
+        <item>MX-30</item>
+    </string-array>
+    <string-array name="mercedes_benz">
+        <item>EQA</item>
+        <item>EQB</item>
+        <item>EQC</item>
+        <item>EQV</item>
+        <item>EQS</item>
+    </string-array>
+    <string-array name="mini">
+        <item>Cooper SE</item>
+    </string-array>
+    <string-array name="nissan">
+        <item>Leaf</item>
+    </string-array>
+    <string-array name="opel">
+        <item>Corsa-e</item>
+        <item>Mokka-e</item>
+    </string-array>
+    <string-array name="peugeot">
+        <item>e-208</item>
+        <item>e-2008</item>
+    </string-array>
+    <string-array name="porsche">
+        <item>Taycan</item>
+    </string-array>
     <string-array name="renault">
         <item>Zoe</item>
+        <item>Megane E-Tech Electric</item>
     </string-array>
     <string-array name="skoda">
         <item>Enyaq</item>
     </string-array>
     <string-array name="smart">
-        <item>forfour</item>
+        <item>EQ ForTwo</item>
+    </string-array>
+    <string-array name="ssangyong">
+        <item>Korando e-Motion</item>
     </string-array>
     <string-array name="tesla">
         <item>Model S</item>
         <item>Model 3</item>
+        <item>Model X</item>
+        <item>Model Y</item>
     </string-array>
     <string-array name="vw">
+        <item>ID.3</item>
         <item>ID.4</item>
+        <item>ID.5</item>
+    </string-array>
+    <string-array name="volvo">
+        <item>XC40</item>
     </string-array>
 
     <string-array name="colors_en">

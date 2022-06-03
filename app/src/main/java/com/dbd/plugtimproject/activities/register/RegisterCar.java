@@ -66,9 +66,6 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
     private FirebaseStorage storage;
     private StorageReference storageReference;
 
-    List<String> companyList;
-    List<String> bmw, dacia, hyundai, renault, skoda, smart, tesla, vw;
-    List<String> colors;
     ArrayAdapter<String> companyAdapter, modelAdapter, colorAdapter;
 
     int imageSize = 224;
@@ -201,25 +198,14 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
 
 
                         stationReference.putFile(imageUri)
-                                .addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onSuccess(@NonNull UploadTask.TaskSnapshot taskSnapshot) {
-                                        pd.dismiss();
-                                    }
+                                .addOnSuccessListener(taskSnapshot -> pd.dismiss())
+                                .addOnFailureListener(e -> {
+                                    pd.dismiss();
+                                    Toast.makeText(RegisterCar.this, "Couldn't load image", Toast.LENGTH_SHORT).show();
                                 })
-                                .addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        pd.dismiss();
-                                        Toast.makeText(RegisterCar.this, "Couldn't load image", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                                    @Override
-                                    public void onProgress(@NonNull UploadTask.TaskSnapshot snapshot) {
-                                        double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                                        pd.setMessage("Progress: " + (int) progress + "%");
-                                    }
+                                .addOnProgressListener(snapshot -> {
+                                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                                    pd.setMessage("Progress: " + (int) progress + "%");
                                 });
                     }
                 });
@@ -227,47 +213,92 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
 
     private void initializeSpinners() {
         // company spinner
-        companyList = Arrays.asList(getResources().getStringArray(R.array.company));
+        List<String> companyList = Arrays.asList(getResources().getStringArray(R.array.company));
         companyAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, companyList);
         regCarCompany.setAdapter(companyAdapter);
 
         // model spinner
-        bmw = Arrays.asList(getResources().getStringArray(R.array.bmw));
-        dacia = Arrays.asList(getResources().getStringArray(R.array.dacia));
-        hyundai = Arrays.asList(getResources().getStringArray(R.array.hyundai));
-        renault = Arrays.asList(getResources().getStringArray(R.array.renault));
-        skoda = Arrays.asList(getResources().getStringArray(R.array.skoda));
-        smart = Arrays.asList(getResources().getStringArray(R.array.smart));
-        tesla = Arrays.asList(getResources().getStringArray(R.array.tesla));
-        vw = Arrays.asList(getResources().getStringArray(R.array.vw));
-
         regCarCompany.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, bmw);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.audi)));
                         break;
                     case 1:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, dacia);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.bmw)));
                         break;
                     case 2:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, hyundai);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.citroen)));
                         break;
                     case 3:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, renault);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.dacia)));
                         break;
                     case 4:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, skoda);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.ds)));
                         break;
                     case 5:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, smart);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.fiat)));
                         break;
                     case 6:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, tesla);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.ford)));
                         break;
                     case 7:
-                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, vw);
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.honda)));
+                        break;
+                    case 8:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.hyundai)));
+                        break;
+                    case 9:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.jaguar)));
+                        break;
+                    case 10:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.kia)));
+                        break;
+                    case 11:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.lexus)));
+                        break;
+                    case 12:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.mazda)));
+                        break;
+                    case 13:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.mercedes_benz)));
+                        break;
+                    case 14:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.mini)));
+                        break;
+                    case 15:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.nissan)));
+                        break;
+                    case 16:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.opel)));
+                        break;
+                    case 17:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.peugeot)));
+                        break;
+                    case 18:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.porsche)));
+                        break;
+                    case 19:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.renault)));
+                        break;
+                    case 20:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.skoda)));
+                        break;
+                    case 21:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.smart)));
+                        break;
+                    case 22:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.ssangyong)));
+                        break;
+                    case 23:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.tesla)));
+                        break;
+                    case 24:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.vw)));
+                        break;
+                    case 25:
+                        modelAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, Arrays.asList(getResources().getStringArray(R.array.volvo)));
                         break;
                 }
                 regCarModel.setAdapter(modelAdapter);
@@ -280,7 +311,7 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
         });
 
         // color spinner
-        colors = Arrays.asList(getResources().getStringArray(R.array.colors_en));
+        List<String> colors = Arrays.asList(getResources().getStringArray(R.array.colors_en));
         colorAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, colors);
         regCarColor.setAdapter(colorAdapter);
     }
@@ -319,13 +350,13 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
             Log.i(TAG, "Dacia Spring " + confidences[3]);
 
             if (confidences[3] > confidences[2]) {
-                regCarCompany.setSelection(1);
+                regCarCompany.setSelection(3);
                 regCarModel.setSelection(0);
                 model.close();
                 return true;
             } else {
-                regCarCompany.setSelection(3);
-                regCarModel.setSelection(0);
+                regCarCompany.setSelection(19);
+                regCarModel.setSelection(1);
                 model.close();
                 return false;
             }
