@@ -95,6 +95,9 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         Button getDirectionsBtn = findViewById(R.id.getDirectionsStationBtn);
         getDirectionsBtn.setOnClickListener(this);
 
+        Button addVisitBtn = findViewById(R.id.addVisitBtn);
+        addVisitBtn.setOnClickListener(this);
+
         getInfo(uuid);
         getPhotos(uuid);
         getLikes(uuid);
@@ -115,6 +118,9 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                 break;
             case R.id.likeIcon:
                 likeStation();
+                break;
+            case R.id.addVisitBtn:
+                openDialog();
                 break;
         }
     }
@@ -423,5 +429,10 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
             }
         });
+    }
+
+    private void openDialog() {
+        VisitDialog visitDialog = new VisitDialog();
+        visitDialog.show(getSupportFragmentManager(), "add visit");
     }
 }

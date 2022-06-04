@@ -108,14 +108,24 @@
             <ImageView
                 android:id="@+id/likeIcon"
                 android:layout_width="50dp"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
 
             <TextView
                 android:id="@+id/noOfLikes"
                 android:layout_width="50dp"
-                android:layout_height="50dp"/>
+                android:layout_height="50dp" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/addVisitBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/getDirectionsStationBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:text="Add Visit"
+            android:textAlignment="center" />
 
     </RelativeLayout>
 
