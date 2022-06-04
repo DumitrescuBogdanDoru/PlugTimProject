@@ -9,8 +9,8 @@
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/chat"
-        android:icon="@drawable/ic_chat"
-        android:title="Chat"
+        android:icon="@drawable/ic_pin"
+        android:title="My Visits"
         app:showAsAction="ifRoom" />
     <item
         android:id="@+id/holder"

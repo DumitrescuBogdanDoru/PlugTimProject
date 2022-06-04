@@ -7,10 +7,14 @@ public class Visit {
     private String userId;
     private String comment;
     private boolean positive;
-    private boolean negative;
 
-    public Visit(String visitId, String userId, String comment, boolean positive) {
+    public Visit() {
+
+    }
+
+    public Visit(String visitId, String stationId, String userId, String comment, boolean positive) {
         this.visitId = visitId;
+        this.stationId = stationId;
         this.userId = userId;
         this.comment = comment;
         this.positive = positive;
@@ -22,6 +26,14 @@ public class Visit {
 
     public void setVisitId(String visitId) {
         this.visitId = visitId;
+    }
+
+    public String getStationId() {
+        return stationId;
+    }
+
+    public void setStationId(String stationId) {
+        this.stationId = stationId;
     }
 
     public String getUserId() {
@@ -47,4 +59,5 @@ public class Visit {
     public void setPositive(boolean positive) {
         this.positive = positive;
     }
+
 }

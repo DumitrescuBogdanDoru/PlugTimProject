@@ -22,12 +22,14 @@
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/fragment_chat.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/fragment_item_list.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/fragment_maps.xml" value="0.16574074074074074" />
-        <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/fragment_notification.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/fragment_notification.xml" value="0.1" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/fragment_profile.xml" value="0.25416666666666665" />
+        <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/fragment_visit.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/layout_photo.xml" value="0.1" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/layout_visit_dialog.xml" value="0.25416666666666665" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/notification_item.xml" value="0.1" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/popup.xml" value="0.4" />
+        <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/layout/visit_fragment.xml" value="0.18518518518518517" />
         <entry key="..\:/Users/bogda/Desktop/PlugTimProject/app/src/main/res/menu/bottom_menu.xml" value="0.152" />
       </map>
     </option>
