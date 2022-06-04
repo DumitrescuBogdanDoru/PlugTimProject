@@ -125,11 +125,10 @@
 
         <ImageView
             android:id="@+id/imageAddStation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
             android:layout_marginTop="20dp"
-            android:maxWidth="200dp"
-            android:maxHeight="200dp"
+
             app:layout_constraintEnd_toEndOf="@+id/addImageBtnForm"
             app:layout_constraintHorizontal_bias="0.496"
             app:layout_constraintStart_toStartOf="@+id/addImageBtnForm"

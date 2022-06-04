@@ -161,7 +161,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
             Log.i(TAG, "Electric Station " + confidences[0]);
             Log.i(TAG, "Gas Pump " + confidences[1]);
 
-            if (confidences[0] > confidences[1]) {
+            if (confidences[0] > confidences[1] && confidences[0] > 0.5) {
                 model.close();
                 return true;
             } else {
