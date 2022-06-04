@@ -8,7 +8,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.StationActivity">
+        tools:context=".activities.StationActivity"
+        android:padding="15dp">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -117,11 +118,19 @@
 
         </LinearLayout>
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyler_view_visits_station"
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_below="@+id/getDirectionsStationBtn"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp" />
+
         <Button
             android:id="@+id/addVisitBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/getDirectionsStationBtn"
+            android:layout_below="@+id/recyler_view_visits_station"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="Add Visit"

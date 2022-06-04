@@ -1,5 +1,6 @@
 package com.dbd.plugtimproject.activities;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,12 +25,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.adapters.PhotoAdapter;
+import com.dbd.plugtimproject.adapters.StationVisitsAdapter;
 import com.dbd.plugtimproject.ml.ModelUnquant;
 import com.dbd.plugtimproject.models.FileUri;
 import com.dbd.plugtimproject.models.LocationHelper;
 import com.dbd.plugtimproject.models.Notification;
 import com.dbd.plugtimproject.models.Station;
 import com.dbd.plugtimproject.models.User;
+import com.dbd.plugtimproject.models.Visit;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -49,8 +52,10 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
 public class StationActivity extends AppCompatActivity implements View.OnClickListener {
@@ -67,6 +72,9 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
     private ArrayList<FileUri> photoList;
     private Uri imageUri;
+
+    private StationVisitsAdapter stationVisitsAdapter;
+    private List<Visit> visitList;
 
     int imageSize = 224;
 
@@ -112,12 +120,20 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         Button addVisitBtn = findViewById(R.id.addVisitBtn);
         addVisitBtn.setOnClickListener(this);
 
+        RecyclerView visitsRecyclerView = findViewById(R.id.recyler_view_visits_station);
+        visitsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        visitList = new ArrayList<>();
+        stationVisitsAdapter = new StationVisitsAdapter(this, visitList);
+        visitsRecyclerView.setAdapter(stationVisitsAdapter);
+
+        readVisits(uuid);
         getInfo(uuid);
         getPhotos(uuid);
         getLikes(uuid);
         nrOfLikes(uuid);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -164,6 +180,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
     private void getInfo(String uuid) {
         mDatabase.child("stations/" + uuid).addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Station station = snapshot.getValue(Station.class);
@@ -225,6 +242,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
     private void getPhotos(String uuid) {
         mDatabase.child("/photos/" + uuid).addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -245,14 +263,17 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         mDatabase.child("/users/" + uuid).addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    if (snapshot.getKey().equals(firebaseUser.getUid())) {
+                    if (Objects.equals(snapshot.getKey(), firebaseUser.getUid())) {
                         addedByStation.setText("Added by me");
                     } else {
                         User user = snapshot.getValue(User.class);
-                        addedByStation.setText("Added by " + user.getFirstName() + " " + user.getLastName());
+                        if (user != null) {
+                            addedByStation.setText("Added by " + user.getFirstName() + " " + user.getLastName());
+                        }
                     }
                 }
 
@@ -509,4 +530,30 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         }
 
     }
+
+    private void readVisits(String uuid) {
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+
+        mDatabase.child("visits/" + uuid).addValueEventListener(new ValueEventListener() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                visitList.clear();
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    Visit visit = dataSnapshot.getValue(Visit.class);
+                    if (visit != null && visit.getStationId().equals(uuid)) {
+                        visitList.add(visit);
+                    }
+                }
+                Collections.reverse(visitList);
+                stationVisitsAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
 }
