@@ -9,12 +9,11 @@ public class Visit {
     private boolean positive;
     private boolean negative;
 
-    public Visit(String visitId, String userId, String comment, boolean positive, boolean negative) {
+    public Visit(String visitId, String userId, String comment, boolean positive) {
         this.visitId = visitId;
         this.userId = userId;
         this.comment = comment;
         this.positive = positive;
-        this.negative = negative;
     }
 
     public String getVisitId() {
@@ -47,13 +46,5 @@ public class Visit {
 
     public void setPositive(boolean positive) {
         this.positive = positive;
-    }
-
-    public boolean isNegative() {
-        return negative;
-    }
-
-    public void setNegative(boolean negative) {
-        this.negative = negative;
     }
 }

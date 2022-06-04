@@ -11,13 +11,13 @@ import androidx.annotation.Nullable;
 
 import com.dbd.plugtimproject.R;
 
-public class ChatFragment extends Fragment {
+public class VisitFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_chat, container, false);
+        return inflater.inflate(R.layout.fragment_visit, container, false);
     }
 }

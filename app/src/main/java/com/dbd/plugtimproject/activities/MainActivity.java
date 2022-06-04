@@ -1,41 +1,29 @@
 package com.dbd.plugtimproject.activities;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.location.Address;
-import android.location.Geocoder;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 
 import com.dbd.plugtimproject.R;
-import com.dbd.plugtimproject.activities.register.Login;
-import com.dbd.plugtimproject.fragments.ChatFragment;
+import com.dbd.plugtimproject.fragments.VisitFragment;
 import com.dbd.plugtimproject.fragments.MapsFragment;
 import com.dbd.plugtimproject.fragments.NotificationFragment;
 import com.dbd.plugtimproject.fragments.ProfileFragment;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.model.LatLng;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity implements BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -104,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements BottomNavigationV
                 break;
 
             case R.id.chat:
-                fragment = new ChatFragment();
+                fragment = new VisitFragment();
                 break;
 
             case R.id.notifications:

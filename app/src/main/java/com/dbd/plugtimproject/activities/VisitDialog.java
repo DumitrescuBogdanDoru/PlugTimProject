@@ -105,8 +105,7 @@ public class VisitDialog extends AppCompatDialogFragment {
                         String visitId = UUID.randomUUID().toString();
                         String commentText = comment.getText().toString();
                         boolean isPositive = positiveImage.getTag().equals("clicked");
-                        boolean isNegative = negativeImage.getTag().equals("clicked");
-                        Visit visit = new Visit(visitId, FirebaseAuth.getInstance().getCurrentUser().getUid(), commentText, isPositive, isNegative);
+                        Visit visit = new Visit(visitId, FirebaseAuth.getInstance().getCurrentUser().getUid(), commentText, isPositive);
                         mDatabase.child("visits/" + uuid).child(visitId).setValue(visit);
 
                         sendVisitNotification(uuid);
