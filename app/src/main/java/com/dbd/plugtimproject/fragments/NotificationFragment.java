@@ -1,5 +1,6 @@
 package com.dbd.plugtimproject.fragments;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,7 +29,6 @@ import java.util.List;
 
 public class NotificationFragment extends Fragment {
 
-    private RecyclerView recyclerView;
     private NotificationAdapter notificationAdapter;
     private List<Notification> notificationList;
 
@@ -39,7 +39,7 @@ public class NotificationFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
 
-        recyclerView = view.findViewById(R.id.recyler_view_notification);
+        RecyclerView recyclerView = view.findViewById(R.id.recyler_view_notification);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         notificationList = new ArrayList<>();
         notificationAdapter = new NotificationAdapter(getContext(), notificationList);
@@ -54,62 +54,41 @@ public class NotificationFragment extends Fragment {
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
 
-        mDatabase.child("notifications/" + firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                notificationList.clear();
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    Notification notification = dataSnapshot.getValue(Notification.class);
-                    if (notification != null) {
-                        notification.setText(getTextByNotificationType(notification.getText()));
+        if (firebaseUser != null) {
+            mDatabase.child("notifications/" + firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+                @SuppressLint("NotifyDataSetChanged")
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    notificationList.clear();
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Notification notification = dataSnapshot.getValue(Notification.class);
+                        if (notification != null) {
+                            notification.setText(getTextByNotificationType(notification.getText()));
+                        }
+                        notificationList.add(notification);
                     }
-                    notificationList.add(notification);
+                    Collections.reverse(notificationList);
+                    notificationAdapter.notifyDataSetChanged();
                 }
-                Collections.reverse(notificationList);
-                notificationAdapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        }
     }
 
     private String getTextByNotificationType(String text) {
-
-        //String code = getActivity().getIntent().getStringExtra("lang");
         String[] strings = text.split(" ");
 
         switch (strings[2]) {
             case "like":
-                /*
-                if (code.equals("en")) {
-                    return String.format("%s %s %s", strings[0], strings[1],  getString(R.string.hello););
-                } else {
-                    return String.format("%s %s a apreciat statia ta", strings[0], strings[1]);
-                }
-
-                 */
-                return String.format("%s %s %s", strings[0], strings[1],  getString(R.string.notification_like));
+                return String.format("%s %s %s", strings[0], strings[1], getString(R.string.notification_like));
             case "photo":
-                /*
-                if (code.equals("en")) {
-                    return String.format("%s %s added a photo to your station", strings[0], strings[1]);
-                } else {
-                    return String.format("%s %s a adaugat o fotografie statiei tale", strings[0], strings[1]);
-                }
-                */
-                return String.format("%s %s %s", strings[0], strings[1],  getString(R.string.notification_photo));
+                return String.format("%s %s %s", strings[0], strings[1], getString(R.string.notification_photo));
             case "visit":
-                /*
-                if (code.equals("en")) {
-                    return String.format("%s %s added a visit to your station", strings[0], strings[1]);
-                } else {
-                    return String.format("%s %s a adaugat o vizita la statiei tale", strings[0], strings[1]);
-                }
-                */
-                return String.format("%s %s %s", strings[0], strings[1],  getString(R.string.notification_visit));
+                return String.format("%s %s %s", strings[0], strings[1], getString(R.string.notification_visit));
         }
         return null;
     }

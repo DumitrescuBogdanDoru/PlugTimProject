@@ -220,16 +220,38 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
 
             String random = UUID.randomUUID().toString();
 
-            mDatabase.child("stations").child(random)
-                    .setValue(station).addOnCompleteListener(task1 -> {
-                if (task1.isSuccessful()) {
-                    Toast.makeText(AddStation.this, "Station has been added successfully", Toast.LENGTH_SHORT).show();
-                } else {
-                    Toast.makeText(AddStation.this, "Failed to add your station. Please try again.", Toast.LENGTH_SHORT).show();
+            mDatabase.child("stations").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    boolean exists = false;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        Station existing = dataSnapshot.getValue(Station.class);
+                        if (existing != null && existing.getLocationHelper().getLatitude() == station.getLocationHelper().getLatitude() && existing.getLocationHelper().getLongitude() == station.getLocationHelper().getLongitude()) {
+                            Toast.makeText(AddStation.this, "Station already exists", Toast.LENGTH_SHORT).show();
+                            exists = true;
+                            return;
+                        }
+                    }
+                    if (!exists) {
+                        mDatabase.child("stations").child(random)
+                                .setValue(station).addOnCompleteListener(task1 -> {
+                            if (task1.isSuccessful()) {
+                                Toast.makeText(AddStation.this, "Station has been added successfully", Toast.LENGTH_SHORT).show();
+                                if (imageUri != null) {
+                                    uploadPicture(random);
+                                }
+                            } else {
+                                Toast.makeText(AddStation.this, "Failed to add your station. Please try again.", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
                 }
             });
-
-            uploadPicture(random);
         } catch (IOException e) {
             e.printStackTrace();
         }
