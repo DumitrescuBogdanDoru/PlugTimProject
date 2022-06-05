@@ -16,10 +16,30 @@
     <string name="menu_notification">Notifications</string>
     <string name="menu_profile">Profile</string>
 
+    <!-- My Visits -->
+    <string name="my_visits_title">My Visits</string>
+
     <!-- Notification -->
+    <string name="notification_title">Notifications</string>
     <string name="notification_like">like your station.</string>
     <string name="notification_photo">added a photo to your station.</string>
     <string name="notification_visit">added a visit to your station.</string>
+
+    <!-- Profile -->
+    <string name="profile_profile_btn">Edit Profile</string>
+    <string name="profile_car_btn">Edit Car</string>
+    <string name="profile_reset_btn">Reset password</string>
+    <string name="profile_signout_btn">Signout</string>
+
+    <!-- Profile Info -->
+    <string name="profile_info_save_btn">Save Changes</string>
+
+    <!-- Car Info Info -->
+    <string name="car_info_save_btn">Save Changes</string>
+
+    <!-- Car Info Info -->
+    <string name="reset_password_email">Email</string>
+    <string name="reset_password_reset_btn">Reset Password</string>
 
 
     <!-- Car Companies for spinner -->

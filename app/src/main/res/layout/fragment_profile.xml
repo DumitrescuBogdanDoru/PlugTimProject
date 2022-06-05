@@ -41,7 +41,7 @@
         android:layout_below="@+id/profile_car"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Edit Profile" />
+        android:text="@string/profile_profile_btn" />
 
 
     <Button
@@ -51,7 +51,7 @@
         android:layout_below="@+id/editProfileBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Edit Car" />
+        android:text="@string/profile_car_btn" />
 
     <Button
         android:id="@+id/resetPasswordBtn"
@@ -60,7 +60,7 @@
         android:layout_below="@+id/editCarBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Reset Password" />
+        android:text="@string/profile_reset_btn" />
 
     <Button
         android:id="@+id/signoutBtn"
@@ -69,6 +69,6 @@
         android:layout_below="@+id/resetPasswordBtn"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Sign out" />
+        android:text="@string/profile_signout_btn" />
 
 </RelativeLayout>

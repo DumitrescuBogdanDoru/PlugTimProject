@@ -244,6 +244,8 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                                 Toast.makeText(AddStation.this, "Failed to add your station. Please try again.", Toast.LENGTH_SHORT).show();
                             }
                         });
+                    } else {
+                        finish();
                     }
                 }
 

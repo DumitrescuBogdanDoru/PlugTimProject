@@ -17,10 +17,30 @@
     <string name="menu_notification">Notificari</string>
     <string name="menu_profile">Profil</string>
 
+    <!-- My Visits -->
+    <string name="my_visits_title">Vizitele mele</string>
+
     <!-- Notification -->
+    <string name="notification_title">Notificari</string>
     <string name="notification_like">a apreciat statia ta.</string>
     <string name="notification_photo">a adaugat o fotografie statiei tale.</string>
     <string name="notification_visit">a adaugat o vizita statiei tale.</string>
+
+    <!-- Profile -->
+    <string name="profile_profile_btn">Editeaza Profilul</string>
+    <string name="profile_car_btn">Editeaza Masina</string>
+    <string name="profile_reset_btn">Reseateaza Parola</string>
+    <string name="profile_signout_btn">Deconectare</string>
+
+    <!-- Profile Info -->
+    <string name="profile_info_save_btn">Salveaza Modificarile</string>
+
+    <!-- Car Info Info -->
+    <string name="car_info_save_btn">Salveaza Modificarile</string>
+
+    <!-- Car Info Info -->
+    <string name="reset_password_email">Email</string>
+    <string name="reset_password_reset_btn">Reseteaza Parola</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

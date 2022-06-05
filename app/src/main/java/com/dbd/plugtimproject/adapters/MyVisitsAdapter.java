@@ -1,5 +1,6 @@
 package com.dbd.plugtimproject.adapters;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.view.LayoutInflater;
@@ -7,11 +8,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.activities.AddStation;
 import com.dbd.plugtimproject.activities.StationActivity;
 import com.dbd.plugtimproject.models.Station;
 import com.dbd.plugtimproject.models.Visit;
@@ -75,10 +78,17 @@ public class MyVisitsAdapter extends RecyclerView.Adapter<MyVisitsAdapter.ViewHo
     private void getText(ViewHolder holder, Visit visit) {
         FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference().child("/stations/" + visit.getStationId())
                 .addValueEventListener(new ValueEventListener() {
+                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Station station = snapshot.getValue(Station.class);
-                        holder.visitText.setText(station.getDescription() + ": " + (visit.getComment().isEmpty() ? "No message" : visit.getComment()));
+                        if (station != null) {
+                            holder.visitText.setText(station.getDescription() + ": " + (visit.getComment().isEmpty() ? "No message" : visit.getComment()));
+                        } else {
+                            Toast.makeText(mContext, "Couldn't get station. Please try again!", Toast.LENGTH_SHORT).show();
+
+                        }
+
                     }
 
                     @Override

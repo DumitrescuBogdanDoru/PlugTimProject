@@ -14,7 +14,7 @@
         android:ems="10"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="SpeakableTextPresentCheck,TextFields" />
 
     <EditText
         android:id="@+id/profileFirstNameInfo"
@@ -47,7 +47,7 @@
         android:layout_below="@+id/profileLastNameInfo"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:text="Save Changes" />
+        android:text="@string/profile_info_save_btn" />
 
 </RelativeLayout>
 
