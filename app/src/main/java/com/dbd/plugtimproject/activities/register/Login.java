@@ -1,5 +1,6 @@
 package com.dbd.plugtimproject.activities.register;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Patterns;
@@ -10,15 +11,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.dbd.plugtimproject.managers.LanguageManager;
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.activities.MainActivity;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthResult;
+import com.dbd.plugtimproject.managers.LanguageManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
@@ -59,6 +56,7 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         en.setOnClickListener(this);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -107,23 +105,22 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
 
         mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-                            if (user.isEmailVerified()) {
-                                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                                finish();
-                            } else {
-                                Toast.makeText(Login.this, "Email verification hasn't been completed. Please check your email.", Toast.LENGTH_SHORT).show();
-                            }
-
-
+                        if (user != null && user.isEmailVerified()) {
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                            intent.putExtra("lang", languageManager.getLang());
+                            startActivity(intent);
+                            finish();
                         } else {
-                            Toast.makeText(Login.this, "Login failed. Please try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(Login.this, "Email verification hasn't been completed. Please check your email.", Toast.LENGTH_SHORT).show();
                         }
+
+
+                    } else {
+                        Toast.makeText(Login.this, "Login failed. Please try again", Toast.LENGTH_SHORT).show();
                     }
                 });
 

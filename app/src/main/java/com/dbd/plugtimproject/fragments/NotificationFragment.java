@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.adapters.NotificationAdapter;
+import com.dbd.plugtimproject.enumeration.NotificationEnum;
 import com.dbd.plugtimproject.models.Notification;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -60,6 +61,9 @@ public class NotificationFragment extends Fragment {
                 notificationList.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Notification notification = dataSnapshot.getValue(Notification.class);
+                    if (notification != null) {
+                        notification.setText(getTextByNotificationType(notification.getText()));
+                    }
                     notificationList.add(notification);
                 }
                 Collections.reverse(notificationList);
@@ -71,5 +75,33 @@ public class NotificationFragment extends Fragment {
 
             }
         });
+    }
+
+    private String getTextByNotificationType(String text) {
+        String code = getActivity().getIntent().getStringExtra("lang");
+        String[] strings = text.split(" ");
+
+        switch (strings[2]) {
+            case "like":
+                if (code.equals("en")) {
+                    return String.format("%s %s liked your station", strings[0], strings[1]);
+                } else {
+                    return  String.format("%s %s a apreciat statia ta", strings[0], strings[1]);
+                }
+            case "photo":
+
+                if (code.equals("en")) {
+                    return String.format("%s %s added a photo to your station", strings[0], strings[1]);
+                } else {
+                    return  String.format("%s %s a adaugat o fotografie statiei tale", strings[0], strings[1]);
+                }
+            case "visit":
+                if (code.equals("en")) {
+                    return String.format("%s %s added a visit to your station", strings[0], strings[1]);
+                } else {
+                    return  String.format("%s %s a adaugat o vizita la statiei tale", strings[0], strings[1]);
+                }
+        }
+        return null;
     }
 }

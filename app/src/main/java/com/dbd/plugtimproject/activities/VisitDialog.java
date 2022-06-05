@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatDialogFragment;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.enumeration.NotificationEnum;
 import com.dbd.plugtimproject.models.Notification;
 import com.dbd.plugtimproject.models.Station;
 import com.dbd.plugtimproject.models.User;
@@ -124,7 +125,7 @@ public class VisitDialog extends AppCompatDialogFragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                String text = user.getFirstName() + " " + user.getLastName() + " added a visit to the station";
+                String text = user.getFirstName() + " " + user.getLastName() + " " + NotificationEnum.VISIT.getType();
 
                 mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
                     @Override

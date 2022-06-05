@@ -1,6 +1,7 @@
 package com.dbd.plugtimproject.managers;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 
@@ -9,9 +10,11 @@ import java.util.Locale;
 public class LanguageManager {
 
     private Context mContext;
+    private SharedPreferences sharedPreferences;
 
     public LanguageManager(Context mContext) {
         this.mContext = mContext;
+        sharedPreferences = mContext.getSharedPreferences("shpr", Context.MODE_PRIVATE);
     }
 
     public void updateResource(String code) {
@@ -23,8 +26,7 @@ public class LanguageManager {
         resources.updateConfiguration(configuration, resources.getDisplayMetrics());
     }
 
-    public String getCode() {
-        Resources resources = mContext.getResources();
-        return  resources.getConfiguration().locale.getLanguage();
+    public String getLang() {
+        return sharedPreferences.getString("lang", "en");
     }
 }

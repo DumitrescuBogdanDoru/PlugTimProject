@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.adapters.PhotoAdapter;
 import com.dbd.plugtimproject.adapters.StationVisitsAdapter;
+import com.dbd.plugtimproject.enumeration.NotificationEnum;
 import com.dbd.plugtimproject.ml.ModelUnquant;
 import com.dbd.plugtimproject.models.FileUri;
 import com.dbd.plugtimproject.models.LocationHelper;
@@ -337,7 +338,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         if (like.getTag().equals("unlike")) {
             mDatabase.child("likes/" + uuid)
                     .child(firebaseUser.getUid()).setValue(true);
-            sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, false);
+            sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, NotificationEnum.LIKE);
 
         } else if (like.getTag().equals("like")) {
             mDatabase.child("likes/" + uuid)
@@ -376,7 +377,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                                             .addOnSuccessListener(uri -> {
                                                 FileUri fileUri = new FileUri(uri.toString());
                                                 mDatabase.child("/photos/" + uuid + "/" + counter).setValue(fileUri);
-                                                sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, true);
+                                                sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, NotificationEnum.PHOTO);
                                             });
 
                                     pd.dismiss();
@@ -394,68 +395,35 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                 });
     }
 
-    private void sendNotification(String userId, String stationId, boolean isPhotoAdded) {
+    private void sendNotification(String userId, String stationId, NotificationEnum notificationEnum) {
+        mDatabase.child("/users/" + userId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                String text = user.getFirstName() + " " + user.getLastName() + " " + notificationEnum.getType();
 
-        if (isPhotoAdded) {
-            mDatabase.child("/users/" + userId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    User user = snapshot.getValue(User.class);
-                    String text = user.getFirstName() + " " + user.getLastName() + " added a photo to the station";
-
-                    mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Station station = snapshot.getValue(Station.class);
-                            Notification notification = new Notification(userId, stationId, text);
-                            if (!userId.equals(station.getAddedBy())) {
-                                mDatabase.child("/notifications/" + station.getAddedBy() + "/" + UUID.randomUUID()).setValue(notification);
-                            }
+                mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Station station = snapshot.getValue(Station.class);
+                        Notification notification = new Notification(userId, stationId, text);
+                        if (!userId.equals(station.getAddedBy())) {
+                            mDatabase.child("/notifications/" + station.getAddedBy() + "/" + UUID.randomUUID()).setValue(notification);
                         }
+                    }
 
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-                        }
-                    });
-                }
+                    }
+                });
+            }
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
 
-                }
-            });
-        } else {
-            mDatabase.child("/users/" + userId).addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    User user = snapshot.getValue(User.class);
-                    String text = user.getFirstName() + " " + user.getLastName() + " appreciates this station";
-
-                    mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            Station station = snapshot.getValue(Station.class);
-                            Notification notification = new Notification(userId, stationId, text);
-                            if (!userId.equals(station.getAddedBy())) {
-                                mDatabase.child("/notifications/" + station.getAddedBy() + "/" + UUID.randomUUID()).setValue(notification);
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-        }
-
+            }
+        });
     }
 
     private void getDirections() {
