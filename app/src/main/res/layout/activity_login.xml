@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="150dp"
-        android:text="PlugTim"
+        android:text="@string/login_title"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
         android:textColor="@android:color/holo_blue_bright"
         android:textSize="40sp"
@@ -29,9 +29,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:ems="10"
+        android:hint="@string/login_username"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="Email"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
@@ -45,9 +45,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:ems="10"
+        android:hint="@string/login_password"
         android:inputType="textPassword"
         android:minHeight="48dp"
-        android:text="password"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.502"
         app:layout_constraintStart_toStartOf="parent"
@@ -59,7 +59,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
         android:backgroundTint="@android:color/holo_blue_bright"
-        android:text="Login"
+        android:text="@string/login_button"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -74,7 +74,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="84dp"
-        android:text="Forgot your password?"
+        android:text="@string/login_reset"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.317"
@@ -88,12 +90,40 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:layout_marginBottom="84dp"
-        android:text="Register"
+        android:text="@string/login_register"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.236"
         app:layout_constraintStart_toEndOf="@+id/forgotBtnLog"
         app:layout_constraintTop_toBottomOf="@+id/loginBtnLog"
         app:layout_constraintVertical_bias="0.066" />
+
+    <LinearLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="116dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginBtnLog">
+
+        <ImageView
+            android:id="@+id/ro_btn"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="20dp"
+            android:src="@drawable/ro" />
+
+        <ImageView
+            android:id="@+id/en_btn"
+            android:layout_width="50dp"
+            android:layout_height="30dp"
+            android:layout_marginStart="50dp"
+            android:src="@drawable/en" />
+
+
+    </LinearLayout>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

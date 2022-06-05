@@ -6,12 +6,14 @@ import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.dbd.plugtimproject.managers.LanguageManager;
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.activities.MainActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -27,6 +29,9 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     private Button loginBtnLog;
     private TextView forgotBtnLog;
     private TextView registerBtnLog;
+
+    private ImageView ro, en;
+    private LanguageManager languageManager;
 
     private FirebaseAuth mAuth;
 
@@ -47,6 +52,11 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
         registerBtnLog = findViewById(R.id.registerBtnLog);
         registerBtnLog.setOnClickListener(this);
 
+        languageManager = new LanguageManager(this);
+        ro = findViewById(R.id.ro_btn);
+        ro.setOnClickListener(this);
+        en = findViewById(R.id.en_btn);
+        en.setOnClickListener(this);
     }
 
     @Override
@@ -60,6 +70,14 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
                 break;
             case R.id.forgotBtnLog:
                 startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
+                break;
+            case R.id.ro_btn:
+                languageManager.updateResource("ro");
+                recreate();
+                break;
+            case R.id.en_btn:
+                languageManager.updateResource("en");
+                recreate();
                 break;
         }
     }

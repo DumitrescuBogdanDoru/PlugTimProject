@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">PlugTimProject</string>
     <string name="title_activity_maps" translatable="false">MapsActivity</string>
@@ -5,17 +6,16 @@
     <!-- Login Screen -->
     <string name="login_title">PlugTim</string>
     <string name="login_username">Email</string>
-    <string name="login_password">Password</string>
-    <string name="login_button">Login</string>
-    <string name="login_reset">Forgot your password?</string>
-    <string name="login_register">Register</string>
+    <string name="login_password">Parola</string>
+    <string name="login_button">Logare</string>
+    <string name="login_reset">Ti-ai uitat parola?</string>
+    <string name="login_register">Inregistreaza-te</string>
 
     <!-- Menu -->
-    <string name="menu_map">Map</string>
-    <string name="menu_visit">Visits</string>
-    <string name="menu_notification">Notifications</string>
-    <string name="menu_profile">Profile</string>
-
+    <string name="menu_map">Harta</string>
+    <string name="menu_visit">Vizite</string>
+    <string name="menu_notification">Notificari</string>
+    <string name="menu_profile">Profil</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">
