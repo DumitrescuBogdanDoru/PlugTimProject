@@ -94,23 +94,17 @@ public class VisitDialog extends AppCompatDialogFragment {
 
         builder.setView(view)
                 .setTitle("Add Visit")
-                .setNegativeButton("cancel", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
+                .setNegativeButton(getString(R.string.visit_dialog_close_btn), (dialog, which) -> {
 
-                    }
                 })
-                .setPositiveButton("add", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        String visitId = UUID.randomUUID().toString();
-                        String commentText = comment.getText().toString();
-                        boolean isPositive = positiveImage.getTag().equals("clicked");
-                        Visit visit = new Visit(visitId, uuid, FirebaseAuth.getInstance().getCurrentUser().getUid(), commentText, isPositive);
-                        mDatabase.child("visits/" + uuid).child(visitId).setValue(visit);
+                .setPositiveButton(getString(R.string.visit_dialog_add_btn), (dialog, which) -> {
+                    String visitId = UUID.randomUUID().toString();
+                    String commentText = comment.getText().toString();
+                    boolean isPositive = positiveImage.getTag().equals("clicked");
+                    Visit visit = new Visit(visitId, uuid, FirebaseAuth.getInstance().getCurrentUser().getUid(), commentText, isPositive);
+                    mDatabase.child("visits/" + uuid).child(visitId).setValue(visit);
 
-                        sendVisitNotification(uuid);
-                    }
+                    sendVisitNotification(uuid);
                 });
 
 

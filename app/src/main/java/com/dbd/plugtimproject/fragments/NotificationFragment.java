@@ -84,11 +84,11 @@ public class NotificationFragment extends Fragment {
 
         switch (strings[2]) {
             case "like":
-                return String.format("%s %s %s", strings[0], strings[1], getString(R.string.notification_like));
+                return String.format("%s %s %s", strings[0], strings[1], getContext().getString(R.string.notification_like));
             case "photo":
-                return String.format("%s %s %s", strings[0], strings[1], getString(R.string.notification_photo));
+                return String.format("%s %s %s", strings[0], strings[1], getContext().getString(R.string.notification_photo));
             case "visit":
-                return String.format("%s %s %s", strings[0], strings[1], getString(R.string.notification_visit));
+                return String.format("%s %s %s", strings[0], strings[1], getContext().getString(R.string.notification_visit));
         }
         return null;
     }

@@ -81,7 +81,7 @@ public class StationVisitsAdapter extends RecyclerView.Adapter<StationVisitsAdap
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
-                            holder.visitText.setText(user.getFirstName() + " " + user.getLastName() + ": " + (visit.getComment().isEmpty() ? "No message" : visit.getComment()));
+                            holder.visitText.setText(user.getFirstName() + " " + user.getLastName() + ": " + (visit.getComment().isEmpty() ? mContext.getString(R.string.visit_adapter_message) : visit.getComment()));
                         }
                     }
 

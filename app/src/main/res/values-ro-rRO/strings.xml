@@ -35,12 +35,34 @@
     <!-- Profile Info -->
     <string name="profile_info_save_btn">Salveaza Modificarile</string>
 
-    <!-- Car Info Info -->
+    <!-- Car Info -->
     <string name="car_info_save_btn">Salveaza Modificarile</string>
 
-    <!-- Car Info Info -->
+    <!-- Reset Password -->
     <string name="reset_password_email">Email</string>
     <string name="reset_password_reset_btn">Reseteaza Parola</string>
+
+    <!-- Visit Adapter -->
+    <string name="visit_adapter_message">Niciun mesaj</string>
+
+    <!-- Station Activity -->
+    <string name="station_add_photo_btn">Adauga Fotografie</string>
+    <string name="station_get_directions">Obtine directii</string>
+    <string name="station_add_visit">Adauga vizita</string>
+    <string name="station_ports">Numar de porturi: </string>
+    <string name="station_port_types">Tipuri de porturi: </string>
+    <string name="station_address">Adresa: </string>
+    <string name="station_added_by_me">Adaugat de mine</string>
+    <string name="station_added_by">Added by </string>
+
+    <!-- Dialog Buttons -->
+    <string name="visit_dialog_title">Adauga vizita ta</string>
+    <string name="visit_dialog_comment">Adauga Comentariu</string>
+    <string name="visit_dialog_add_btn">Adauga</string>
+    <string name="visit_dialog_close_btn">Inchide</string>
+
+    <!-- Maps Fragment -->
+    <string name="maps_fragment_snippet">Click pentru detalii</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

@@ -24,7 +24,7 @@
             android:layout_below="@+id/recyclerView"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Add photos +"
+            android:text="@string/station_add_photo_btn"
             android:textAlignment="center" />
 
         <TextView
@@ -85,7 +85,7 @@
             android:layout_below="@+id/addedByStation"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Get Directions"
+            android:text="@string/station_get_directions"
             android:textAlignment="center" />
 
         <LinearLayout
@@ -124,7 +124,7 @@
             android:layout_below="@+id/recyler_view_visits_station"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:text="Add Visit"
+            android:text="@string/station_add_visit"
             android:textAlignment="center" />
 
     </RelativeLayout>

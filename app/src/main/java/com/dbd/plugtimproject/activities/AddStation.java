@@ -323,6 +323,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
     public void onCheckBoxChecked(View view) {
         CheckBox checkBox = findViewById(view.getId());
 
+        // TODO sa fie minim un checkbox checked
         switch (view.getId()) {
             case R.id.type1CheckBox:
                 isType1 = checkBox.isChecked();

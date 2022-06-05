@@ -21,7 +21,7 @@
 
     <!-- Notification -->
     <string name="notification_title">Notifications</string>
-    <string name="notification_like">like your station.</string>
+    <string name="notification_like">liked your station.</string>
     <string name="notification_photo">added a photo to your station.</string>
     <string name="notification_visit">added a visit to your station.</string>
 
@@ -34,13 +34,34 @@
     <!-- Profile Info -->
     <string name="profile_info_save_btn">Save Changes</string>
 
-    <!-- Car Info Info -->
+    <!-- Car Info -->
     <string name="car_info_save_btn">Save Changes</string>
 
-    <!-- Car Info Info -->
+    <!-- Reset password -->
     <string name="reset_password_email">Email</string>
     <string name="reset_password_reset_btn">Reset Password</string>
 
+    <!-- Visit Adapter -->
+    <string name="visit_adapter_message">No message</string>
+
+    <!-- Station Activity -->
+    <string name="station_add_photo_btn">Add Photo</string>
+    <string name="station_get_directions">Get Directions</string>
+    <string name="station_add_visit">Add Visit</string>
+    <string name="station_ports">Number of Ports:</string>
+    <string name="station_port_types">Port Types: </string>
+    <string name="station_address">Address: </string>
+    <string name="station_added_by_me">Added by me</string>
+    <string name="station_added_by">Adaugat de </string>
+
+    <!-- Visit dialog -->
+    <string name="visit_dialog_title">Add Your Visit</string>
+    <string name="visit_dialog_comment">Add Comment</string>
+    <string name="visit_dialog_add_btn">Add</string>
+    <string name="visit_dialog_close_btn">Close</string>
+
+    <!-- Maps Fragment -->
+    <string name="maps_fragment_snippet">Click for more info</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

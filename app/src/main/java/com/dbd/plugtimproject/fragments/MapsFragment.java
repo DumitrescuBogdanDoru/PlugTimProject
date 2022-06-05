@@ -122,7 +122,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
                     Station station = dataSnapshot.getValue(Station.class);
                     if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitude) {
                         marker.setTitle(station.getDescription());
-                        marker.setSnippet("Click for more info");
+                        marker.setSnippet(getContext().getString(R.string.maps_fragment_snippet));
                         marker.showInfoWindow();
                         break;
                     }

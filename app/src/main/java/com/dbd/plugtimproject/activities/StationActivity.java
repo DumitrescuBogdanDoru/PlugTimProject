@@ -185,15 +185,14 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                 if (station != null) {
                     try {
                         name.setText(station.getDescription());
-                        ports.setText("Number of Ports: " + station.getNumberOfPorts());
-                        portTypes.setText("Port Types: " + getPortTypes(station));
-                        address.setText("Address: " + getAddress(station.getLocationHelper()));
+                        ports.setText(getString(R.string.station_ports) + " " + station.getNumberOfPorts());
+                        portTypes.setText(getString(R.string.station_port_types) + " " + getPortTypes(station));
+                        address.setText(getString(R.string.station_address) + " " + getAddress(station.getLocationHelper()));
                         getUser(station.getAddedBy());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-
             }
 
             @Override
@@ -265,11 +264,11 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
                     if (Objects.equals(snapshot.getKey(), firebaseUser.getUid())) {
-                        addedByStation.setText("Added by me");
+                        addedByStation.setText(getString(R.string.station_added_by_me));
                     } else {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
-                            addedByStation.setText("Added by " + user.getFirstName() + " " + user.getLastName());
+                            addedByStation.setText(getString(R.string.station_added_by) + user.getFirstName() + " " + user.getLastName());
                         }
                     }
                 }
@@ -342,13 +341,12 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private boolean choosePicture() {
+    private void choosePicture() {
         // intent to open gallery from phone
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         startActivityForResult(intent, 1);
-        return true;
     }
 
     private void addPhoto() {

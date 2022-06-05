@@ -83,7 +83,7 @@ public class MyVisitsAdapter extends RecyclerView.Adapter<MyVisitsAdapter.ViewHo
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         Station station = snapshot.getValue(Station.class);
                         if (station != null) {
-                            holder.visitText.setText(station.getDescription() + ": " + (visit.getComment().isEmpty() ? "No message" : visit.getComment()));
+                            holder.visitText.setText(station.getDescription() + ": " + (visit.getComment().isEmpty() ? mContext.getString(R.string.visit_adapter_message) : visit.getComment()));
                         } else {
                             Toast.makeText(mContext, "Couldn't get station. Please try again!", Toast.LENGTH_SHORT).show();
 

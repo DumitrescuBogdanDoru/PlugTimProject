@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:text="Add your visit"
+        android:text="@string/visit_dialog_title"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -45,7 +45,7 @@
         android:layout_below="@+id/linear_layout_visit"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="50dp"
-        android:hint="Add Comment"
+        android:hint="@string/visit_dialog_comment"
         android:minHeight="50dp" />
 
 
