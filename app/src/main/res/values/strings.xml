@@ -63,6 +63,26 @@
     <!-- Maps Fragment -->
     <string name="maps_fragment_snippet">Click for more info</string>
 
+    <!-- Add Station Activity -->
+    <string name="add_station_title">Please enter station\'s details</string>
+    <string name="add_station_name">Station\'s name</string>
+    <string name="add_station_nr_of_ports">Number of ports</string>
+    <string name="add_station_add_btn">Add station</string>
+    <string name="add_station_upload_picture_btn">Add Photo</string>
+
+    <!-- Register -->
+    <string name="register_username">Email</string>
+    <string name="register_password">Password</string>
+    <string name="register_first_name">First Name</string>
+    <string name="register_last_name">Last Name</string>
+    <string name="register_next_btn">Next</string>
+
+    <!-- Register Car -->
+    <string name="register_car_year">Year</string>
+    <string name="register_car_finish_btn">Finish</string>
+    <string name="register_car_skip_btn">Skip</string>
+    <string name="register_car_upload_picture_btn">Upload Picture</string>
+
     <!-- Car Companies for spinner -->
     <string-array name="company">
         <item>Audi</item>

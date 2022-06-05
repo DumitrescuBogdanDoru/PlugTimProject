@@ -64,6 +64,26 @@
     <!-- Maps Fragment -->
     <string name="maps_fragment_snippet">Click pentru detalii</string>
 
+    <!-- Add Station Activity -->
+    <string name="add_station_title">Please enter station\'s details</string>
+    <string name="add_station_name">Numele statiei</string>
+    <string name="add_station_nr_of_ports">Numar de porturi</string>
+    <string name="add_station_add_btn">Adauga Statie</string>
+    <string name="add_station_upload_picture_btn">Adauga Fotografie</string>
+
+    <!-- Register -->
+    <string name="register_username">Email</string>
+    <string name="register_password">Parola</string>
+    <string name="register_first_name">Prenume</string>
+    <string name="register_last_name">Nume de familie</string>
+    <string name="register_next_btn">Urmator</string>
+
+    <!-- Register Car -->
+    <string name="register_car_year">An de fabricatie</string>
+    <string name="register_car_finish_btn">Urmator</string>
+    <string name="register_car_skip_btn">Omite</string>
+    <string name="register_car_upload_picture_btn">Adauga fotografie</string>
+
     <!-- Car Companies for spinner -->
     <string-array name="company">
         <item>Audi</item>
@@ -194,15 +214,15 @@
     </string-array>
 
     <string-array name="colors_en">
-        <item>White</item>
-        <item>Blue</item>
-        <item>Gray</item>
-        <item>Black</item>
-        <item>Red</item>
-        <item>Silver</item>
-        <item>Brown</item>
-        <item>Orange</item>
-        <item>Green</item>
-        <item>Yellow</item>
+        <item>Alb</item>
+        <item>Albastru</item>
+        <item>Gri</item>
+        <item>Negru</item>
+        <item>Rosu</item>
+        <item>Argintiu</item>
+        <item>Maro</item>
+        <item>Portocaliu</item>
+        <item>Verde</item>
+        <item>Galben</item>
     </string-array>
 </resources>

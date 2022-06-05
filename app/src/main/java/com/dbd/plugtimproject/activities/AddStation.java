@@ -102,6 +102,8 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                 addStation();
                 break;
             case R.id.addImageBtnForm:
+                // TODO mai intai deschide un dialog sa ii zici ca se recunoaste statia si la fel si la inregistrare la masina
+                // TODO sa faci verificari pentru campuri si sa le modifici la inregistrare
                 choosePicture();
                 break;
         }
@@ -262,6 +264,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
 
     private boolean checkFields(String descriptionStation, String portsStation) {
         if (descriptionStation.isEmpty() || descriptionStation.length() < 2) {
+            // TODO mesaje modificate sa fie si in engleza si in romana
             description.setError("Please enter a valid name");
             description.requestFocus();
             return false;
