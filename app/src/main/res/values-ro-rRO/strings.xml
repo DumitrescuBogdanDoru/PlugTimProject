@@ -17,6 +17,11 @@
     <string name="menu_notification">Notificari</string>
     <string name="menu_profile">Profil</string>
 
+    <!-- Notification -->
+    <string name="notification_like">a apreciat statia ta.</string>
+    <string name="notification_photo">a adaugat o fotografie statiei tale.</string>
+    <string name="notification_visit">a adaugat o vizita statiei tale.</string>
+
     <!-- Car Companies for spinner -->
     <string-array name="company">
         <item>Audi</item>

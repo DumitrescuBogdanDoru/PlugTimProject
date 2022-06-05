@@ -18,19 +18,10 @@
             android:orientation="horizontal" />
 
         <Button
-            android:id="@+id/choosePhotoBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/recyclerView"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:text="Choose Photo" />
-
-        <Button
             android:id="@+id/addPhotosToStationBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/choosePhotoBtn"
+            android:layout_below="@+id/recyclerView"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="Add photos +"

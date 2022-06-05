@@ -162,17 +162,4 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
             }
         });
     }
-
-    private Station getStation(Station s) {
-        return new Station() {{
-            setDescription(s.getDescription());
-            setNumberOfPorts(s.getNumberOfPorts());
-            setAddedBy(s.getAddedBy());
-            setLocationHelper(s.getLocationHelper());
-            setType1(isType1());
-            setType2(isType2());
-            setCcs(isCcs());
-            setChademo(isChademo());
-        }};
-    }
 }

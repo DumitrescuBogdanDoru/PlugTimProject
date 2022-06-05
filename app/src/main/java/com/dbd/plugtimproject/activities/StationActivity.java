@@ -102,8 +102,6 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
         Button addPhotosToStationBtn = findViewById(R.id.addPhotosToStationBtn);
         addPhotosToStationBtn.setOnClickListener(this);
-        Button choosePhotoBtn = findViewById(R.id.choosePhotoBtn);
-        choosePhotoBtn.setOnClickListener(this);
 
         name = findViewById(R.id.nameStation);
         ports = findViewById(R.id.portsStation);
@@ -138,11 +136,8 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.choosePhotoBtn:
-                choosePicture();
-                break;
             case R.id.addPhotosToStationBtn:
-                addPhoto();
+                choosePicture();
                 break;
             case R.id.getDirectionsStationBtn:
                 getDirections();
@@ -170,6 +165,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
                 if (checkImage(image)) {
                     imageUri = data.getData();
+                    addPhoto();
                 } else {
                     Toast.makeText(StationActivity.this, "It doesn't look like an EV Station. Please take another picture", Toast.LENGTH_LONG).show();
                 }
@@ -346,12 +342,13 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    private void choosePicture() {
+    private boolean choosePicture() {
         // intent to open gallery from phone
         Intent intent = new Intent();
         intent.setType("image/*");
         intent.setAction(Intent.ACTION_OPEN_DOCUMENT);
         startActivityForResult(intent, 1);
+        return true;
     }
 
     private void addPhoto() {

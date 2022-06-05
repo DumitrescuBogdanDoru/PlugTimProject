@@ -16,6 +16,11 @@
     <string name="menu_notification">Notifications</string>
     <string name="menu_profile">Profile</string>
 
+    <!-- Notification -->
+    <string name="notification_like">like your station.</string>
+    <string name="notification_photo">added a photo to your station.</string>
+    <string name="notification_visit">added a visit to your station.</string>
+
 
     <!-- Car Companies for spinner -->
     <string-array name="company">
