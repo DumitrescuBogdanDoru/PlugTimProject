@@ -94,6 +94,7 @@
 
     <!-- Forgot Password Messages -->
     <string name="forgot_password_email_sent">Emailul pentru resetarea parolei a fost trimis.</string>
+    <string name="forgot_password_wrong_email">Va rugam sa adaugati mailul propriu.</string>
 
     <!-- Register Messages -->
     <string name="register_first_name_message">Prenumele obligatoriu este necesar</string>
@@ -114,8 +115,15 @@
     <string name="car_image_not_recognised">In poza nu pare a fi o masina. Va rugam sa faceti o poza clara din fata masinii</string>
 
     <!-- Profile Info Messages -->
-    <string name="profile_info_save_changes">Modificarile au fost salvate</string>
+    <string name="save_changes_message">Modificarile au fost salvate</string>
     <string name="user_not_found">Nu am putut obtine informatiile. Va rugam sa incercati din nou</string>
+
+    <!-- Car Info Messages -->
+    <string name="car_not_found">Couldn\'t get your car information. Please try again</string>
+    <string name="car_info_company_required">Numele companiei este invalid</string>
+    <string name="car_info_model_required">Numele modelului este invalid</string>
+    <string name="car_info_color_required">Culoarea este invalida</string>
+    <string name="car_info_year_required">Anul de fabricatie este invalid</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

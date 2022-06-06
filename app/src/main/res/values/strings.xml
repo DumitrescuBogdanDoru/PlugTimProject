@@ -93,6 +93,7 @@
 
     <!-- Forgot Password Messages -->
     <string name="forgot_password_email_sent">An email has been sent to reset your password</string>
+    <string name="forgot_password_wrong_email">Please add your own email.</string>
 
     <!-- Register Messages -->
     <string name="register_first_name_message">First Name is required</string>
@@ -114,8 +115,17 @@
     <string name="car_image_not_recognised">It doesn\'t look like a car. Please take another picture from the front of the car</string>
 
     <!-- Profile Info Messages -->
-    <string name="profile_info_save_changes">Changes were saved</string>
+    <string name="save_changes_message">Changes were saved</string>
     <string name="user_not_found">Couldn\'t get your information. Please try again</string>
+
+    <!-- Car Info Messages -->
+    <string name="car_not_found">Couldn\'t get your car information. Please try again</string>
+    <string name="car_info_company_required">Company name is invalid</string>
+    <string name="car_info_model_required">Model name is invalid</string>
+    <string name="car_info_color_required">Color is invalid</string>
+    <string name="car_info_year_required">Year is invalid</string>
+
+
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

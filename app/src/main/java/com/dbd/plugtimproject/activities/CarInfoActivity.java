@@ -2,7 +2,7 @@ package com.dbd.plugtimproject.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
+import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -22,12 +22,16 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class CarInfo extends AppCompatActivity {
+public class CarInfoActivity extends AppCompatActivity {
+
+    private static final String TAG = "CarInfoActivity";
 
     private EditText carCompanyInfo, carModelInfo, carColorInfo, carYearInfo;
     String company, model, color, year;
     Button changeCarInfoBtn;
+
     private DatabaseReference mDatabase;
 
     @Override
@@ -44,16 +48,13 @@ public class CarInfo extends AppCompatActivity {
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("cars");
 
-        String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String uuid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         getInfo(uuid);
 
-        changeCarInfoBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (saveChanges(uuid)) {
-                    finish();
-                    startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                }
+        changeCarInfoBtn.setOnClickListener(v -> {
+            if (saveChanges(uuid)) {
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                finish();
             }
         });
     }
@@ -65,6 +66,7 @@ public class CarInfo extends AppCompatActivity {
                 Car car = snapshot.getValue(Car.class);
 
                 if (car != null) {
+                    Log.d(TAG, "Getting data for the car from Firebase");
                     company = car.getCompany();
                     carCompanyInfo.setText(company);
                     model = car.getModel();
@@ -73,12 +75,16 @@ public class CarInfo extends AppCompatActivity {
                     carColorInfo.setText(color);
                     year = car.getYear().toString();
                     carYearInfo.setText(year);
+                } else {
+                    Log.e(TAG, String.format("Couldn't get data for the user's car %s", snapshot.getKey()));
+                    Toast.makeText(CarInfoActivity.this, getString(R.string.car_not_found), Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(CarInfo.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CarInfoActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -92,20 +98,24 @@ public class CarInfo extends AppCompatActivity {
         Map<String, Object> update = new HashMap<>();
 
         if (!changedCarCompany.equals(company)) {
-            if (!changedCarCompany.isEmpty()) {
+            if (changedCarCompany.length() > 1) {
+                Log.d(TAG, String.format("Car company updated for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
                 update.put("company", changedCarCompany);
             } else {
-                carCompanyInfo.setError("Company name is invalid");
+                Log.e(TAG, String.format("Car company: %s is invalid for user %s", changedCarCompany, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                carCompanyInfo.setError(getString(R.string.car_info_company_required));
                 carCompanyInfo.requestFocus();
                 return false;
             }
         }
 
         if (!changedCarModel.equals(model)) {
-            if (!changedCarModel.isEmpty()) {
+            if (changedCarModel.length() > 1) {
+                Log.d(TAG, String.format("Car model updated for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
                 update.put("model", changedCarModel);
             } else {
-                carModelInfo.setError("Model name is invalid");
+                Log.e(TAG, String.format("Car model: %s is invalid for user %s", changedCarModel, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                carModelInfo.setError(getString(R.string.car_info_model_required));
                 carModelInfo.requestFocus();
                 return false;
             }
@@ -113,27 +123,35 @@ public class CarInfo extends AppCompatActivity {
 
 
         if (!changedCarColor.equals(color)) {
-            if (!changedCarColor.isEmpty()) {
+            if (changedCarColor.length() > 1) {
+                Log.d(TAG, String.format("Car color updated for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
                 update.put("color", changedCarColor);
             } else {
-                carColorInfo.setError("Color is invalid");
+                Log.e(TAG, String.format("Car color: %s is invalid for user %s", changedCarColor, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                carColorInfo.setError(getString(R.string.car_info_color_required));
                 carColorInfo.requestFocus();
                 return false;
             }
         }
 
-
         if (!changedCarYear.equals(year)) {
-            if (!changedCarCompany.isEmpty() && (Integer.parseInt(changedCarYear) > 1885 && Integer.parseInt(changedCarYear) <= Calendar.getInstance().get(Calendar.YEAR))) {
+            if (!changedCarYear.isEmpty() && (Integer.parseInt(changedCarYear) > 1997 && Integer.parseInt(changedCarYear) <= Calendar.getInstance().get(Calendar.YEAR))) {
+                Log.d(TAG, String.format("Car year updated for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
                 update.put("year", Integer.parseInt(changedCarYear));
             } else {
-                carYearInfo.setError("Year is invalid");
+                Log.e(TAG, String.format("Car year: %s is invalid for user %s", changedCarYear, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                carYearInfo.setError(getString(R.string.car_info_year_required));
                 carYearInfo.requestFocus();
                 return false;
             }
         }
 
-        mDatabase.child(uuid).updateChildren(update);
+        if (!update.isEmpty()) {
+            mDatabase.child(uuid).updateChildren(update);
+            Toast.makeText(CarInfoActivity.this, getString(R.string.save_changes_message), Toast.LENGTH_SHORT).show();
+            Log.d(TAG, String.format("Updated data in firebase for car's user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+        }
+
         return true;
     }
 }

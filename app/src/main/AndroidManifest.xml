@@ -39,10 +39,10 @@
             android:name=".activities.AddStation"
             android:exported="false" />
         <activity
-            android:name=".activities.CarInfo"
+            android:name=".activities.CarInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.ProfileInfo"
+            android:name=".activities.ProfileInfoActivity"
             android:exported="false" />
         <activity
             android:name=".activities.register.ForgotPasswordActivity"

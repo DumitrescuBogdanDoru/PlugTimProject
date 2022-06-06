@@ -26,6 +26,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.adapters.PhotoAdapter;
 import com.dbd.plugtimproject.adapters.StationVisitsAdapter;
+import com.dbd.plugtimproject.dialogs.VisitDialog;
 import com.dbd.plugtimproject.enumeration.NotificationEnum;
 import com.dbd.plugtimproject.ml.ModelUnquant;
 import com.dbd.plugtimproject.models.FileUri;

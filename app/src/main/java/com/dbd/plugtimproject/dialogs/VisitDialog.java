@@ -1,4 +1,4 @@
-package com.dbd.plugtimproject.activities;
+package com.dbd.plugtimproject.dialogs;
 
 import android.app.AlertDialog;
 import android.app.Dialog;

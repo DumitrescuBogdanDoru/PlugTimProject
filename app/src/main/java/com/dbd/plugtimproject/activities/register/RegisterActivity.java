@@ -25,6 +25,7 @@ import java.util.Objects;
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
     private static final String TAG = "RegisterActivity";
+
     private EditText regUsername, regPassword, regFirstName, regLastName;
 
     private FirebaseAuth mAuth;

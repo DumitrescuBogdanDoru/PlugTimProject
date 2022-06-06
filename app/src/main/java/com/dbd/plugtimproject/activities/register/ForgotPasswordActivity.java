@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.dbd.plugtimproject.R;
 import com.google.firebase.auth.FirebaseAuth;
 
+import java.util.Objects;
+
 /**
  * Added by: Bogdan Dumitrescu
  * Date: 28/12/2021
@@ -52,13 +54,20 @@ public class ForgotPasswordActivity extends AppCompatActivity {
         }
 
         // Sending email to reset the password
-        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
-            if (task.isSuccessful()) {
-                Toast.makeText(this, getString(R.string.forgot_password_email_sent), Toast.LENGTH_SHORT).show();
-                finish();
-            } else {
-                Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (FirebaseAuth.getInstance().getCurrentUser().getEmail().equals(email)) {
+            mAuth.sendPasswordResetEmail(email).addOnCompleteListener(task -> {
+                if (task.isSuccessful()) {
+                    Log.d(TAG, String.format("Reset password email was sent to the user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                    Toast.makeText(this, getString(R.string.forgot_password_email_sent), Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Log.d(TAG, String.format("Failed to reset password for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                    Toast.makeText(this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } else {
+            Log.d(TAG, String.format("Wrong email: %s typed by the user %s", email, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+            Toast.makeText(this, getString(R.string.forgot_password_wrong_email), Toast.LENGTH_SHORT).show();
+        }
     }
 }

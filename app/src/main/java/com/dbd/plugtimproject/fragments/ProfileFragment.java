@@ -18,8 +18,8 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.dbd.plugtimproject.R;
-import com.dbd.plugtimproject.activities.CarInfo;
-import com.dbd.plugtimproject.activities.ProfileInfo;
+import com.dbd.plugtimproject.activities.CarInfoActivity;
+import com.dbd.plugtimproject.activities.ProfileInfoActivity;
 import com.dbd.plugtimproject.activities.register.ForgotPasswordActivity;
 import com.dbd.plugtimproject.activities.register.LoginActivity;
 import com.dbd.plugtimproject.models.Car;
@@ -137,10 +137,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.editProfileBtn:
-                startActivity(new Intent(getActivity(), ProfileInfo.class));
+                startActivity(new Intent(getActivity(), ProfileInfoActivity.class));
                 break;
             case R.id.editCarBtn:
-                startActivity(new Intent(getActivity(), CarInfo.class));
+                startActivity(new Intent(getActivity(), CarInfoActivity.class));
                 break;
             case R.id.profile_image:
                 addCarImage();

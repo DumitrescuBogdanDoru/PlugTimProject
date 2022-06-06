@@ -2,8 +2,8 @@ package com.dbd.plugtimproject.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -13,7 +13,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.models.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -24,12 +23,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
-public class ProfileInfo extends AppCompatActivity {
+public class ProfileInfoActivity extends AppCompatActivity {
+
+    private static final String TAG = "ProfileInfoActivity";
 
     private EditText profileEmailInfo, profileFirstNameInfo, profileLastNameInfo;
     private String email, firstName, lastName;
-    private Button changeProfileInfoBtn;
     private DatabaseReference mDatabase;
 
     @Override
@@ -40,16 +41,16 @@ public class ProfileInfo extends AppCompatActivity {
         profileEmailInfo = findViewById(R.id.profileEmailInfo);
         profileFirstNameInfo = findViewById(R.id.profileFirstNameInfo);
         profileLastNameInfo = findViewById(R.id.profileLastNameInfo);
-        changeProfileInfoBtn = findViewById(R.id.changeProfileInfoBtn);
+        Button changeProfileInfoBtn = findViewById(R.id.changeProfileInfoBtn);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
 
-        String uuid = FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String uuid = Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid();
         getInfo(uuid);
 
         changeProfileInfoBtn.setOnClickListener(v -> {
             if (saveChanges(uuid)) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
                 finish();
             }
         });
@@ -62,18 +63,23 @@ public class ProfileInfo extends AppCompatActivity {
                 User user = snapshot.getValue(User.class);
 
                 if (user != null) {
+                    Log.d(TAG, "Getting data for the user from Firebase");
                     email = user.getUsername();
                     profileEmailInfo.setText(email);
                     firstName = user.getFirstName();
                     profileFirstNameInfo.setText(firstName);
                     lastName = user.getLastName();
                     profileLastNameInfo.setText(lastName);
+                } else {
+                    Log.e(TAG, String.format("Couldn't get data for the user %s", snapshot.getKey()));
+                    Toast.makeText(ProfileInfoActivity.this, getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                    finish();
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(ProfileInfo.this, "Something went wrong", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ProfileInfoActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -86,22 +92,29 @@ public class ProfileInfo extends AppCompatActivity {
         Map<String, Object> update = new HashMap<>();
 
         if (!changedEmail.equals(email)) {
-            if (Patterns.EMAIL_ADDRESS.matcher(changedEmail).matches() && !changedEmail.isEmpty()) {
+            if (Patterns.EMAIL_ADDRESS.matcher(changedEmail).matches() && changedEmail.length() > 1) {
                 update.put("username", changedEmail);
                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                firebaseUser.updateEmail(changedEmail).addOnSuccessListener(unused -> firebaseUser.sendEmailVerification());
+
+                if (firebaseUser != null) {
+                    Log.d(TAG, String.format("Email updated for user %s", firebaseUser.getUid()));
+                    firebaseUser.updateEmail(changedEmail).addOnSuccessListener(unused -> firebaseUser.sendEmailVerification());
+                }
             } else {
-                profileEmailInfo.setError("Email is invalid");
+                Log.e(TAG, String.format("Email %s is invalid for user %s", changedEmail, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                profileEmailInfo.setError(getString(R.string.email_invalid_message));
                 profileEmailInfo.requestFocus();
                 return false;
             }
         }
 
         if (!changedFirstName.equals(firstName)) {
-            if (!changedEmail.isEmpty() && changedEmail.length() > 1) {
+            if (!changedFirstName.isEmpty() && changedFirstName.length() > 1) {
+                Log.d(TAG, String.format("First name updated for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
                 update.put("firstName", changedFirstName);
             } else {
-                profileFirstNameInfo.setError("First name is invalid");
+                Log.e(TAG, String.format("First name: %s is invalid for user %s", changedFirstName, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                profileFirstNameInfo.setError(getString(R.string.register_first_name_message));
                 profileFirstNameInfo.requestFocus();
                 return false;
             }
@@ -109,13 +122,23 @@ public class ProfileInfo extends AppCompatActivity {
 
         if (!changedLastName.equals(lastName)) {
             if (!changedLastName.isEmpty() && changedLastName.length() > 1) {
+                Log.d(TAG, String.format("Last Name updated for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
                 update.put("lastName", changedLastName);
             } else {
-                profileLastNameInfo.setError("Last name is invalid");
+                Log.e(TAG, String.format("Last Name: %s is invalid for user %s", changedLastName, Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                profileLastNameInfo.setError(getString(R.string.register_last_name_message));
+                profileLastNameInfo.requestFocus();
+                return false;
             }
         }
 
-        mDatabase.child(uuid).updateChildren(update);
+        if (!update.isEmpty()){
+            mDatabase.child(uuid).updateChildren(update)
+                    .addOnSuccessListener(unused -> {
+                        Toast.makeText(ProfileInfoActivity.this, getString(R.string.save_changes_message), Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, String.format("Updated data in firebase for user for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                    });
+        }
         return true;
     }
 }
