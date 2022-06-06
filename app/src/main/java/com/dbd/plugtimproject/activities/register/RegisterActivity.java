@@ -3,6 +3,7 @@ package com.dbd.plugtimproject.activities.register;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -20,14 +21,13 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.Objects;
 
-public class Register extends AppCompatActivity implements View.OnClickListener {
+public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
 
+    private static final String TAG = "RegisterActivity";
     private EditText regUsername, regPassword, regFirstName, regLastName;
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String email, pass;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,66 +49,70 @@ public class Register extends AppCompatActivity implements View.OnClickListener 
     public void onClick(View v) {
         if (v.getId() == R.id.nxtBntReg) {
             if (registerUser()) {
-                Intent intent = new Intent(getApplicationContext(), RegisterCar.class);
-                intent.putExtra("email", email);
-                startActivity(intent);
+                startActivity(new Intent(this, RegisterCarActivity.class));
             } else {
-                Toast.makeText(Register.this, "ERROR", Toast.LENGTH_SHORT).show();
+                Log.d(TAG, "Error occurred during user registry");
+                Toast.makeText(RegisterActivity.this, getString(R.string.register_error_message), Toast.LENGTH_SHORT).show();
             }
         }
     }
 
     private boolean registerUser() {
-        String username = regUsername.getText().toString();
+        String email = regUsername.getText().toString();
         String password = regPassword.getText().toString();
         String firstName = regFirstName.getText().toString();
         String lastName = regLastName.getText().toString();
 
-        if (username.isEmpty()) {
-            regUsername.setError("Email is required");
+        if (email.isEmpty()) {
+            Log.d(TAG, "No email was added");
+            regUsername.setError(getString(R.string.email_required_message));
             regUsername.requestFocus();
             return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(username).matches()) {
-            regUsername.setError("Email is invalid");
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+            Log.d(TAG, "Invalid email");
+            regUsername.setError(getString(R.string.email_invalid_message));
             regUsername.requestFocus();
             return false;
         } else if (password.isEmpty()) {
-            regPassword.setError("Password is required");
+            Log.d(TAG, "No password was added");
+            regPassword.setError(getString(R.string.email_required_message));
             regPassword.requestFocus();
             return false;
         } else if (password.length() < 6) {
-            regPassword.setError("Password must have at least 6 characters");
+            Log.d(TAG, "Invalid password");
+            regPassword.setError(getString(R.string.email_required_message));
             regPassword.requestFocus();
             return false;
         } else if (firstName.isEmpty()) {
-            regFirstName.setError("First Name is required");
+            Log.d(TAG, "No first name was added");
+            regFirstName.setError(getString(R.string.register_first_name_message));
             regFirstName.requestFocus();
             return false;
         } else if (lastName.isEmpty()) {
-            regLastName.setError("Last Name is required");
+            Log.d(TAG, "No last name was added");
+            regLastName.setError(getString(R.string.register_last_name_message));
             regLastName.requestFocus();
             return false;
         }
 
-        // using email as link for the owner to the car
-        email = username;
-        pass = password;
-
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-
-        mAuth.createUserWithEmailAndPassword(username, password)
+        mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
-                        User user = new User(username, firstName, lastName);
+                        User user = new User(email, firstName, lastName);
                         mDatabase.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                                 .setValue(user).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
                                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                firebaseUser.sendEmailVerification();
-                                Toast.makeText(Register.this, "A verification email has been sent. Please check your email", Toast.LENGTH_SHORT).show();
+                                if (firebaseUser != null) {
+                                    firebaseUser.sendEmailVerification();
+                                    Log.d(TAG, "Register added successfully to database");
+                                    Toast.makeText(RegisterActivity.this, getString(R.string.register_send_email), Toast.LENGTH_SHORT).show();
+                                }
                             } else {
-                                Toast.makeText(Register.this, "Failed to register. Please try again", Toast.LENGTH_SHORT).show();
+                                Log.d(TAG, "Registration failed");
+                                Toast.makeText(RegisterActivity.this, "Failed to register. Please try again", Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

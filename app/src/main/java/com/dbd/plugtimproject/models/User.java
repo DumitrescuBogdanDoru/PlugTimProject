@@ -6,7 +6,6 @@ import java.util.List;
 public class User {
 
     private String username, firstName, lastName;
-    private List<Car> cars;
 
     public User() {
 
@@ -16,7 +15,6 @@ public class User {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
-        cars = new ArrayList<>();
     }
 
     public String getUsername() {
@@ -41,13 +39,5 @@ public class User {
 
     public void setLastName(String lastName) {
         this.lastName = lastName;
-    }
-
-    public List<Car> getCars() {
-        return cars;
-    }
-
-    public void setCars(List<Car> cars) {
-        this.cars = cars;
     }
 }

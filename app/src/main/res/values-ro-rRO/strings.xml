@@ -3,7 +3,7 @@
     <string name="app_name" translatable="false">PlugTimProject</string>
     <string name="title_activity_maps" translatable="false">MapsActivity</string>
 
-    <!-- Login Screen -->
+    <!-- LoginActivity Screen -->
     <string name="login_title">PlugTim</string>
     <string name="login_username">Email</string>
     <string name="login_password">Parola</string>
@@ -29,7 +29,7 @@
     <!-- Profile -->
     <string name="profile_profile_btn">Editeaza Profilul</string>
     <string name="profile_car_btn">Editeaza Masina</string>
-    <string name="profile_reset_btn">Reseateaza Parola</string>
+    <string name="profile_reset_btn">Reseteaza Parola</string>
     <string name="profile_signout_btn">Deconectare</string>
 
     <!-- Profile Info -->
@@ -71,18 +71,49 @@
     <string name="add_station_add_btn">Adauga Statie</string>
     <string name="add_station_upload_picture_btn">Adauga Fotografie</string>
 
-    <!-- Register -->
+    <!-- RegisterActivity -->
     <string name="register_username">Email</string>
     <string name="register_password">Parola</string>
     <string name="register_first_name">Prenume</string>
     <string name="register_last_name">Nume de familie</string>
     <string name="register_next_btn">Urmator</string>
 
-    <!-- Register Car -->
+    <!-- RegisterActivity Car -->
     <string name="register_car_year">An de fabricatie</string>
     <string name="register_car_finish_btn">Urmator</string>
     <string name="register_car_skip_btn">Omite</string>
     <string name="register_car_upload_picture_btn">Adauga fotografie</string>
+
+    <!-- LoginActivity Messages -->
+    <string name="email_required_message">Emailul este necesar</string>
+    <string name="email_invalid_message">Emailul este invalid</string>
+    <string name="password_required_message">Parola este necesara</string>
+    <string name="password_invalid_message">Parola trebuie sa aiba cel putin 6 caractere</string>
+    <string name="login_email_verification_required">Verificarea prin email nu a fost finalizata. Va rugam sa verificati emailul.</string>
+    <string name="login_email_failed">Logarea a esuat. Va rugam sa incercati din nou.</string>
+
+    <!-- Forgot Password Messages -->
+    <string name="forgot_password_email_sent">Emailul pentru resetarea parolei a fost trimis.</string>
+
+    <!-- Register Messages -->
+    <string name="register_first_name_message">Prenumele obligatoriu este necesar</string>
+    <string name="register_last_name_message">Numele de familie este necesar</string>
+    <string name="register_error_message">A aparut o eroare. Va rugam sa incercati din nou.</string>
+    <string name="register_send_email">Un email de verificare a fost trimis. Va rugam sa va verificati emailul.</string>
+    <string name="register_error_register">Inregistrare esuata. Va rugam sa incercati din nou.</string>
+
+    <!-- Register Car Messages -->
+    <string name="register_car_year_message">Anul de fabricatie este necesar</string>
+    <string name="register_car_year_invalid_message">Va rugam sa introduceti un an valid</string>
+    <string name="register_car_successfully">Masina a fost adaugata cu success</string>
+    <string name="register_car_error">Adaugarea masinii a esuat. Va rugam sa incercati din nou</string>
+
+    <!-- General Messages -->
+    <string name="image_load_failed">Poza nu s-a incarcat</string>
+    <string name="general_error">Ceva nu a mers bine. Va rugam sa incercati din nou.</string>
+    <string name="car_image_not_recognised">In poza nu pare a fi o masina. Va rugam sa faceti o poza clara din fata masinii</string>
+
+
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

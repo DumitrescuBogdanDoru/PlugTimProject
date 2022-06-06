@@ -1,5 +1,6 @@
 package com.dbd.plugtimproject.activities.register;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -18,24 +19,18 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.R;
-import com.dbd.plugtimproject.activities.AddStation;
 import com.dbd.plugtimproject.ml.ModelUnquant;
 import com.dbd.plugtimproject.models.Car;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.ListResult;
-import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import org.tensorflow.lite.DataType;
 import org.tensorflow.lite.support.tensorbuffer.TensorBuffer;
@@ -46,38 +41,33 @@ import java.nio.ByteOrder;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
-public class RegisterCar extends AppCompatActivity implements View.OnClickListener {
+public class RegisterCarActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private static final String TAG = "RegisterCar";
-
-    private TextView regCarSkipBtn;
-    private Button regCarFinishBtn;
-
-    private EditText regCarYear;
     private Spinner regCarCompany, regCarModel, regCarColor;
+    private EditText regCarYear;
 
-    private DatabaseReference mDatabase;
-
-    private Button addCarImageBtn;
-    private ImageView carImage;
-
-    private Uri imageUri;
-    private FirebaseStorage storage;
     private StorageReference storageReference;
+
+    private ImageView carImage;
+    private Uri imageUri;
+
 
     ArrayAdapter<String> companyAdapter, modelAdapter, colorAdapter;
 
     int imageSize = 224;
+
+    private static final String TAG = "RegisterCarActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_car);
 
-        regCarSkipBtn = findViewById(R.id.regCarSkipBtn);
+        TextView regCarSkipBtn = findViewById(R.id.regCarSkipBtn);
         regCarSkipBtn.setOnClickListener(this);
-        regCarFinishBtn = findViewById(R.id.regCarFinishBtn);
+        Button regCarFinishBtn = findViewById(R.id.regCarFinishBtn);
         regCarFinishBtn.setOnClickListener(this);
 
         regCarCompany = findViewById(R.id.regCarCompany);
@@ -86,30 +76,27 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
         regCarYear = findViewById(R.id.regCarYear);
 
         // add car image
-        addCarImageBtn = findViewById(R.id.addCarImageBtn);
+        Button addCarImageBtn = findViewById(R.id.addCarImageBtn);
         addCarImageBtn.setOnClickListener(this);
         carImage = findViewById(R.id.carImage);
 
-        storage = FirebaseStorage.getInstance();
-        storageReference = storage.getReference();
-
+        storageReference = FirebaseStorage.getInstance().getReference();
         initializeSpinners();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.regCarSkipBtn:
-                startActivity(new Intent(getApplicationContext(), Login.class));
+                startActivity(new Intent(this, LoginActivity.class));
                 break;
             case R.id.regCarFinishBtn:
-                Intent intent = getIntent();
-                String email = intent.getStringExtra("email");
-                if (registerCar(email)) {
-                    startActivity(new Intent(getApplicationContext(), Login.class));
+                if (registerCar()) {
                     if (imageUri != null) {
-                        uploadPicture(FirebaseAuth.getInstance().getCurrentUser().getUid());
+                        uploadPicture(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
                     }
+                    startActivity(new Intent(this, LoginActivity.class));
                 }
                 break;
             case R.id.addCarImageBtn:
@@ -118,33 +105,42 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
         }
     }
 
-    private boolean registerCar(String email) {
+    private boolean registerCar() {
         String company = regCarCompany.getSelectedItem().toString();
         String model = regCarModel.getSelectedItem().toString();
         String color = regCarColor.getSelectedItem().toString();
         String year = regCarYear.getText().toString();
 
         if (year.isEmpty()) {
+            Log.d(TAG, "No year was added");
             regCarYear.setError("Year is required");
             regCarYear.requestFocus();
             return false;
-        } else if (Integer.parseInt(year) < 1885 || Integer.parseInt(year) > Calendar.getInstance().get(Calendar.YEAR)) {
+        } else if (Integer.parseInt(year) < 1997 || Integer.parseInt(year) > Calendar.getInstance().get(Calendar.YEAR)) {
+            Log.d(TAG, String.format("Year %s is not valid", year));
             regCarYear.setError("Please enter a valid year");
             regCarYear.requestFocus();
             return false;
         }
 
-        mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        Car car = new Car(company, model, color, Integer.parseInt(year), email);
-        mDatabase.child("cars").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
-                .setValue(car).addOnCompleteListener(task1 -> {
-            if (task1.isSuccessful()) {
-                Toast.makeText(RegisterCar.this, "Car has been added successfully", Toast.LENGTH_SHORT).show();
-            } else {
-                Toast.makeText(RegisterCar.this, "Failed to add your car. Please try again.", Toast.LENGTH_SHORT).show();
-            }
-        });
+        if (user != null) {
+            String uuid = user.getUid();
+
+            Car car = new Car(company, model, color, Integer.parseInt(year), uuid);
+            mDatabase.child("cars").child(FirebaseAuth.getInstance().getCurrentUser().getUid())
+                    .setValue(car).addOnCompleteListener(task1 -> {
+                if (task1.isSuccessful()) {
+                    Log.d(TAG, "Car added");
+                    Toast.makeText(RegisterCarActivity.this, getString(R.string.register_car_successfully), Toast.LENGTH_SHORT).show();
+                } else {
+                    Log.d(TAG, "Car upload failed");
+                    Toast.makeText(RegisterCarActivity.this, getString(R.string.register_car_error), Toast.LENGTH_SHORT).show();
+                }
+            });
+        }
 
         return true;
     }
@@ -174,7 +170,8 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
                 if (checkImage(image)) {
                     carImage.setImageURI(imageUri);
                 } else {
-                    Toast.makeText(RegisterCar.this, "It doesn't look like a car. Please take another picture from the front of the car", Toast.LENGTH_LONG).show();
+                    Log.d(TAG, "There wasn't a car in the picture");
+                    Toast.makeText(RegisterCarActivity.this, getString(R.string.car_image_not_recognised), Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -190,29 +187,21 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
 
         StorageReference stationReference = storageReference.child("images/cars/" + uuid);
         stationReference.listAll()
-                .addOnSuccessListener(new OnSuccessListener<ListResult>() {
-
-
-                    @Override
-                    public void onSuccess(ListResult listResult) {
-
-
-                        stationReference.putFile(imageUri)
-                                .addOnSuccessListener(taskSnapshot -> pd.dismiss())
-                                .addOnFailureListener(e -> {
-                                    pd.dismiss();
-                                    Toast.makeText(RegisterCar.this, "Couldn't load image", Toast.LENGTH_SHORT).show();
-                                })
-                                .addOnProgressListener(snapshot -> {
-                                    double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
-                                    pd.setMessage("Progress: " + (int) progress + "%");
-                                });
-                    }
-                });
+                .addOnSuccessListener(listResult -> stationReference.putFile(imageUri)
+                        .addOnSuccessListener(taskSnapshot -> pd.dismiss())
+                        .addOnFailureListener(e -> {
+                            pd.dismiss();
+                            Toast.makeText(RegisterCarActivity.this, getString(R.string.image_load_failed), Toast.LENGTH_SHORT).show();
+                        })
+                        .addOnProgressListener(snapshot -> {
+                            double progress = (100.00 * snapshot.getBytesTransferred() / snapshot.getTotalByteCount());
+                            pd.setMessage("Progress: " + (int) progress + "%");
+                        }));
     }
 
     private void initializeSpinners() {
-        // company spinner
+        // company
+        Log.i(TAG, "Initializing spinners");
         List<String> companyList = Arrays.asList(getResources().getStringArray(R.array.company));
         companyAdapter = new ArrayAdapter<>(getApplicationContext(), android.R.layout.simple_spinner_item, companyList);
         regCarCompany.setAdapter(companyAdapter);
@@ -344,10 +333,8 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
             float[] confidences = outputFeature0.getFloatArray();
-            Log.i(TAG, "Electric Station " + confidences[0]);
-            Log.i(TAG, "Gas Pump " + confidences[1]);
-            Log.i(TAG, "Renault Zoe " + confidences[2]);
             Log.i(TAG, "Dacia Spring " + confidences[3]);
+            Log.i(TAG, "Renault Zoe " + confidences[2]);
 
             if (confidences[3] > confidences[2]) {
                 regCarCompany.setSelection(3);
@@ -360,9 +347,8 @@ public class RegisterCar extends AppCompatActivity implements View.OnClickListen
                 model.close();
                 return false;
             }
-
-            // Releases model resources if no longer used.
         } catch (IOException e) {
+            Log.d(TAG, "Car recognition failed");
             return false;
         }
 

@@ -3,6 +3,7 @@ package com.dbd.plugtimproject.activities.register;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
 import android.view.View;
 import android.widget.Button;
@@ -19,40 +20,43 @@ import com.dbd.plugtimproject.managers.LanguageManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-public class Login extends AppCompatActivity implements View.OnClickListener {
+/**
+ * Added by: Bogdan Dumitrescu
+ * Date: 11/12/2021
+ */
+public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
     private EditText logUsername;
     private EditText logPassword;
-    private Button loginBtnLog;
-    private TextView forgotBtnLog;
-    private TextView registerBtnLog;
 
-    private ImageView ro, en;
     private LanguageManager languageManager;
 
-    private FirebaseAuth mAuth;
+    private static final String TAG = "LoginActivity";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        // Edit Texts
         logUsername = findViewById(R.id.logUsername);
         logPassword = findViewById(R.id.logPassword);
 
-        loginBtnLog = findViewById(R.id.loginBtnLog);
+        // Buttons
+        Button loginBtnLog = findViewById(R.id.loginBtnLog);
         loginBtnLog.setOnClickListener(this);
 
-        forgotBtnLog = findViewById(R.id.forgotBtnLog);
+        TextView forgotBtnLog = findViewById(R.id.forgotBtnLog);
         forgotBtnLog.setOnClickListener(this);
 
-        registerBtnLog = findViewById(R.id.registerBtnLog);
+        TextView registerBtnLog = findViewById(R.id.registerBtnLog);
         registerBtnLog.setOnClickListener(this);
 
+        // Language Change
         languageManager = new LanguageManager(this);
-        ro = findViewById(R.id.ro_btn);
+        ImageView ro = findViewById(R.id.ro_btn);
         ro.setOnClickListener(this);
-        en = findViewById(R.id.en_btn);
+        ImageView en = findViewById(R.id.en_btn);
         en.setOnClickListener(this);
     }
 
@@ -61,69 +65,74 @@ public class Login extends AppCompatActivity implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.registerBtnLog:
-                startActivity(new Intent(getApplicationContext(), Register.class));
+                Log.d(TAG, "Started RegisterActivity activity");
+                startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.loginBtnLog:
                 loginUser();
                 break;
             case R.id.forgotBtnLog:
-                startActivity(new Intent(getApplicationContext(), ForgotPassword.class));
+                Log.d(TAG, "Started ForgotPasswordActivity activity");
+                startActivity(new Intent(this, ForgotPasswordActivity.class));
                 break;
             case R.id.ro_btn:
+                Log.d(TAG, "Changed language to romanian");
                 languageManager.updateResource("ro");
                 recreate();
                 break;
             case R.id.en_btn:
+                Log.d(TAG, "Changed language to english");
                 languageManager.updateResource("en");
                 recreate();
                 break;
         }
     }
 
-    private boolean loginUser() {
+    private void loginUser() {
         String email = logUsername.getText().toString().trim();
         String password = logPassword.getText().toString().trim();
 
         if (email.isEmpty()) {
-            logUsername.setError("Email is required");
+            Log.d(TAG, "No email was added");
+            logUsername.setError(getString(R.string.email_required_message));
             logUsername.requestFocus();
-            return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            logUsername.setError("Email is invalid");
+            return;
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+            Log.d(TAG, "Invalid email");
+            logUsername.setError(getString(R.string.email_invalid_message));
             logUsername.requestFocus();
-            return false;
+            return;
         } else if (password.isEmpty()) {
-            logPassword.setError("Password is required");
+            Log.d(TAG, "No password was added");
+            logPassword.setError(getString(R.string.password_required_message));
             logPassword.requestFocus();
-            return false;
+            return;
         } else if (password.length() < 6) {
-            logPassword.setError("Password must have at least 6 characters");
+            Log.d(TAG, "Invalid password");
+            logPassword.setError(getString(R.string.password_invalid_message));
             logPassword.requestFocus();
-            return false;
+            return;
         }
 
-        mAuth = FirebaseAuth.getInstance();
-
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
+                        Log.d(TAG, "Logged in successfully");
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                         if (user != null && user.isEmailVerified()) {
-                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                            intent.putExtra("lang", languageManager.getLang());
-                            startActivity(intent);
+                            Log.d(TAG, "Started Main Activity");
+                            startActivity(new Intent(this, MainActivity.class));
                             finish();
                         } else {
-                            Toast.makeText(Login.this, "Email verification hasn't been completed. Please check your email.", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(LoginActivity.this, getString(R.string.login_email_verification_required), Toast.LENGTH_SHORT).show();
                         }
 
 
                     } else {
-                        Toast.makeText(Login.this, "Login failed. Please try again", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(LoginActivity.this, getString(R.string.login_email_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
-
-        return true;
     }
 }

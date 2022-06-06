@@ -45,16 +45,16 @@
             android:name=".activities.ProfileInfo"
             android:exported="false" />
         <activity
-            android:name=".activities.register.ForgotPassword"
+            android:name=".activities.register.ForgotPasswordActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.register.RegisterCar"
+            android:name=".activities.register.RegisterCarActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.register.Register"
+            android:name=".activities.register.RegisterActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.register.Login"
+            android:name=".activities.register.LoginActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

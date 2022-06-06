@@ -20,8 +20,8 @@ import androidx.fragment.app.Fragment;
 import com.dbd.plugtimproject.R;
 import com.dbd.plugtimproject.activities.CarInfo;
 import com.dbd.plugtimproject.activities.ProfileInfo;
-import com.dbd.plugtimproject.activities.register.ForgotPassword;
-import com.dbd.plugtimproject.activities.register.Login;
+import com.dbd.plugtimproject.activities.register.ForgotPasswordActivity;
+import com.dbd.plugtimproject.activities.register.LoginActivity;
 import com.dbd.plugtimproject.models.Car;
 import com.dbd.plugtimproject.models.User;
 import com.google.firebase.auth.FirebaseAuth;
@@ -146,12 +146,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 addCarImage();
                 break;
             case R.id.resetPasswordBtn:
-                startActivity(new Intent(getActivity(), ForgotPassword.class));
+                startActivity(new Intent(getActivity(), ForgotPasswordActivity.class));
                 break;
             case R.id.signoutBtn:
                 FirebaseAuth.getInstance().signOut();
                 getActivity().finish();
-                startActivity(new Intent(getActivity(), Login.class));
+                startActivity(new Intent(getActivity(), LoginActivity.class));
 
         }
     }
