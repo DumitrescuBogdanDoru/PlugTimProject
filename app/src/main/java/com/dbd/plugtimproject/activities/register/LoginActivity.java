@@ -20,6 +20,9 @@ import com.dbd.plugtimproject.managers.LanguageManager;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Date;
+import java.util.Objects;
+
 /**
  * Added by: Bogdan Dumitrescu
  * Date: 11/12/2021
@@ -65,14 +68,14 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.registerBtnLog:
-                Log.d(TAG, "Started RegisterActivity activity");
+                Log.d(TAG, "Started RegisterActivity");
                 startActivity(new Intent(this, RegisterActivity.class));
                 break;
             case R.id.loginBtnLog:
                 loginUser();
                 break;
             case R.id.forgotBtnLog:
-                Log.d(TAG, "Started ForgotPasswordActivity activity");
+                Log.d(TAG, "Started ForgotPasswordActivity");
                 startActivity(new Intent(this, ForgotPasswordActivity.class));
                 break;
             case R.id.ro_btn:
@@ -118,19 +121,17 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        Log.d(TAG, "Logged in successfully");
                         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                         if (user != null && user.isEmailVerified()) {
-                            Log.d(TAG, "Started Main Activity");
+                            Log.d(TAG, String.format("User %s was logged in successfully at %s", user.getUid(), new Date()));
                             startActivity(new Intent(this, MainActivity.class));
                             finish();
                         } else {
                             Toast.makeText(LoginActivity.this, getString(R.string.login_email_verification_required), Toast.LENGTH_SHORT).show();
                         }
-
-
                     } else {
+                        Log.d(TAG, String.format("User %s couldn't logged in at %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
                         Toast.makeText(LoginActivity.this, getString(R.string.login_email_failed), Toast.LENGTH_SHORT).show();
                     }
                 });

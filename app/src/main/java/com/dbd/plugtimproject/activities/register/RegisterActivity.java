@@ -19,6 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.Date;
 import java.util.Objects;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
@@ -107,12 +108,12 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
                                 if (firebaseUser != null) {
                                     firebaseUser.sendEmailVerification();
-                                    Log.d(TAG, "Register added successfully to database");
+                                    Log.d(TAG, String.format("User %s added successfully to database at %s", firebaseUser.getUid(), new Date()));
                                     Toast.makeText(RegisterActivity.this, getString(R.string.register_send_email), Toast.LENGTH_SHORT).show();
                                 }
                             } else {
                                 Log.d(TAG, "Registration failed");
-                                Toast.makeText(RegisterActivity.this, "Failed to register. Please try again", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(RegisterActivity.this, String.format("Failed to register user %s at %s. Please try again", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()), Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

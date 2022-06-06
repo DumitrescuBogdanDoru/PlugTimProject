@@ -113,6 +113,10 @@
     <string name="general_error">Something went wrong. Please try again.</string>
     <string name="car_image_not_recognised">It doesn\'t look like a car. Please take another picture from the front of the car</string>
 
+    <!-- Profile Info Messages -->
+    <string name="profile_info_save_changes">Changes were saved</string>
+    <string name="user_not_found">Couldn\'t get your information. Please try again</string>
+
     <!-- Car Companies for spinner -->
     <string-array name="company">
         <item>Audi</item>

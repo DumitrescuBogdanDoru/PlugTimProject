@@ -113,7 +113,9 @@
     <string name="general_error">Ceva nu a mers bine. Va rugam sa incercati din nou.</string>
     <string name="car_image_not_recognised">In poza nu pare a fi o masina. Va rugam sa faceti o poza clara din fata masinii</string>
 
-
+    <!-- Profile Info Messages -->
+    <string name="profile_info_save_changes">Modificarile au fost salvate</string>
+    <string name="user_not_found">Nu am putut obtine informatiile. Va rugam sa incercati din nou</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">
