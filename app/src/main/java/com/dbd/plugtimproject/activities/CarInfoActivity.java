@@ -75,10 +75,6 @@ public class CarInfoActivity extends AppCompatActivity {
                     carColorInfo.setText(color);
                     year = car.getYear().toString();
                     carYearInfo.setText(year);
-                } else {
-                    Log.e(TAG, String.format("Couldn't get data for the user's car %s", snapshot.getKey()));
-                    Toast.makeText(CarInfoActivity.this, getString(R.string.car_not_found), Toast.LENGTH_SHORT).show();
-                    finish();
                 }
             }
 

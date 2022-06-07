@@ -1,11 +1,13 @@
 package com.dbd.plugtimproject.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,7 +15,6 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -25,17 +26,19 @@ import com.dbd.plugtimproject.activities.register.LoginActivity;
 import com.dbd.plugtimproject.models.Car;
 import com.dbd.plugtimproject.models.User;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+
+import java.util.Objects;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
+
+    private static final String TAG = "ProfileFragment";
 
     private CircleImageView profileImageView;
     private TextView profileInfo, carInfo;
@@ -56,8 +59,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
 
-        getInfo(FirebaseAuth.getInstance().getCurrentUser().getUid());
-        getProfileImage(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (firebaseUser != null) {
+            getInfo(FirebaseAuth.getInstance().getCurrentUser().getUid());
+            getProfileImage(FirebaseAuth.getInstance().getCurrentUser().getUid());
+        } else {
+            Log.e(TAG, String.format("Couldn't get profile information for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+        }
+
+
     }
 
     @Override
@@ -84,55 +95,61 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @SuppressLint("SetTextI18n")
     private void getInfo(String userId) {
-        mDatabase.child("users").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user = snapshot.getValue(User.class);
+        mDatabase.child("users").child(userId).get()
+                .addOnCompleteListener(task -> {
+                    User user = task.getResult().getValue(User.class);
 
-                if (user != null) {
-                    String firstName = user.getFirstName();
-                    String lastName = user.getLastName();
-                    profileInfo.setText(firstName + " " + lastName);
-                }
-            }
+                    if (user != null) {
+                        String firstName = user.getFirstName();
+                        String lastName = user.getLastName();
+                        profileInfo.setText(firstName + " " + lastName);
+                    }
+                })
+                .addOnCompleteListener(dataSnapshot -> {
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-            }
-        });
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, String.format("Couldn't get profile information for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                });
 
-        mDatabase.child("cars").child(userId).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Car car = snapshot.getValue(Car.class);
 
-                if (car != null) {
-                    String carCompany = car.getCompany();
-                    String carModel = car.getModel();
-                    carInfo.setText(carCompany + " " + carModel);
-                }
-            }
+        mDatabase.child("cars").child(userId).get()
+                .addOnCompleteListener(task -> {
+                    Car car = task.getResult().getValue(Car.class);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Toast.makeText(getContext(), "Something went wrong", Toast.LENGTH_SHORT).show();
-            }
-        });
+                    if (car != null) {
+                        String carCompany = car.getCompany();
+                        String carModel = car.getModel();
+                        carInfo.setText(carCompany + " " + carModel);
+                    }
+                })
+                .addOnFailureListener(e -> {
+                    Toast.makeText(getContext(), getString(R.string.user_not_found), Toast.LENGTH_SHORT).show();
+                    Log.e(TAG, String.format("Couldn't get car information for user %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid()));
+                });
     }
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     private void getProfileImage(String userId) {
         StorageReference pathReference = storageReference.child("images/cars/" + userId);
 
         long MAXBYTES = 1024 * 1024 * 20;
 
-        pathReference.getBytes(MAXBYTES).addOnSuccessListener(bytes -> {
-            Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-            profileImageView.setImageBitmap(bitmap);
-        });
+        pathReference.getBytes(MAXBYTES)
+                .addOnSuccessListener(bytes -> {
+                    Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                    if (bitmap != null) {
+                        profileImageView.setImageBitmap(bitmap);
+                    }
+                })
+                .addOnFailureListener(e -> profileImageView.setImageDrawable(requireActivity().getDrawable(R.drawable.ic_account)));
+
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -150,7 +167,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.signoutBtn:
                 FirebaseAuth.getInstance().signOut();
-                getActivity().finish();
+                requireActivity().finish();
                 startActivity(new Intent(getActivity(), LoginActivity.class));
 
         }
