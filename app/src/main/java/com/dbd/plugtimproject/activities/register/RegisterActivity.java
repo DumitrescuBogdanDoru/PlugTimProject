@@ -113,7 +113,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                     Toast.makeText(RegisterActivity.this, getString(R.string.register_send_email), Toast.LENGTH_SHORT).show();
                                 }
                             } else {
-                                Log.d(TAG, "Registration failed");
+                                Log.d(TAG, String.format("Registration failed for user %s at %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
                                 Toast.makeText(RegisterActivity.this, String.format("Failed to register user %s at %s. Please try again", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()), Toast.LENGTH_SHORT).show();
                             }
                         });
