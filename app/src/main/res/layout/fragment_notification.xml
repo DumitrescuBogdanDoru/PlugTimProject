@@ -11,6 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginHorizontal="10dp"
+        android:layout_marginStart="25dp"
         android:layout_marginTop="20dp"
         android:text="@string/notification_title"
         android:textSize="20sp"
