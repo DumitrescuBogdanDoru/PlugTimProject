@@ -32,6 +32,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private EditText logUsername;
     private EditText logPassword;
 
+    private FirebaseAuth mAuth;
     private LanguageManager languageManager;
 
     private static final String TAG = "LoginActivity";
@@ -61,6 +62,20 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         ro.setOnClickListener(this);
         ImageView en = findViewById(R.id.en_btn);
         en.setOnClickListener(this);
+
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null && currentUser.isEmailVerified()) {
+            startActivity(new Intent(this, MainActivity.class));
+        } else {
+            mAuth.signOut();
+        }
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -92,15 +107,15 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void loginUser() {
-        String email = logUsername.getText().toString().trim();
-        String password = logPassword.getText().toString().trim();
+        String email = logUsername.getText().toString().replace(" ", "");
+        String password = logPassword.getText().toString().replace(" ", "");
 
         if (email.isEmpty()) {
             Log.d(TAG, "No email was added");
             logUsername.setError(getString(R.string.email_required_message));
             logUsername.requestFocus();
             return;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Log.d(TAG, "Invalid email");
             logUsername.setError(getString(R.string.email_invalid_message));
             logUsername.requestFocus();

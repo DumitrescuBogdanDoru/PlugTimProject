@@ -113,10 +113,12 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
 
         if (year.isEmpty()) {
             Log.d(TAG, "No year was added");
+            Toast.makeText(RegisterCarActivity.this, getString(R.string.register_car_year_message), Toast.LENGTH_SHORT).show();
             regCarYear.setError("Year is required");
             regCarYear.requestFocus();
             return false;
         } else if (Integer.parseInt(year) < 1997 || Integer.parseInt(year) > Calendar.getInstance().get(Calendar.YEAR)) {
+            Toast.makeText(RegisterCarActivity.this, getString(R.string.register_car_year_invalid_message), Toast.LENGTH_SHORT).show();
             Log.d(TAG, String.format("Year %s is not valid", year));
             regCarYear.setError("Please enter a valid year");
             regCarYear.requestFocus();

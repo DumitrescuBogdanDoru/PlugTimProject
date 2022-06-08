@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.dbd.plugtimproject.R;
+import com.dbd.plugtimproject.activities.MainActivity;
 import com.dbd.plugtimproject.models.User;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,7 +30,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText regUsername, regPassword, regFirstName, regLastName;
 
     private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
+    private FirebaseDatabase mDatabase;
+    private DatabaseReference mReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +46,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         regFirstName = findViewById(R.id.regFirstName);
         regLastName = findViewById(R.id.regLastName);
 
+        mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/");
+        mReference = mDatabase.getReference();
+
+        mAuth = FirebaseAuth.getInstance();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+
+        if (currentUser != null && currentUser.isEmailVerified()) {
+            startActivity(new Intent(this, MainActivity.class));
+        } else {
+            mAuth.signOut();
+        }
     }
 
     @SuppressLint("NonConstantResourceId")
@@ -51,7 +69,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View v) {
         if (v.getId() == R.id.nxtBntReg) {
             if (registerUser()) {
-                startActivity(new Intent(this, RegisterCarActivity.class));
+                startActivity(new Intent(getApplicationContext(), RegisterCarActivity.class));
             } else {
                 Log.d(TAG, "Error occurred during user registry");
                 Toast.makeText(RegisterActivity.this, getString(R.string.register_error_message), Toast.LENGTH_SHORT).show();
@@ -60,17 +78,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private boolean registerUser() {
-        String email = regUsername.getText().toString();
-        String password = regPassword.getText().toString();
-        String firstName = regFirstName.getText().toString();
-        String lastName = regLastName.getText().toString();
+        String email = regUsername.getText().toString().replace(" ", "");
+        String password = regPassword.getText().toString().replace(" ", "");
+        String firstName = regFirstName.getText().toString().replace(" ", "");
+        String lastName = regLastName.getText().toString().replace(" ", "");
 
         if (email.isEmpty()) {
             Log.d(TAG, "No email was added");
             regUsername.setError(getString(R.string.email_required_message));
             regUsername.requestFocus();
             return false;
-        } else if (!Patterns.EMAIL_ADDRESS.matcher(email.trim()).matches()) {
+        } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Log.d(TAG, "Invalid email");
             regUsername.setError(getString(R.string.email_invalid_message));
             regUsername.requestFocus();
@@ -97,26 +115,27 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return false;
         }
 
-        mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
+                        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+                        if (firebaseUser != null) {
+                            firebaseUser.sendEmailVerification();
+                            Log.d(TAG, String.format("An email was sent to user %s at %s", firebaseUser.getUid(), new Date()));
+                            Toast.makeText(RegisterActivity.this, getString(R.string.register_send_email), Toast.LENGTH_SHORT).show();
+                        }
                         User user = new User(email, firstName, lastName);
-                        mDatabase.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+                        mReference.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
                                 .setValue(user).addOnCompleteListener(task1 -> {
                             if (task1.isSuccessful()) {
-                                FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
-                                if (firebaseUser != null) {
-                                    firebaseUser.sendEmailVerification();
-                                    Log.d(TAG, String.format("User %s added successfully to database at %s", firebaseUser.getUid(), new Date()));
-                                    Toast.makeText(RegisterActivity.this, getString(R.string.register_send_email), Toast.LENGTH_SHORT).show();
-                                }
+                                Log.d(TAG, String.format("User %s added successfully to database at %s", firebaseUser.getUid(), new Date()));
                             } else {
                                 Log.d(TAG, String.format("Registration failed for user %s at %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
-                                Toast.makeText(RegisterActivity.this, String.format("Failed to register user %s at %s. Please try again", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()), Toast.LENGTH_SHORT).show();
                             }
                         });
+                    } else {
+                        Log.d(TAG, Objects.requireNonNull(task.getException()).getMessage());
+                        Toast.makeText(RegisterActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
                     }
                 });
         return true;
