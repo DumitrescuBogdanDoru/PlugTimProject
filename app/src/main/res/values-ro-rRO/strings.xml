@@ -73,6 +73,7 @@
     <string name="add_station_upload_picture_btn">Adauga Fotografie</string>
 
     <!-- RegisterActivity -->
+    <string name="register_info">Va rugam introduceti datele personale</string>
     <string name="register_username">Email</string>
     <string name="register_password">Parola</string>
     <string name="register_first_name">Prenume</string>
@@ -80,6 +81,7 @@
     <string name="register_next_btn">Urmator</string>
 
     <!-- RegisterActivity Car -->
+    <string name="register_car_infos">Va rugam sa introduceti datele masinii dumneavoastra</string>
     <string name="register_car_year">An de fabricatie</string>
     <string name="register_car_finish_btn">Urmator</string>
     <string name="register_car_skip_btn">Omite</string>

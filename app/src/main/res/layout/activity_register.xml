@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,89 +7,78 @@
     tools:context=".activities.register.RegisterActivity">
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/register_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="PlugTim"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/kdamthmorpro_regular"
+        android:text="@string/login_title"
         android:textColor="@android:color/holo_blue_bright"
-        android:textSize="40sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.500"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.100" />
+        android:textSize="48sp"
+        android:textStyle="bold" />
 
-    <EditText
-        android:id="@+id/regUsername"
+    <TextView
+        android:id="@+id/register_infos"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="44dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
+        android:layout_below="@+id/register_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="@string/register_info" />
+
+    <EditText
+        android:id="@+id/register_username"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/register_infos"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="50dp"
         android:hint="@string/register_username"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView" />
+        android:inputType="textPersonName"
+        tools:ignore="SpeakableTextPresentCheck" />
+
 
     <EditText
-        android:id="@+id/regPassword"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:inputType="textPassword"
-        android:minHeight="48dp"
+        android:id="@+id/register_password"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/register_username"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:hint="@string/register_password"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regUsername" />
+        android:inputType="textPassword" />
 
     <EditText
-        android:id="@+id/regFirstName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
+        android:id="@+id/register_first_name"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/register_password"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:hint="@string/register_first_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regPassword" />
+        android:inputType="textPersonName" />
 
     <EditText
-        android:id="@+id/regLastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
+        android:id="@+id/register_last_name"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/register_first_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:hint="@string/register_last_name"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regFirstName" />
+        android:inputType="textPersonName" />
 
     <Button
-        android:id="@+id/nxtBntReg"
+        android:id="@+id/register_next_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
+        android:layout_below="@+id/register_last_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:backgroundTint="@android:color/holo_blue_bright"
         android:text="@string/register_next_btn"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.817"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/regLastName"
-        app:layout_constraintVertical_bias="0.0" />
+        app:cornerRadius="50dp" />
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+</RelativeLayout>

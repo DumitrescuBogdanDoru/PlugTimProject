@@ -37,13 +37,13 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        Button nxtBtnReg = findViewById(R.id.nxtBntReg);
+        Button nxtBtnReg = findViewById(R.id.register_next_btn);
         nxtBtnReg.setOnClickListener(this);
 
-        regUsername = findViewById(R.id.regUsername);
-        regPassword = findViewById(R.id.regPassword);
-        regFirstName = findViewById(R.id.regFirstName);
-        regLastName = findViewById(R.id.regLastName);
+        regUsername = findViewById(R.id.register_username);
+        regPassword = findViewById(R.id.register_password);
+        regFirstName = findViewById(R.id.register_first_name);
+        regLastName = findViewById(R.id.register_last_name);
 
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/");
         mReference = mDatabase.getReference();
@@ -66,7 +66,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.nxtBntReg) {
+        if (v.getId() == R.id.register_next_btn) {
             if (registerUser()) {
                 startActivity(new Intent(getApplicationContext(), RegisterCarActivity.class));
             } else {

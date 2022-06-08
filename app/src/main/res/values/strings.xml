@@ -72,6 +72,7 @@
     <string name="add_station_upload_picture_btn">Add Photo</string>
 
     <!-- RegisterActivity -->
+    <string name="register_info">Please add your personal details</string>
     <string name="register_username">Email</string>
     <string name="register_password">Password</string>
     <string name="register_first_name">First Name</string>
@@ -79,6 +80,7 @@
     <string name="register_next_btn">Next</string>
 
     <!-- RegisterActivity Car -->
+    <string name="register_car_infos">Please add your car\'s info</string>
     <string name="register_car_year">Year</string>
     <string name="register_car_finish_btn">Finish</string>
     <string name="register_car_skip_btn">Skip</string>

@@ -65,20 +65,20 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_car);
 
-        TextView regCarSkipBtn = findViewById(R.id.regCarSkipBtn);
+        TextView regCarSkipBtn = findViewById(R.id.register_car_skip_btn);
         regCarSkipBtn.setOnClickListener(this);
-        Button regCarFinishBtn = findViewById(R.id.regCarFinishBtn);
+        Button regCarFinishBtn = findViewById(R.id.register_car_finish_btn);
         regCarFinishBtn.setOnClickListener(this);
 
-        regCarCompany = findViewById(R.id.regCarCompany);
-        regCarModel = findViewById(R.id.regCarModel);
-        regCarColor = findViewById(R.id.regCarColor);
-        regCarYear = findViewById(R.id.regCarYear);
+        regCarCompany = findViewById(R.id.register_car_company);
+        regCarModel = findViewById(R.id.register_car_model);
+        regCarColor = findViewById(R.id.register_car_color);
+        regCarYear = findViewById(R.id.register_car_year);
 
         // add car image
-        Button addCarImageBtn = findViewById(R.id.addCarImageBtn);
+        Button addCarImageBtn = findViewById(R.id.register_car_add_image_btn);
         addCarImageBtn.setOnClickListener(this);
-        carImage = findViewById(R.id.carImage);
+        carImage = findViewById(R.id.register_car_image);
 
         storageReference = FirebaseStorage.getInstance().getReference();
         initializeSpinners();
@@ -88,10 +88,10 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.regCarSkipBtn:
+            case R.id.register_car_skip_btn:
                 startActivity(new Intent(this, LoginActivity.class));
                 break;
-            case R.id.regCarFinishBtn:
+            case R.id.register_car_finish_btn:
                 if (registerCar()) {
                     if (imageUri != null) {
                         uploadPicture(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid());
@@ -99,7 +99,7 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
                     startActivity(new Intent(this, LoginActivity.class));
                 }
                 break;
-            case R.id.addCarImageBtn:
+            case R.id.register_car_add_image_btn:
                 addCarImage();
                 break;
         }
