@@ -129,8 +129,7 @@
     <string name="car_info_model_required">Model name is invalid</string>
     <string name="car_info_color_required">Color is invalid</string>
     <string name="car_info_year_required">Year is invalid</string>
-
-
+    <string name="like">likes</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

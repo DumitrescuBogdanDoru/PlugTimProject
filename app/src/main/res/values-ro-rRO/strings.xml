@@ -131,6 +131,7 @@
     <string name="car_info_model_required">Numele modelului este invalid</string>
     <string name="car_info_color_required">Culoarea este invalida</string>
     <string name="car_info_year_required">Anul de fabricatie este invalid</string>
+    <string name="like">aprecieri</string>
 
     <!-- Car Companies for spinner -->
     <string-array name="company">

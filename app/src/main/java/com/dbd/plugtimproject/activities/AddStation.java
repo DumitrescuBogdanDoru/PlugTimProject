@@ -1,6 +1,7 @@
 package com.dbd.plugtimproject.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -25,6 +26,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 import androidx.core.app.ActivityCompat;
 
 import com.dbd.plugtimproject.R;
@@ -59,12 +61,9 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
 
     private static final String TAG = "AddStation";
 
-    private Button addStationBtn, addImageBtn;
     private EditText description, ports;
     private DatabaseReference mDatabase;
-    private FirebaseStorage storage;
     private StorageReference storageReference;
-    private FusedLocationProviderClient fusedLocationClient;
     protected LocationManager locationManager;
     private ImageView imageAddStation;
     private Uri imageUri;
@@ -85,16 +84,17 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
         ports = findViewById(R.id.ports);
         imageAddStation = findViewById(R.id.imageAddStation);
 
-        addImageBtn = findViewById(R.id.addImageBtnForm);
+        Button addImageBtn = findViewById(R.id.addImageBtnForm);
         addImageBtn.setOnClickListener(this);
-        addStationBtn = findViewById(R.id.addStationBtnForm);
+        Button addStationBtn = findViewById(R.id.addStationBtnForm);
         addStationBtn.setOnClickListener(this);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference();
-        storage = FirebaseStorage.getInstance();
+        FirebaseStorage storage = FirebaseStorage.getInstance();
         storageReference = storage.getReference();
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -102,8 +102,6 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                 addStation();
                 break;
             case R.id.addImageBtnForm:
-                // TODO mai intai deschide un dialog sa ii zici ca se recunoaste statia si la fel si la inregistrare la masina
-                // TODO sa faci verificari pentru campuri si sa le modifici la inregistrare
                 choosePicture();
                 break;
         }
@@ -182,7 +180,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
     }
 
     private void addStation() {
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
 
         if (ActivityCompat.checkSelfPermission(AddStation.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
@@ -217,45 +215,50 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
         try {
             List<Address> addressList = geocoder.getFromLocation(location.getLatitude(), location.getLongitude(), 1);
 
-            Station station = new Station(descriptionStation, Integer.parseInt(portsStation), new LocationHelper(addressList.get(0).getLatitude(), addressList.get(0).getLongitude()),
-                    FirebaseAuth.getInstance().getUid(), isType1, isType2, isCcs, isChademo);
+            // verify that at least one type of port is selected
+            if (isType1 || isType2 || isCcs || isChademo) {
+                Station station = new Station(descriptionStation, Integer.parseInt(portsStation), new LocationHelper(addressList.get(0).getLatitude(), addressList.get(0).getLongitude()),
+                        FirebaseAuth.getInstance().getUid(), isType1, isType2, isCcs, isChademo);
 
-            String random = UUID.randomUUID().toString();
+                String random = UUID.randomUUID().toString();
 
-            mDatabase.child("stations").addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    boolean exists = false;
-                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                        Station existing = dataSnapshot.getValue(Station.class);
-                        if (existing != null && existing.getLocationHelper().getLatitude() == station.getLocationHelper().getLatitude() && existing.getLocationHelper().getLongitude() == station.getLocationHelper().getLongitude()) {
-                            Toast.makeText(AddStation.this, "Station already exists", Toast.LENGTH_SHORT).show();
-                            exists = true;
-                            return;
+                mDatabase.child("stations").addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        boolean exists = false;
+                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            Station existing = dataSnapshot.getValue(Station.class);
+                            if (existing != null && existing.getLocationHelper().getLatitude() == station.getLocationHelper().getLatitude() && existing.getLocationHelper().getLongitude() == station.getLocationHelper().getLongitude()) {
+                                Toast.makeText(AddStation.this, "Station already exists", Toast.LENGTH_SHORT).show();
+                                exists = true;
+                                return;
+                            }
+                        }
+                        if (!exists) {
+                            mDatabase.child("stations").child(random)
+                                    .setValue(station).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Toast.makeText(AddStation.this, "Station has been added successfully", Toast.LENGTH_SHORT).show();
+                                    if (imageUri != null) {
+                                        uploadPicture(random);
+                                    }
+                                } else {
+                                    Toast.makeText(AddStation.this, "Failed to add your station. Please try again.", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        } else {
+                            finish();
                         }
                     }
-                    if (!exists) {
-                        mDatabase.child("stations").child(random)
-                                .setValue(station).addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                Toast.makeText(AddStation.this, "Station has been added successfully", Toast.LENGTH_SHORT).show();
-                                if (imageUri != null) {
-                                    uploadPicture(random);
-                                }
-                            } else {
-                                Toast.makeText(AddStation.this, "Failed to add your station. Please try again.", Toast.LENGTH_SHORT).show();
-                            }
-                        });
-                    } else {
-                        finish();
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
                     }
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
+                });
+            } else {
+                Toast.makeText(AddStation.this, "Please select at least one port", Toast.LENGTH_SHORT).show();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -269,7 +272,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
             description.requestFocus();
             return false;
         }
-        if (Integer.parseInt(portsStation) < 0) {
+        if ( portsStation.isEmpty() || Integer.parseInt(portsStation) < 0) {
             ports.setError("Please enter a valid number of ports");
             ports.requestFocus();
             return false;
@@ -323,6 +326,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                 });
     }
 
+    @SuppressLint("NonConstantResourceId")
     public void onCheckBoxChecked(View view) {
         CheckBox checkBox = findViewById(view.getId());
 

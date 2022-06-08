@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -7,9 +8,9 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:context=".activities.StationActivity"
-        android:padding="15dp">
+        android:layout_height="wrap_content"
+        android:padding="15dp"
+        tools:context=".activities.StationActivity">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
@@ -17,15 +18,40 @@
             android:layout_height="200dp"
             android:orientation="horizontal" />
 
+        <LinearLayout
+            android:id="@+id/likes"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/recyclerView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:id="@+id/likeIcon"
+                android:layout_width="35dp"
+                android:layout_height="35dp" />
+
+            <TextView
+                android:id="@+id/noOfLikes"
+                android:layout_width="match_parent"
+                android:layout_height="35dp"
+                android:layout_marginStart="10dp"
+                android:gravity="center_vertical"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
         <Button
             android:id="@+id/addPhotosToStationBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/recyclerView"
+            android:layout_below="@+id/likes"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="@string/station_add_photo_btn"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:cornerRadius="50dp" />
 
         <TextView
             android:id="@+id/nameStation"
@@ -39,80 +65,58 @@
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/portsStation"
+            android:id="@+id/addedByStation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/nameStation"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:textAlignment="center"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/portsStation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/addedByStation"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/portTypesStation"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/portsStation"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:textAlignment="center"
             android:textSize="16sp" />
 
         <TextView
             android:id="@+id/addressStation"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/portTypesStation"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:textAlignment="center"
-            android:textSize="16sp" />
-
-        <TextView
-            android:id="@+id/addedByStation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/addressStation"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:textAlignment="center"
             android:textSize="16sp" />
 
         <Button
             android:id="@+id/getDirectionsStationBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/addedByStation"
+            android:layout_below="@+id/addressStation"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="@string/station_get_directions"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:cornerRadius="50dp" />
 
-        <LinearLayout
-            android:id="@+id/likes"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/getDirectionsStationBtn"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="20dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/likeIcon"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
-
-            <TextView
-                android:id="@+id/noOfLikes"
-                android:layout_width="50dp"
-                android:layout_height="50dp" />
-
-        </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyler_view_visits_station"
-            android:layout_width="200dp"
-            android:layout_height="200dp"
+            android:layout_width="400dp"
+            android:layout_height="100dp"
             android:layout_below="@+id/getDirectionsStationBtn"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="10dp" />
@@ -125,7 +129,8 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
             android:text="@string/station_add_visit"
-            android:textAlignment="center" />
+            android:textAlignment="center"
+            app:cornerRadius="50dp" />
 
     </RelativeLayout>
 

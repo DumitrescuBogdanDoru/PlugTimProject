@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.media.ThumbnailUtils;
@@ -264,7 +265,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if (snapshot.exists()) {
-                    if (Objects.equals(snapshot.getKey(), firebaseUser.getUid())) {
+                    if (firebaseUser != null && Objects.equals(snapshot.getKey(), firebaseUser.getUid())) {
                         addedByStation.setText(getString(R.string.station_added_by_me));
                     } else {
                         User user = snapshot.getValue(User.class);
@@ -307,6 +308,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
     private void nrOfLikes(String uuid) {
         mDatabase.child("likes/" + uuid).addValueEventListener(new ValueEventListener() {
+            @SuppressLint("SetTextI18n")
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Integer counter = 0;
@@ -317,7 +319,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                     }
                 }
 
-                noOfLikes.setText(counter + " likes");
+                noOfLikes.setText(counter + " " + getString(R.string.like));
             }
 
             @Override
@@ -331,14 +333,16 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
         String uuid = getIntent().getStringExtra("uuid");
         FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        if (like.getTag().equals("unlike")) {
-            mDatabase.child("likes/" + uuid)
-                    .child(firebaseUser.getUid()).setValue(true);
-            sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, NotificationEnum.LIKE);
+        if (firebaseUser != null) {
+            if (like.getTag().equals("unlike")) {
+                mDatabase.child("likes/" + uuid)
+                        .child(firebaseUser.getUid()).setValue(true);
+                sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, NotificationEnum.LIKE);
 
-        } else if (like.getTag().equals("like")) {
-            mDatabase.child("likes/" + uuid)
-                    .child(firebaseUser.getUid()).setValue(false);
+            } else if (like.getTag().equals("like")) {
+                mDatabase.child("likes/" + uuid)
+                        .child(firebaseUser.getUid()).setValue(false);
+            }
         }
     }
 
@@ -373,7 +377,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                                             .addOnSuccessListener(uri -> {
                                                 FileUri fileUri = new FileUri(uri.toString());
                                                 mDatabase.child("/photos/" + uuid + "/" + counter).setValue(fileUri);
-                                                sendNotification(FirebaseAuth.getInstance().getCurrentUser().getUid(), uuid, NotificationEnum.PHOTO);
+                                                sendNotification(Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), uuid, NotificationEnum.PHOTO);
                                             });
 
                                     pd.dismiss();
@@ -396,23 +400,26 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
-                String text = user.getFirstName() + " " + user.getLastName() + " " + notificationEnum.getType();
 
-                mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        Station station = snapshot.getValue(Station.class);
-                        Notification notification = new Notification(userId, stationId, text);
-                        if (!userId.equals(station.getAddedBy())) {
-                            mDatabase.child("/notifications/" + station.getAddedBy() + "/" + UUID.randomUUID()).setValue(notification);
+                if (user != null) {
+                    String text = user.getFirstName() + " " + user.getLastName() + " " + notificationEnum.getType();
+
+                    mDatabase.child("/stations/" + stationId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Station station = snapshot.getValue(Station.class);
+                            Notification notification = new Notification(userId, stationId, text);
+                            if (station != null && !userId.equals(station.getAddedBy())) {
+                                mDatabase.child("/notifications/" + station.getAddedBy() + "/" + UUID.randomUUID()).setValue(notification);
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-                    }
-                });
+                        }
+                    });
+                }
             }
 
             @Override
