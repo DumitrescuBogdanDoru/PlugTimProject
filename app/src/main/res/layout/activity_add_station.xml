@@ -9,60 +9,51 @@
     tools:layout_editor_absoluteX="1dp"
     tools:layout_editor_absoluteY="1dp">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         tools:context=".activities.AddStation">
 
         <TextView
-            android:id="@+id/textView7"
+            android:id="@+id/station_add_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="48dp"
-            android:text="@string/add_station_title"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.497"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="50dp"
+            android:text="@string/add_station_title" />
 
         <EditText
             android:id="@+id/description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:minHeight="48dp"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/station_add_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
             android:hint="@string/add_station_name"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView7" />
+            android:inputType="textPersonName"
+            tools:ignore="Autofill" />
 
         <EditText
             android:id="@+id/ports"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="250dp"
+            android:layout_height="50dp"
+            android:layout_below="@id/description"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="20dp"
-            android:ems="10"
-            android:inputType="number"
-            android:minHeight="48dp"
             android:hint="@string/add_station_nr_of_ports"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/description" />
+            android:inputType="number"
+            tools:ignore="Autofill" />
 
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
+            android:layout_below="@+id/ports"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
             android:elevation="5dp"
-            app:cardCornerRadius="2dp"
-            app:layout_constraintEnd_toEndOf="@+id/ports"
-            app:layout_constraintStart_toStartOf="@+id/ports"
-            app:layout_constraintTop_toBottomOf="@id/ports">
+            app:cardCornerRadius="2dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -73,28 +64,32 @@
                     android:layout_width="75dp"
                     android:layout_height="100dp"
                     android:background="@drawable/type1"
-                    android:onClick="onCheckBoxChecked" />
+                    android:onClick="onCheckBoxChecked"
+                    tools:ignore="UsingOnClickInXml" />
 
                 <CheckBox
                     android:id="@+id/type2CheckBox"
                     android:layout_width="75dp"
                     android:layout_height="100dp"
                     android:background="@drawable/type2"
-                    android:onClick="onCheckBoxChecked" />
+                    android:onClick="onCheckBoxChecked"
+                    tools:ignore="UsingOnClickInXml" />
 
                 <CheckBox
                     android:id="@+id/ccsCheckBox"
                     android:layout_width="75dp"
                     android:layout_height="100dp"
                     android:background="@drawable/ccs"
-                    android:onClick="onCheckBoxChecked" />
+                    android:onClick="onCheckBoxChecked"
+                    tools:ignore="UsingOnClickInXml" />
 
                 <CheckBox
                     android:id="@+id/chademoCheckBox"
                     android:layout_width="75dp"
                     android:layout_height="100dp"
                     android:background="@drawable/chademo"
-                    android:onClick="onCheckBoxChecked" />
+                    android:onClick="onCheckBoxChecked"
+                    tools:ignore="UsingOnClickInXml" />
 
 
             </LinearLayout>
@@ -104,37 +99,32 @@
             android:id="@+id/addStationBtnForm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="44dp"
+            android:layout_below="@id/imageAddStation"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@android:color/holo_blue_bright"
             android:text="@string/add_station_add_btn"
-            app:layout_constraintEnd_toEndOf="@+id/imageAddStation"
-            app:layout_constraintStart_toStartOf="@+id/imageAddStation"
-            app:layout_constraintTop_toBottomOf="@+id/imageAddStation" />
+            app:cornerRadius="50dp" />
 
         <Button
             android:id="@+id/addImageBtnForm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="68dp"
+            android:layout_below="@+id/cardView"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="40dp"
             android:backgroundTint="@android:color/holo_blue_bright"
             android:text="@string/add_station_upload_picture_btn"
-            app:layout_constraintEnd_toEndOf="@+id/cardView"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="@+id/cardView"
-            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+            app:cornerRadius="50dp" />
 
         <ImageView
             android:id="@+id/imageAddStation"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_marginTop="20dp"
-
-            app:layout_constraintEnd_toEndOf="@+id/addImageBtnForm"
-            app:layout_constraintHorizontal_bias="0.496"
-            app:layout_constraintStart_toStartOf="@+id/addImageBtnForm"
-            app:layout_constraintTop_toBottomOf="@+id/addImageBtnForm"
-            tools:ignore="MissingConstraints" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_below="@id/addImageBtnForm"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp" />
+    </RelativeLayout>
 
 
 </ScrollView>

@@ -229,7 +229,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                             Station existing = dataSnapshot.getValue(Station.class);
                             if (existing != null && existing.getLocationHelper().getLatitude() == station.getLocationHelper().getLatitude() && existing.getLocationHelper().getLongitude() == station.getLocationHelper().getLongitude()) {
-                                Toast.makeText(AddStation.this, "Station already exists", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(AddStation.this, getString(R.string.add_station_exists), Toast.LENGTH_SHORT).show();
                                 exists = true;
                                 return;
                             }
@@ -238,12 +238,12 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                             mDatabase.child("stations").child(random)
                                     .setValue(station).addOnCompleteListener(task1 -> {
                                 if (task1.isSuccessful()) {
-                                    Toast.makeText(AddStation.this, "Station has been added successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddStation.this, getString(R.string.add_station_success), Toast.LENGTH_SHORT).show();
                                     if (imageUri != null) {
                                         uploadPicture(random);
                                     }
                                 } else {
-                                    Toast.makeText(AddStation.this, "Failed to add your station. Please try again.", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(AddStation.this, getString(R.string.add_station_failed), Toast.LENGTH_SHORT).show();
                                 }
                             });
                         } else {
@@ -257,7 +257,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                     }
                 });
             } else {
-                Toast.makeText(AddStation.this, "Please select at least one port", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddStation.this, getString(R.string.add_station_ports), Toast.LENGTH_SHORT).show();
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -267,13 +267,12 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
 
     private boolean checkFields(String descriptionStation, String portsStation) {
         if (descriptionStation.isEmpty() || descriptionStation.length() < 2) {
-            // TODO mesaje modificate sa fie si in engleza si in romana
-            description.setError("Please enter a valid name");
+            description.setError(getString(R.string.add_station_name_invalid));
             description.requestFocus();
             return false;
         }
-        if ( portsStation.isEmpty() || Integer.parseInt(portsStation) < 0) {
-            ports.setError("Please enter a valid number of ports");
+        if ( portsStation.isEmpty() || Integer.parseInt(portsStation) > 25) {
+            ports.setError(getString(R.string.add_station_ports_number_invalid));
             ports.requestFocus();
             return false;
         }
@@ -330,7 +329,6 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
     public void onCheckBoxChecked(View view) {
         CheckBox checkBox = findViewById(view.getId());
 
-        // TODO sa fie minim un checkbox checked
         switch (view.getId()) {
             case R.id.type1CheckBox:
                 isType1 = checkBox.isChecked();

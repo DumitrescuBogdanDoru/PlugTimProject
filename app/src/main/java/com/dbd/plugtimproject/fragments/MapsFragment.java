@@ -33,6 +33,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
@@ -122,9 +123,8 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
                     Station station = dataSnapshot.getValue(Station.class);
                     if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitude) {
                         marker.setTitle(station.getDescription());
-                        marker.setSnippet(getContext().getString(R.string.maps_fragment_snippet));
+                        marker.setSnippet(requireActivity().getString(R.string.maps_fragment_snippet));
                         marker.showInfoWindow();
-                        break;
                     }
                 }
             }

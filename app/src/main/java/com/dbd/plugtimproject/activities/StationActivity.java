@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
 import android.media.ThumbnailUtils;
@@ -169,7 +168,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                     imageUri = data.getData();
                     addPhoto();
                 } else {
-                    Toast.makeText(StationActivity.this, "It doesn't look like an EV Station. Please take another picture", Toast.LENGTH_LONG).show();
+                    Toast.makeText(StationActivity.this, getString(R.string.station_image_not_recognised), Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -270,7 +269,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                     } else {
                         User user = snapshot.getValue(User.class);
                         if (user != null) {
-                            addedByStation.setText(getString(R.string.station_added_by) + user.getFirstName() + " " + user.getLastName());
+                            addedByStation.setText(getString(R.string.station_added_by) + " " + user.getFirstName() + " " + user.getLastName());
                         }
                     }
                 }
@@ -453,7 +452,7 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
 
     private void openDialog() {
         VisitDialog visitDialog = new VisitDialog();
-        visitDialog.show(getSupportFragmentManager(), "add visit");
+        visitDialog.show(getSupportFragmentManager(), getString(R.string.visit_title));
     }
 
     private boolean checkImage(Bitmap image) {
@@ -526,5 +525,4 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
             }
         });
     }
-
 }
