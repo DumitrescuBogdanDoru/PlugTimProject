@@ -38,10 +38,10 @@ public class ProfileInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile_info);
 
-        profileEmailInfo = findViewById(R.id.profileEmailInfo);
-        profileFirstNameInfo = findViewById(R.id.profileFirstNameInfo);
-        profileLastNameInfo = findViewById(R.id.profileLastNameInfo);
-        Button changeProfileInfoBtn = findViewById(R.id.changeProfileInfoBtn);
+        profileEmailInfo = findViewById(R.id.profile_info_email);
+        profileFirstNameInfo = findViewById(R.id.profile_info_first_name);
+        profileLastNameInfo = findViewById(R.id.profile_info_last_name);
+        Button changeProfileInfoBtn = findViewById(R.id.profile_info_save_btn);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("users");
 

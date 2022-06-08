@@ -39,12 +39,12 @@ public class CarInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_car_info);
 
-        carCompanyInfo = findViewById(R.id.carCompanyInfo);
-        carModelInfo = findViewById(R.id.carModelInfo);
-        carColorInfo = findViewById(R.id.carColorInfo);
-        carYearInfo = findViewById(R.id.carYearInfo);
+        carCompanyInfo = findViewById(R.id.car_info_company);
+        carModelInfo = findViewById(R.id.car_info_model);
+        carColorInfo = findViewById(R.id.car_info_color);
+        carYearInfo = findViewById(R.id.car_info_year);
 
-        changeCarInfoBtn = findViewById(R.id.changeCarInfoBtn);
+        changeCarInfoBtn = findViewById(R.id.car_info_save_btn);
 
         mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/").getReference("cars");
 

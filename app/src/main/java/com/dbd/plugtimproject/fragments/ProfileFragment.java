@@ -83,13 +83,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         profileInfo = view.findViewById(R.id.profile_name);
         carInfo = view.findViewById(R.id.profile_car);
 
-        Button editProfileBtn = view.findViewById(R.id.editProfileBtn);
+        Button editProfileBtn = view.findViewById(R.id.edit_profile_btn);
         editProfileBtn.setOnClickListener(this);
-        Button editCarBtn = view.findViewById(R.id.editCarBtn);
+        Button editCarBtn = view.findViewById(R.id.edit_car_btn);
         editCarBtn.setOnClickListener(this);
-        Button resetPasswordBtn = view.findViewById(R.id.resetPasswordBtn);
+        Button resetPasswordBtn = view.findViewById(R.id.reset_password_btn);
         resetPasswordBtn.setOnClickListener(this);
-        Button signoutBtn = view.findViewById(R.id.signoutBtn);
+        Button signoutBtn = view.findViewById(R.id.signout_btn);
         signoutBtn.setOnClickListener(this);
 
         return view;
@@ -153,19 +153,19 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.editProfileBtn:
+            case R.id.edit_profile_btn:
                 startActivity(new Intent(getActivity(), ProfileInfoActivity.class));
                 break;
-            case R.id.editCarBtn:
+            case R.id.edit_car_btn:
                 startActivity(new Intent(getActivity(), CarInfoActivity.class));
                 break;
             case R.id.profile_image:
                 addCarImage();
                 break;
-            case R.id.resetPasswordBtn:
+            case R.id.reset_password_btn:
                 startActivity(new Intent(getActivity(), ForgotPasswordActivity.class));
                 break;
-            case R.id.signoutBtn:
+            case R.id.signout_btn:
                 FirebaseAuth.getInstance().signOut();
                 requireActivity().finish();
                 startActivity(new Intent(getActivity(), LoginActivity.class));

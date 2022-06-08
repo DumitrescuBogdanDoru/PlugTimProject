@@ -35,40 +35,55 @@
         android:textSize="18sp" />
 
     <Button
-        android:id="@+id/editProfileBtn"
+        android:id="@+id/edit_profile_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/profile_car"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        app:cornerRadius="50dp"
         android:text="@string/profile_profile_btn" />
 
 
     <Button
-        android:id="@+id/editCarBtn"
+        android:id="@+id/edit_car_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editProfileBtn"
+        android:layout_below="@+id/edit_profile_btn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        app:cornerRadius="50dp"
         android:text="@string/profile_car_btn" />
 
     <Button
-        android:id="@+id/resetPasswordBtn"
+        android:id="@+id/reset_password_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/editCarBtn"
+        android:layout_below="@+id/edit_car_btn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        app:cornerRadius="50dp"
         android:text="@string/profile_reset_btn" />
 
     <Button
-        android:id="@+id/signoutBtn"
+        android:id="@+id/signout_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/resetPasswordBtn"
+        android:layout_below="@+id/reset_password_btn"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="15dp"
+        app:cornerRadius="50dp"
         android:text="@string/profile_signout_btn" />
+
+    <TextView
+        android:id="@+id/forgot_password_info"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/signout_btn"
+        android:layout_marginTop="25dp"
+        android:textAlignment="center"
+        android:layout_centerHorizontal="true"
+        android:text="@string/profile_info_message"
+        />
 
 </RelativeLayout>

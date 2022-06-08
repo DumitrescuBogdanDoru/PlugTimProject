@@ -1,64 +1,81 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.CarInfoActivity">
 
-    <EditText
-        android:id="@+id/carCompanyInfo"
+    <TextView
+        android:id="@+id/car_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:layout_marginTop="75dp"
+        android:fontFamily="@font/kdamthmorpro_regular"
+        android:text="@string/login_title"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/car_info_infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/car_info_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="@string/car_info_information"
+        android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/carModelInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/carCompanyInfo"
+        android:id="@+id/car_info_company"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/car_info_infos"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
+        android:layout_marginTop="50dp"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="Autofill,SpeakableTextPresentCheck" />
 
     <EditText
-        android:id="@+id/carColorInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/carModelInfo"
+        android:id="@+id/car_info_model"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/car_info_company"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
+        android:layout_marginTop="25dp"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="Autofill,SpeakableTextPresentCheck" />
 
     <EditText
-        android:id="@+id/carYearInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/carColorInfo"
+        android:id="@+id/car_info_color"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/car_info_model"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
+        android:layout_marginTop="25dp"
+        android:inputType="textPersonName"
+        tools:ignore="Autofill,SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/car_info_year"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/car_info_color"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
         android:inputType="number"
-        android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="Autofill,SpeakableTextPresentCheck" />
 
     <Button
-        android:id="@+id/changeCarInfoBtn"
+        android:id="@+id/car_info_save_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/carYearInfo"
+        android:layout_below="@+id/car_info_year"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/car_info_save_btn" />
+        android:layout_marginTop="50dp"
+        android:text="@string/car_info_save_btn"
+        app:cornerRadius="50dp" />
 
 </RelativeLayout>

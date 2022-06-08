@@ -1,53 +1,72 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".activities.ProfileInfoActivity">
 
-    <EditText
-        android:id="@+id/profileEmailInfo"
+    <TextView
+        android:id="@+id/profile_info_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="200dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck,TextFields" />
+        android:layout_marginTop="75dp"
+        android:fontFamily="@font/kdamthmorpro_regular"
+        android:text="@string/login_title"
+        android:textColor="@android:color/holo_blue_bright"
+        android:textSize="48sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/profile_info_infos"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile_info_title"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:text="@string/profile_info_information"
+        android:textSize="20sp" />
 
     <EditText
-        android:id="@+id/profileFirstNameInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profileEmailInfo"
+        android:id="@+id/profile_info_email"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/profile_info_infos"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        android:layout_marginTop="50dp"
+        android:inputType="textEmailAddress"
+        tools:ignore="Autofill,SpeakableTextPresentCheck" />
 
     <EditText
-        android:id="@+id/profileLastNameInfo"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/profileFirstNameInfo"
+        android:id="@+id/profile_info_first_name"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/profile_info_email"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:ems="10"
+        android:layout_marginTop="25dp"
         android:inputType="textPersonName"
-        android:minHeight="48dp"
-        tools:ignore="SpeakableTextPresentCheck" />
+        tools:ignore="Autofill,SpeakableTextPresentCheck" />
+
+    <EditText
+        android:id="@+id/profile_info_last_name"
+        android:layout_width="250dp"
+        android:layout_height="50dp"
+        android:layout_below="@+id/profile_info_first_name"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:inputType="textPersonName"
+        tools:ignore="Autofill,SpeakableTextPresentCheck" />
 
     <Button
-        android:id="@+id/changeProfileInfoBtn"
+        android:id="@+id/profile_info_save_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/profileLastNameInfo"
+        android:layout_below="@+id/profile_info_last_name"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp"
-        android:text="@string/profile_info_save_btn" />
+        android:layout_marginTop="50dp"
+        android:text="@string/profile_info_save_btn"
+        app:cornerRadius="50dp" />
 
 </RelativeLayout>
 

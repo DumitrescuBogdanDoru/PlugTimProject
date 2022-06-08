@@ -30,6 +30,7 @@
     <string name="profile_car_btn">Edit Car</string>
     <string name="profile_reset_btn">Reset password</string>
     <string name="profile_signout_btn">Signout</string>
+    <string name="profile_info_message">Please contact us for any problems at <b>bogdandoru100599@gmail.com</b></string>
 
     <!-- Profile Info -->
     <string name="profile_info_save_btn">Save Changes</string>
@@ -94,6 +95,7 @@
     <!-- Forgot Password Messages -->
     <string name="forgot_password_email_sent">An email has been sent to reset your password</string>
     <string name="forgot_password_wrong_email">Please add your own email.</string>
+    <string name="forgot_password_info">Please enter your email and you will receive a link to reset your password.</string>
 
     <!-- Register Messages -->
     <string name="register_first_name_message">First Name is required</string>
@@ -108,17 +110,18 @@
     <string name="register_car_successfully">Car has been added successfully</string>
     <string name="register_car_error">Failed to add your car. Please try again.</string>
 
-
     <!-- General Messages -->
     <string name="image_load_failed">Couldn\'t load image</string>
     <string name="general_error">Something went wrong. Please try again.</string>
     <string name="car_image_not_recognised">It doesn\'t look like a car. Please take another picture from the front of the car</string>
 
     <!-- Profile Info Messages -->
+    <string name="profile_info_information">Your profile information</string>
     <string name="save_changes_message">Changes were saved</string>
     <string name="user_not_found">Couldn\'t get your information. Please try again</string>
 
     <!-- Car Info Messages -->
+    <string name="car_info_information">Your car information</string>
     <string name="car_not_found">Couldn\'t get your car information. Please try again</string>
     <string name="car_info_company_required">Company name is invalid</string>
     <string name="car_info_model_required">Model name is invalid</string>
