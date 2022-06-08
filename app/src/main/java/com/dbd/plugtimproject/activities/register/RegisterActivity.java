@@ -30,7 +30,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     private EditText regUsername, regPassword, regFirstName, regLastName;
 
     private FirebaseAuth mAuth;
-    private FirebaseDatabase mDatabase;
     private DatabaseReference mReference;
 
     @Override
@@ -46,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         regFirstName = findViewById(R.id.regFirstName);
         regLastName = findViewById(R.id.regLastName);
 
-        mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/");
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance("https://plugtimproject-default-rtdb.europe-west1.firebasedatabase.app/");
         mReference = mDatabase.getReference();
 
         mAuth = FirebaseAuth.getInstance();
@@ -123,16 +122,17 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                             firebaseUser.sendEmailVerification();
                             Log.d(TAG, String.format("An email was sent to user %s at %s", firebaseUser.getUid(), new Date()));
                             Toast.makeText(RegisterActivity.this, getString(R.string.register_send_email), Toast.LENGTH_SHORT).show();
+
+                            User user = new User(email, firstName, lastName);
+                            mReference.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
+                                    .setValue(user).addOnCompleteListener(task1 -> {
+                                if (task1.isSuccessful()) {
+                                    Log.d(TAG, String.format("User %s added successfully to database at %s", firebaseUser.getUid(), new Date()));
+                                } else {
+                                    Log.d(TAG, String.format("Registration failed for user %s at %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
+                                }
+                            });
                         }
-                        User user = new User(email, firstName, lastName);
-                        mReference.child("users").child(Objects.requireNonNull(mAuth.getCurrentUser()).getUid())
-                                .setValue(user).addOnCompleteListener(task1 -> {
-                            if (task1.isSuccessful()) {
-                                Log.d(TAG, String.format("User %s added successfully to database at %s", firebaseUser.getUid(), new Date()));
-                            } else {
-                                Log.d(TAG, String.format("Registration failed for user %s at %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
-                            }
-                        });
                     } else {
                         Log.d(TAG, Objects.requireNonNull(task.getException()).getMessage());
                         Toast.makeText(RegisterActivity.this, getString(R.string.general_error), Toast.LENGTH_SHORT).show();
