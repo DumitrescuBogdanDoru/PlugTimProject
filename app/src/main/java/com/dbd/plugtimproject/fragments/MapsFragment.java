@@ -33,22 +33,20 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickListener, GoogleMap.OnInfoWindowClickListener {
 
-    private FusedLocationProviderClient fusedLocationClient;
     private DatabaseReference mDatabase;
     private GoogleMap mMap;
 
-    private OnMapReadyCallback callback = new OnMapReadyCallback() {
+    private final OnMapReadyCallback callback = new OnMapReadyCallback() {
 
         @SuppressLint("MissingPermission")
         @Override
         public void onMapReady(@NonNull GoogleMap googleMap) {
             mMap = googleMap;
 
-            fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
+            FusedLocationProviderClient fusedLocationClient = LocationServices.getFusedLocationProviderClient(getContext());
 
             fusedLocationClient.getLastLocation().addOnCompleteListener(task -> {
                 Location location = task.getResult();
@@ -123,7 +121,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
                     Station station = dataSnapshot.getValue(Station.class);
                     if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitude) {
                         marker.setTitle(station.getDescription());
-                        marker.setSnippet(requireActivity().getString(R.string.maps_fragment_snippet));
+                        marker.setSnippet(getPortTypes(station));
                         marker.showInfoWindow();
                     }
                 }
@@ -161,5 +159,29 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
             public void onCancelled(@NonNull DatabaseError error) {
             }
         });
+    }
+
+    private String getPortTypes(Station station) {
+        List<String> types = new ArrayList<>();
+        StringBuilder portTypes = new StringBuilder();
+
+        if (station.isType1()) {
+            types.add("Type1");
+        }
+        if (station.isType2()) {
+            types.add("Type1");
+        }
+        if (station.isCcs()) {
+            types.add("Ccs");
+        }
+        if (station.isChademo()) {
+            types.add("Chademo");
+        }
+
+        for (String type : types) {
+            portTypes.append(type).append(" ");
+        }
+
+        return portTypes.toString();
     }
 }
