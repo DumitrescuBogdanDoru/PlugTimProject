@@ -246,8 +246,6 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                                     Toast.makeText(AddStation.this, getString(R.string.add_station_failed), Toast.LENGTH_SHORT).show();
                                 }
                             });
-                        } else {
-                            finish();
                         }
                     }
 
@@ -311,7 +309,6 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                                             });
 
                                     pd.dismiss();
-                                    finish();
                                 })
                                 .addOnFailureListener(e -> {
                                     pd.dismiss();
