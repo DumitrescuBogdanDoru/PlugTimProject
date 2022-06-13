@@ -146,7 +146,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                             Toast.makeText(LoginActivity.this, getString(R.string.login_email_verification_required), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Log.d(TAG, String.format("User %s couldn't logged in at %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
                         Toast.makeText(LoginActivity.this, getString(R.string.login_email_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
