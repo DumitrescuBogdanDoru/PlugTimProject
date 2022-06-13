@@ -49,8 +49,8 @@
     <string name="station_add_photo_btn">Add Photo</string>
     <string name="station_get_directions">Get Directions</string>
     <string name="station_add_visit">Add Visit</string>
-    <string name="station_ports">Number of Ports:</string>
-    <string name="station_port_types">Port Types:</string>
+    <string name="station_ports">Number of Connectors:</string>
+    <string name="station_port_types">Connector Types:</string>
     <string name="station_address">Address:</string>
     <string name="station_added_by_me">Added by me</string>
     <string name="station_added_by">Added by</string>
@@ -67,7 +67,7 @@
     <!-- Add Station Activity -->
     <string name="add_station_title">Please enter station\'s details</string>
     <string name="add_station_name">Station\'s name</string>
-    <string name="add_station_nr_of_ports">Number of ports</string>
+    <string name="add_station_nr_of_ports">Number of connectors</string>
     <string name="add_station_add_btn">Add station</string>
     <string name="add_station_upload_picture_btn">Add Photo</string>
 
@@ -135,9 +135,9 @@
     <string name="add_station_exists">Station already exists</string>
     <string name="add_station_success">Station has been added successfully</string>
     <string name="add_station_failed">Failed to add your station. Please try again.</string>
-    <string name="add_station_ports">Please select at least one port</string>
+    <string name="add_station_ports">Please select at least one connector</string>
     <string name="add_station_name_invalid">Please enter a valid name</string>
-    <string name="add_station_ports_number_invalid">Please enter a valid number of ports</string>
+    <string name="add_station_ports_number_invalid">Please enter a valid number of connectors</string>
     <string name="station_image_not_recognised">It doesn\'t look like an EV Station. Please take another picture</string>
 
     <string name="visit_title">Add visit</string>

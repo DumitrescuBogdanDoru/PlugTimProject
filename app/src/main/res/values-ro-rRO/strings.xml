@@ -50,8 +50,8 @@
     <string name="station_add_photo_btn">Adauga Fotografie</string>
     <string name="station_get_directions">Obtine directii</string>
     <string name="station_add_visit">Adauga vizita</string>
-    <string name="station_ports">Numar de porturi: </string>
-    <string name="station_port_types">Tipuri de porturi: </string>
+    <string name="station_ports">Numar de conectori: </string>
+    <string name="station_port_types">Tipuri de conectori: </string>
     <string name="station_address">Adresa: </string>
     <string name="station_added_by_me">Adaugat de mine</string>
     <string name="station_added_by">Added by </string>
@@ -68,7 +68,7 @@
     <!-- Add Station Activity -->
     <string name="add_station_title">Va rugam sa introduceti detaliile statiei</string>
     <string name="add_station_name">Numele statiei</string>
-    <string name="add_station_nr_of_ports">Numar de porturi</string>
+    <string name="add_station_nr_of_ports">Numar de conectori</string>
     <string name="add_station_add_btn">Adauga Statie</string>
     <string name="add_station_upload_picture_btn">Adauga Fotografie</string>
 
@@ -137,9 +137,9 @@
     <string name="add_station_exists">Statie exista deja</string>
     <string name="add_station_success">Statia a fost adaugata cu succes</string>
     <string name="add_station_failed">Statia nu a putut fi adaugata. Va rugam sa incercati din nou</string>
-    <string name="add_station_ports">Selectati cel putin un port</string>
+    <string name="add_station_ports">Selectati cel putin un conector</string>
     <string name="add_station_name_invalid">Introduceti un nume valid</string>
-    <string name="add_station_ports_number_invalid">Introduceti un numar valid de porturi</string>
+    <string name="add_station_ports_number_invalid">Introduceti un numar valid de conectori</string>
 
     <string name="station_image_not_recognised">Nu pare a fi o statie de incarcare. Va rugam sa faceti o poza clara</string>
 
