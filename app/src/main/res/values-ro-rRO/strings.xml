@@ -102,8 +102,8 @@
 
 
     <!-- Register Messages -->
-    <string name="register_first_name_message">Prenumele obligatoriu este necesar</string>
-    <string name="register_last_name_message">Numele de familie este necesar</string>
+    <string name="register_first_name_message">Prenumele este invalid</string>
+    <string name="register_last_name_message">Numele de familie este invalid</string>
     <string name="register_error_message">A aparut o eroare. Va rugam sa incercati din nou.</string>
     <string name="register_send_email">Un email de verificare a fost trimis. Va rugam sa va verificati emailul.</string>
     <string name="register_error_register">Inregistrare esuata. Va rugam sa incercati din nou.</string>
