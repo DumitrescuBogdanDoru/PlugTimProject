@@ -71,7 +71,6 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(new Intent(getApplicationContext(), RegisterCarActivity.class));
             } else {
                 Log.d(TAG, "Error occurred during user registry");
-                Toast.makeText(RegisterActivity.this, getString(R.string.register_error_message), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -94,20 +93,20 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
             return false;
         } else if (password.isEmpty()) {
             Log.d(TAG, "No password was added");
-            regPassword.setError(getString(R.string.email_required_message));
+            regPassword.setError(getString(R.string.password_required_message));
             regPassword.requestFocus();
             return false;
         } else if (password.length() < 6) {
             Log.d(TAG, "Invalid password");
-            regPassword.setError(getString(R.string.email_required_message));
+            regPassword.setError(getString(R.string.password_invalid_message));
             regPassword.requestFocus();
             return false;
-        } else if (firstName.isEmpty()) {
+        } else if (firstName.length() < 2) {
             Log.d(TAG, "No first name was added");
             regFirstName.setError(getString(R.string.register_first_name_message));
             regFirstName.requestFocus();
             return false;
-        } else if (lastName.isEmpty()) {
+        } else if (lastName.length() < 2) {
             Log.d(TAG, "No last name was added");
             regLastName.setError(getString(R.string.register_last_name_message));
             regLastName.requestFocus();
@@ -129,7 +128,8 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
                                 if (task1.isSuccessful()) {
                                     Log.d(TAG, String.format("User %s added successfully to database at %s", firebaseUser.getUid(), new Date()));
                                 } else {
-                                    Log.d(TAG, String.format("Registration failed for user %s at %s", Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
+                                    Log.d(TAG, String.format("Registration failed for user %s at %s",
+                                            Objects.requireNonNull(FirebaseAuth.getInstance().getCurrentUser()).getUid(), new Date()));
                                 }
                             });
                         }

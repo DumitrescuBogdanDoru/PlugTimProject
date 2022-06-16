@@ -53,7 +53,6 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
     private ImageView carImage;
     private Uri imageUri;
 
-
     ArrayAdapter<String> companyAdapter, modelAdapter, colorAdapter;
 
     int imageSize = 224;
@@ -338,21 +337,25 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
             Log.i(TAG, "Dacia Spring " + confidences[3]);
             Log.i(TAG, "Renault Zoe " + confidences[2]);
 
-            if (confidences[3] > confidences[2]) {
+            if (confidences[0] > 0.5 || confidences[1] > 0.5 || confidences[4] > 0.5) {
+                model.close();
+                return false;
+            } else if (confidences[3] > confidences[2] && confidences[3] > 0.5) {
                 regCarCompany.setSelection(3);
                 regCarModel.setSelection(0);
                 model.close();
                 return true;
-            } else {
+            } else if (confidences[3] < confidences[2] && confidences[2] > 0.5) {
                 regCarCompany.setSelection(19);
                 regCarModel.setSelection(1);
                 model.close();
-                return false;
+                return true;
             }
         } catch (IOException e) {
             Log.d(TAG, "Car recognition failed");
             return false;
         }
 
+        return false;
     }
 }

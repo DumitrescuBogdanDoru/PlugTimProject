@@ -100,8 +100,8 @@
     <string name="forgot_password_info">Please enter your email and you will receive a link to reset your password.</string>
 
     <!-- Register Messages -->
-    <string name="register_first_name_message">First Name is required</string>
-    <string name="register_last_name_message">Last Name is required</string>
+    <string name="register_first_name_message">First Name is invalid</string>
+    <string name="register_last_name_message">Last Name is invalid</string>
     <string name="register_error_message">Something went wrong. Please try again</string>
     <string name="register_send_email">A verification email has been sent. Please check your email.</string>
     <string name="register_error_register">Failed to register. Please try again</string>
