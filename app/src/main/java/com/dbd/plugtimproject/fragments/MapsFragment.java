@@ -119,10 +119,12 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     Station station = dataSnapshot.getValue(Station.class);
-                    if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitude) {
-                        marker.setTitle(station.getDescription());
-                        marker.setSnippet(getPortTypes(station));
-                        marker.showInfoWindow();
+                    if (station != null) {
+                        if (station.getLocationHelper().getLatitude() == latitude && station.getLocationHelper().getLongitude() == longitude) {
+                            marker.setTitle(station.getDescription());
+                            marker.setSnippet(getPortTypes(station));
+                            marker.showInfoWindow();
+                        }
                     }
                 }
             }
