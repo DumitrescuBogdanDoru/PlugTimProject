@@ -124,7 +124,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                 if (checkImage(image)) {
                     imageAddStation.setImageURI(imageUri);
                 } else {
-                    Toast.makeText(AddStation.this, "It doesn't look like an EV Station. Please take another picture", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddStation.this, getString(R.string.station_image_not_recognised), Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -142,12 +142,12 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
             byteBuffer.order(ByteOrder.nativeOrder());
 
-            int[] intValues = new int[imageSize * imageSize];
-            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+            int[] pixelsValues = new int[imageSize * imageSize];
+            image.getPixels(pixelsValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
             int pixel = 0;
             for (int i = 0; i < imageSize; i++) {
                 for (int j = 0; j < imageSize; j++) {
-                    int val = intValues[pixel++];
+                    int val = pixelsValues[pixel++];
                     byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 255.f));
                     byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 255.f));
                     byteBuffer.putFloat((val & 0xFF) * (1.f / 255.f));
@@ -160,11 +160,11 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
             ModelUnquant.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
-            float[] confidences = outputFeature0.getFloatArray();
-            Log.i(TAG, "Electric Station " + confidences[0]);
-            Log.i(TAG, "Gas Pump " + confidences[1]);
+            float[] confidence = outputFeature0.getFloatArray();
+            Log.i(TAG, "Electric Station " + confidence[0]);
+            Log.i(TAG, "Gas Pump " + confidence[1]);
 
-            if (confidences[0] > confidences[1] && confidences[0] > 0.5) {
+            if (confidence[0] > confidence[1] && confidence[0] > 0.5) {
                 model.close();
                 return true;
             } else {
