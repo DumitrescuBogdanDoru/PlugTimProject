@@ -124,7 +124,7 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                 if (checkImage(image)) {
                     imageAddStation.setImageURI(imageUri);
                 } else {
-                    Toast.makeText(AddStation.this, "It doesn't look like an EV Station. Please take another picture", Toast.LENGTH_LONG).show();
+                    Toast.makeText(AddStation.this, getString(R.string.station_image_not_recognised), Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
                 e.printStackTrace();
