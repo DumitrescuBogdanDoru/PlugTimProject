@@ -315,12 +315,12 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
             ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * imageSize * imageSize * 3);
             byteBuffer.order(ByteOrder.nativeOrder());
 
-            int[] intValues = new int[imageSize * imageSize];
-            image.getPixels(intValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
+            int[] pixelsValues = new int[imageSize * imageSize];
+            image.getPixels(pixelsValues, 0, image.getWidth(), 0, 0, image.getWidth(), image.getHeight());
             int pixel = 0;
             for (int i = 0; i < imageSize; i++) {
                 for (int j = 0; j < imageSize; j++) {
-                    int val = intValues[pixel++];
+                    int val = pixelsValues[pixel++];
                     byteBuffer.putFloat(((val >> 16) & 0xFF) * (1.f / 255.f));
                     byteBuffer.putFloat(((val >> 8) & 0xFF) * (1.f / 255.f));
                     byteBuffer.putFloat((val & 0xFF) * (1.f / 255.f));
@@ -333,19 +333,19 @@ public class RegisterCarActivity extends AppCompatActivity implements View.OnCli
             ModelUnquant.Outputs outputs = model.process(inputFeature0);
             TensorBuffer outputFeature0 = outputs.getOutputFeature0AsTensorBuffer();
 
-            float[] confidences = outputFeature0.getFloatArray();
-            Log.i(TAG, "Dacia Spring " + confidences[3]);
-            Log.i(TAG, "Renault Zoe " + confidences[2]);
+            float[] confidence = outputFeature0.getFloatArray();
+            Log.i(TAG, "Dacia Spring " + confidence[3]);
+            Log.i(TAG, "Renault Zoe " + confidence[2]);
 
-            if (confidences[0] > 0.5 || confidences[1] > 0.5 || confidences[4] > 0.5) {
+            if (confidence[0] > 0.5 || confidence[1] > 0.5 || confidence[4] > 0.5) {
                 model.close();
                 return false;
-            } else if (confidences[3] > confidences[2] && confidences[3] > 0.5) {
+            } else if (confidence[3] > confidence[2] && confidence[3] > 0.5) {
                 regCarCompany.setSelection(3);
                 regCarModel.setSelection(0);
                 model.close();
                 return true;
-            } else if (confidences[3] < confidences[2] && confidences[2] > 0.5) {
+            } else if (confidence[3] < confidence[2] && confidence[2] > 0.5) {
                 regCarCompany.setSelection(19);
                 regCarModel.setSelection(1);
                 model.close();
