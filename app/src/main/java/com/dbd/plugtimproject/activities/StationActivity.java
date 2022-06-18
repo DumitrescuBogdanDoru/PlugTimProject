@@ -380,7 +380,6 @@ public class StationActivity extends AppCompatActivity implements View.OnClickLi
                                             });
 
                                     pd.dismiss();
-                                    finish();
                                 })
                                 .addOnFailureListener(e -> {
                                     pd.dismiss();

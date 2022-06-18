@@ -195,14 +195,14 @@ public class AddStation extends AppCompatActivity implements View.OnClickListene
                         if (checkFields(descriptionStation, portsStation)) {
                             addStationInFirebase(location, descriptionStation, portsStation);
                         } else {
-                            Toast.makeText(AddStation.this, "Please try again", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddStation.this, getString(R.string.add_station_failed), Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(AddStation.this, "Couldn't get your location", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(AddStation.this, getString(R.string.add_station_failed), Toast.LENGTH_SHORT).show();
                     }
                 });
             } else {
-                Toast.makeText(AddStation.this, "Couldn't get your location", Toast.LENGTH_SHORT).show();
+                Toast.makeText(AddStation.this, getString(R.string.location_failed), Toast.LENGTH_SHORT).show();
             }
         } else {
             ActivityCompat.requestPermissions(AddStation.this,
