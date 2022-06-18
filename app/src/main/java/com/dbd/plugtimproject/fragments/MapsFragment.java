@@ -171,7 +171,7 @@ public class MapsFragment extends Fragment implements GoogleMap.OnMarkerClickLis
             types.add("Type1");
         }
         if (station.isType2()) {
-            types.add("Type1");
+            types.add("Type2");
         }
         if (station.isCcs()) {
             types.add("Ccs");

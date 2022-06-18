@@ -135,6 +135,7 @@
     <string name="add_station_exists">Station already exists</string>
     <string name="add_station_success">Station has been added successfully</string>
     <string name="add_station_failed">Failed to add your station. Please try again.</string>
+    <string name="location_failed">Couldn\'t get your location</string>
     <string name="add_station_ports">Please select at least one connector</string>
     <string name="add_station_name_invalid">Please enter a valid name</string>
     <string name="add_station_ports_number_invalid">Please enter a valid number of connectors</string>
